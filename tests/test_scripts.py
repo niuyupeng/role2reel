@@ -54,7 +54,10 @@ class InitializerTests(unittest.TestCase):
             self.assertFalse((target / "02-characters" / "a-b-2").exists())
             created, _ = initialize(target, ["A/B"], "scene", False, profiles_only=True)
             second_profile = target / "02-characters" / "a-b-2" / "character.yaml"
-            self.assertIn(second_profile, created)
+            self.assertTrue(
+                any(path.name == "character.yaml" and path.parent.name == "a-b-2" for path in created)
+            )
+            self.assertTrue(second_profile.is_file())
             self.assertIn('name: "A/B"', second_profile.read_text(encoding="utf-8"))
 
     def test_reserved_windows_components_are_sanitized(self) -> None:
