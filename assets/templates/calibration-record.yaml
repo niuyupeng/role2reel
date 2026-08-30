@@ -1,0 +1,19 @@
+schema_version: 1
+record_id: null
+case_id: null
+method: null
+model_and_version: null
+prompt_version: null
+source_hash: null
+candidate: null
+decision: null
+human_final: null
+edit_reasons: []
+scores:
+  source_fidelity: null
+  naturalness: null
+  character_consistency: null
+  interaction_consequence: null
+  actor_readability: null
+reviewer_blinded: null
+notes: null

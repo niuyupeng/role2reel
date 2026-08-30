@@ -1,0 +1,29 @@
+schema_version: 1
+scene:
+  id: null
+  slugline: null
+  dramatic_question: null
+  physical_constraints: []
+  immutable_facts: []
+  source_lines_to_preserve: []
+start_state:
+  information: []
+  power: null
+  intimacy: null
+  obligation: null
+  emotion: null
+characters:
+  - id: null
+    private_goal: null
+    acceptable_loss: null
+    feared_exposure: null
+    knows: []
+    suspects: []
+    misunderstands: []
+    believes_others_know: []
+    available_strategies: []
+end_state:
+  required_changes: []
+  open_questions: []
+continuity_in: []
+continuity_out: []

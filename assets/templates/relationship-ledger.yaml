@@ -1,0 +1,16 @@
+schema_version: 1
+relationships:
+  - from_character: null
+    to_character: null
+    public_relationship: null
+    trust: null
+    intimacy: null
+    power: null
+    debt_and_obligation: []
+    resentment: []
+    leverage: []
+    promises: []
+    secrets_held: []
+    prohibited_topics: []
+    believes_other_knows: []
+    recent_changes: []

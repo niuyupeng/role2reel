@@ -1,0 +1,16 @@
+schema_version: 1
+scene_id: null
+beats:
+  - id: beat-001
+    starts_with: null
+    active_tactic: null
+    resistance: null
+    turn_event: null
+    state_change:
+      information: null
+      belief: null
+      power: null
+      intimacy: null
+      emotion: null
+      physical: null
+    ends_when: null

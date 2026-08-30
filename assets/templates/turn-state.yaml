@@ -1,0 +1,21 @@
+schema_version: 1
+scene_id: null
+turns:
+  - turn: 1
+    character_id: null
+    perceived_cue: null
+    literal_read: null
+    retrieved_factors: []
+    attribution: null
+    judgment_or_question: null
+    stance: null
+    confidence: null
+    social_objective: null
+    strategy: null
+    surface:
+      dialogue: null
+      action: null
+      silence: false
+    observable_by_others: []
+    consequence: []
+    residual_state: null

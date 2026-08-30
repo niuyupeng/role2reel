@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "FT-01",
+      "title": "Humanize a transcript without upgrading uncertainty",
+      "should_invoke": true,
+      "request": "把下面转写整理成可公开发布的第一人称口述稿。去掉纯转写噪声，保留犹豫、自我修正、观点归属和不确定性；不要替我补证据或下结论。只给成稿。",
+      "input": "呃，我不是说人物小传没用啊。这个，前面我也觉得，写得越长人物就越真。后来我们监剧老师试了二十条，能直接用的，大概四条吧。也可能样本太少。反正现在我更怀疑，问题不是资料不够，是这些资料没变成人物当下的判断。先别说一定，先做盲测。",
+      "hard_invariants": [
+        "Retain 20 tested and about 4 directly usable.",
+        "Do not turn suspicion or small-sample uncertainty into proof.",
+        "Do not invent evidence, conditions, or an effect size.",
+        "Retain the proposal to run a blind test."
+      ],
+      "human_rubric": ["source fidelity", "speakable first-person voice", "no bureaucratic polish"]
+    },
+    {
+      "id": "FT-02",
+      "title": "Subtext dialogue with private knowledge boundaries",
+      "should_invoke": true,
+      "request": "根据下面资料写 8–10 轮可演对白。母亲想确认女儿是否还回来，女儿想在出门前不说破。结尾停在母亲问到核心、女儿未回答。允许动作和沉默；不要解释人物心理，不要输出分析。",
+      "input": "公共：清晨卧室，行李箱开着；女儿只说去广州出差两天；母亲看见三件厚毛衣和一张装框合影。母亲私有：三个月前女儿隐瞒过一次面试；她不知道新公司、期限、租住地址、票是单程。她不爱直接指控，常借吃穿住行发问。女儿私有：已接受栖鹭影业九个月外派，买了单程票，租住17-3；她相信母亲没看见任何文件。受压时只答字面问题，并一直收拾东西。",
+      "hard_invariants": [
+        "Mother must not know 栖鹭影业, 九个月, 17-3, or 单程.",
+        "Daughter must not volunteer those secrets before the ending.",
+        "The exchange must progress from test to literal evasion to upgraded question.",
+        "The final spoken turn is the mother's core question followed only by silence or action."
+      ],
+      "human_rubric": ["precise subtext", "distinct tactics", "playability"]
+    },
+    {
+      "id": "FT-03",
+      "title": "Storyboard by state change rather than line count",
+      "should_invoke": true,
+      "request": "把下面对白做成28秒、16:9、单场景专业分镜表。按观众需要感知的状态变化拆镜，不按台词拆镜。字段只要：编号、时间段、画面与动作、台词与声音、镜头职责、镜头依据。允许固定机位和无台词镜头；不要新增台词、旁白、BGM、CTA。",
+      "input": "母：厚外套带了吗？ 女：广州用不上。 母：那就不是去两天。（女儿把拉链拉到头。）母：票哪天的？ 女：明早。 母：我问回来的。（女儿的手停住。）",
+      "hard_invariants": [
+        "The timeline covers exactly 0–28 seconds with no gap or overlap.",
+        "Use fewer shots than spoken units and include at least one silent shot.",
+        "Do not add dialogue, narration, music, CTA, logo, or decorative particles.",
+        "Every shot has a specific and non-interchangeable audience-facing duty."
+      ],
+      "human_rubric": ["shot motivation", "reaction timing", "spatial and emotional continuity"]
+    },
+    {
+      "id": "FT-04",
+      "title": "Isolate multimodal reference-asset roles",
+      "should_invoke": true,
+      "request": "用以下素材设计一个10秒普通多模态生成任务。只输出：主模式、素材职责锁定表、精确时间轴、最终提示词、禁止项。目标：固定中景；同一位老人穿米色开衫在餐厅端杯；6.2秒门铃响后她才失手，杯子落在桌面但不碎；无对白、无音乐。",
+      "input": "@img_identity：65岁女性脸、发型、年龄参考；源图另有红色影棚背景和黑皮衣。@img_scene：暖色黄昏餐厅布局与光线；无人。@vid_action：手拿瓷杯、停顿、脱手落桌的动作参考；源视频是男演员、蓝色运动服、地铁背景、手持摄影。@aud_cue：06.2秒门铃音色与时点；源音频另有爵士乐和陌生人说话声。",
+      "hard_invariants": [
+        "Use exactly one primary mode.",
+        "Each of four assets has borrow, target, interval, preserve, and exclude fields.",
+        "Do not inherit the red studio, black jacket, male actor, blue sportswear, subway, handheld camera, jazz, or stranger's voice.",
+        "Doorbell precedes reaction, release, and an unbroken cup landing on the table."
+      ],
+      "human_rubric": ["asset isolation", "causal timing", "prompt executability"]
+    },
+    {
+      "id": "FT-05",
+      "title": "Do not invoke for generic administrative copyediting",
+      "should_invoke": false,
+      "request": "把下面文字改成简洁清楚的物业公告，保留全部事实，不要影视化。只给公告。",
+      "input": "各位3至5号楼的业主啊，那个因为二次供水水箱清洗，9月2号上午9点到12点可能会停水，大家可以提前接点水，有问题打010-5558-2040。",
+      "hard_invariants": [
+        "Preserve buildings 3–5, reason, date, time, possibility, storage advice, and phone number.",
+        "Do not introduce characters, scenes, dialogue, shots, or video prompts."
+      ],
+      "human_rubric": ["concise notice", "no narrative expansion"]
+    },
+    {
+      "id": "FT-06",
+      "title": "Honor an explicit typo-only scope",
+      "should_invoke": true,
+      "request": "这是档案访谈里的原话。只改错别字和标点，不润色，不删重复，不补动作或心理，只输出校正后的原文。",
+      "input": "我，我那天没去。不是，我去了门囗，但是没进去。你要问为啥……我现在不想说。就，就这样。",
+      "hard_invariants": [
+        "The only lexical replacement is 囗 to 口.",
+        "Retain repetitions, self-correction, ellipsis, and incomplete explanation.",
+        "Add no speaker label, action, or psychology."
+      ],
+      "human_rubric": ["scope restraint"]
+    },
+    {
+      "id": "FT-07",
+      "title": "Respect a one-take static-camera constraint",
+      "should_invoke": true,
+      "request": "把下面场景转成可执行拍摄说明。严格使用单一固定广角机位、18秒一镜到底；不切镜、不推拉摇移、不加BGM、旁白或新台词。只给一行机位说明和0–18秒动作时间轴。",
+      "input": "空厨房。父亲把钥匙放桌上。女儿看着钥匙说：‘你还回来吗？’父亲不回答。第14秒水壶响。",
+      "hard_invariants": [
+        "Exactly one static wide shot covers 0–18 seconds.",
+        "The kettle sounds at second 14 after the key and question.",
+        "Add no cuts, camera movement, dialogue, narration, music, CTA, or logo."
+      ],
+      "human_rubric": ["action clarity", "use of silence and off-screen sound"]
+    }
+  ]
+}

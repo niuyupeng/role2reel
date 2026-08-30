@@ -1,0 +1,3 @@
+shot_id,start_s,end_s,duty,visual,framing,movement,performance,dialogue_sound,continuity
+S001,0,4,增强电影感,Person enters,Wide,static,Walks in,Room tone,Door open
+S001,3.5,3,Reveal response,Person reacts,Close,handheld,Reaction,Dialogue,

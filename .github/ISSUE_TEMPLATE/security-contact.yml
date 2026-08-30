@@ -1,0 +1,15 @@
+name: Security contact request
+description: Signal that the private advisory form is unavailable without disclosing vulnerability details.
+title: "[Security contact]: "
+labels: ["security"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include vulnerability details, exploit steps, credentials, private material, or personal data. This public issue only asks the maintainer to restore a private reporting route.
+  - type: checkboxes
+    id: safe-request
+    attributes:
+      label: Public-content confirmation
+      options:
+        - label: I confirm that this issue contains no vulnerability details or sensitive material.
+          required: true

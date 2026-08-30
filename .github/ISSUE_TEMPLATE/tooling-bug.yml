@@ -1,0 +1,33 @@
+name: Tooling bug
+description: Report a reproducible problem in an included script or template.
+title: "[Tooling]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Before posting, remove tokens, credentials, private scripts, personal data, local usernames and paths, sensitive command arguments, and unreleased production material.
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or template
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and full error
+      description: Paste the smallest useful excerpt after redacting all sensitive values and machine-specific paths.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: OS and Python version
+    validations:
+      required: true

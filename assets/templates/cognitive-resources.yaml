@@ -1,0 +1,16 @@
+schema_version: 1
+character_id: null
+resources:
+  - id: resource-001
+    type: belief
+    content: null
+    source: null
+    confidence: null
+    domains: []
+    conditions_that_change_it: []
+expertise:
+  known_domains: []
+  partial_domains: []
+  excluded_domains: []
+misconceptions: []
+analogies_and_categories: []

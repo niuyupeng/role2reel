@@ -1,0 +1,13 @@
+schema_version: 1
+character_id: null
+memories:
+  - id: memory-001
+    objective_event: null
+    perceived_event: null
+    belief_formed_then: null
+    current_meaning: null
+    current_accuracy: unknown
+    emotional_force: null
+    relationship_relevance: []
+    retrieval_cues: []
+    recency: null

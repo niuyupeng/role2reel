@@ -1,0 +1,15 @@
+schema_version: 1
+global_locks:
+  characters: []
+  wardrobe: []
+  props_and_ownership: []
+  location_geometry: []
+  light_and_time: []
+  screen_direction: []
+  voice_and_sound: []
+state_changes:
+  - item: null
+    before: null
+    trigger: null
+    after: null
+shot_handoffs: []

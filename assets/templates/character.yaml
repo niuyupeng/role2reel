@@ -1,0 +1,27 @@
+schema_version: 1
+character:
+  id: null
+  name: null
+  dramatic_role: null
+  immutable_facts: []
+stable_system:
+  drives: []
+  values: []
+  contradictions: []
+  pride_triggers: []
+  shame_triggers: []
+  interpretation_rules: []
+  decision_rules: []
+expression:
+  vocabulary_sources: []
+  syntax_and_rhythm: []
+  humor_and_evasion: []
+  register_by_relationship: []
+  approved_samples: []
+current_state:
+  body: null
+  emotion: null
+  need: null
+  risk: null
+  public_mask: null
+unknowns: []

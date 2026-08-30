@@ -1,0 +1,4 @@
+interface:
+  display_name: "Role2Reel"
+  short_description: "Human-first dialogue, scenes, and storyboards"
+  default_prompt: "Use $role2reel to turn this material into human dialogue, a playable scene, and purposeful shots."

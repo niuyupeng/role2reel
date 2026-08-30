@@ -1,0 +1,192 @@
+<p align="center">
+  <img src="docs/role2reel-banner.svg" alt="Role2Reel — human-first AI video direction" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://github.com/niuyupeng/role2reel/actions/workflows/validate.yml"><img src="https://github.com/niuyupeng/role2reel/actions/workflows/validate.yml/badge.svg" alt="Validation"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e.svg" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/Codex-skill-8b5cf6.svg" alt="Codex Skill">
+</p>
+
+# Role2Reel
+
+**Build the person. Shape the drama. Design the shot. Generate the reel.**
+
+Role2Reel is a human-first Codex skill for transforming rough story material into believable dialogue, playable scenes, purposeful storyboards, and model-ready video prompts.
+
+**先把人立住，再让戏发生，最后才让镜头开机。**
+
+它解决的不是“怎么多写一点电影术语”，而是一个更根本的问题：AI 经常让角色轮流解释现场，却没有让角色基于自己的经历、知识边界、关系和风险做出判断。
+
+```text
+raw material
+  -> meaning-preserving humanization
+  -> character knowledge, memory, judgment, and strategy
+  -> consequential dialogue and dramatic beats
+  -> shots with an audience-facing duty
+  -> continuity-safe video-model prompts
+```
+
+## What makes it different
+
+| Layer | Role2Reel asks |
+|---|---|
+| Humanization | What did the speaker actually mean, who owns the claim, and how certain are they? |
+| Character | What can this person know, remember, infer, misunderstand, want, and risk now? |
+| Dialogue | What change are they trying to produce in the other person, and what do they withhold? |
+| Scene | What changes in information, power, intimacy, intention, emotion, or physical state? |
+| Storyboard | Why must this shot exist for the audience? |
+| Video prompt | What does each reference asset contribute—and what must it never leak? |
+
+The central rule is simple:
+
+> **A character's private interpretation can be rich. Their spoken explanation should be restrained.**
+
+That creates lines like:
+
+```text
+母亲：票哪天的？
+女儿：明早。
+母亲：我问回来的。
+```
+
+The past, suspicion, relationship, and demand are present without being explained to the audience.
+
+## Install in Codex
+
+Recommended: ask the built-in installer to install this repository.
+
+```text
+$skill-installer Install the Role2Reel skill from https://github.com/niuyupeng/role2reel
+```
+
+For a manual user-scoped install, clone into the current Codex user skill location.
+
+macOS / Linux:
+
+```bash
+mkdir -p "$HOME/.agents/skills"
+git clone https://github.com/niuyupeng/role2reel.git "$HOME/.agents/skills/role2reel"
+cd "$HOME/.agents/skills/role2reel"
+```
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills" | Out-Null
+git clone https://github.com/niuyupeng/role2reel.git "$env:USERPROFILE\.agents\skills\role2reel"
+Set-Location -LiteralPath "$env:USERPROFILE\.agents\skills\role2reel"
+```
+
+Restart or open a new Codex task if the skill is not discovered immediately, then invoke it explicitly:
+
+```text
+$role2reel 把这段口述整理成人说得出口的对白，再按状态变化做分镜。
+```
+
+The repository root is the skill folder: `SKILL.md`, `agents/`, `references/`, `assets/`, and `scripts/` travel together.
+
+For a manual install, update with `git -C <skill-directory> pull --ff-only`. To uninstall, remove only the `role2reel` directory under `$HOME/.agents/skills` (or `$env:USERPROFILE\.agents\skills` on Windows), then restart Codex. Save or commit local changes before updating or removing the directory.
+
+## Use it
+
+Role2Reel routes to the narrowest requested workflow. You do not need to run the whole pipeline.
+
+```text
+$role2reel 只改错别字和标点，不要润色这段档案访谈。
+```
+
+```text
+$role2reel 根据人物各自知道的信息，写一场有潜台词的两人对白。
+```
+
+```text
+$role2reel 把这场戏做成 28 秒分镜；按观众需要感知的变化拆镜，不按台词拆镜。
+```
+
+```text
+$role2reel 把分镜适配成视频生成提示词。逐个锁定参考图、动作视频和声音素材的职责。
+```
+
+For a persistent production workspace, the installation-independent route is to ask the skill to initialize it:
+
+```text
+$role2reel 在当前工作目录初始化 my-film 项目，人物是“江瑟、牛老师”，首场戏编号 scene-001。
+```
+
+For a direct CLI call after a manual clone, run this from the repository root:
+
+```bash
+python3 scripts/init_project.py ./my-film --characters "江瑟,牛老师" --scene scene-001
+```
+
+On Windows, use `py -3` in place of `python3` for the direct CLI and validation commands below.
+
+The initializer never overwrites existing files unless `--force` is supplied explicitly.
+If a workspace already has scene and relationship contracts, adding a new participant without updating those contracts is rejected. Use `--profiles-only` only when you deliberately want an unlinked standalone profile; otherwise rerun with `--force` and the complete initial-scene participant list.
+
+## Included production system
+
+- meaning-ledger humanization that preserves uncertainty and authorship;
+- character runtime, episodic memory, relationship ledger, knowledge boundary, and second-order belief;
+- scene contract, private goals, turn-state simulation, and beat mapping;
+- natural Chinese dialogue guidance based on judgment and interaction rather than filler words;
+- shot-duty storyboarding, motivated camera, causal performance, physics, sound, and continuity;
+- provider-neutral asset-role contracts and causal timelines;
+- reusable YAML, CSV, Markdown, and Fountain templates;
+- deterministic project initialization, dialogue linting, storyboard timing checks, packaging, and repository validation;
+- forward-evaluation cases for fidelity, subtext, shot duty, asset isolation, and restraint.
+
+## Validate locally
+
+Run the complete local gate from the repository or installed skill root:
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 scripts/validate_repo.py
+python3 -m unittest discover -s tests -v
+python3 scripts/package_skill.py
+```
+
+PyYAML is used only for repository validation and YAML storyboard auditing; initialization, packaging, dialogue auditing, and CSV/JSON storyboard auditing use the Python standard library.
+
+The linters deliberately report review signals rather than claiming to measure artistic quality. Behavioral cases under `tests/forward/` separate machine-checkable invariants from blinded human judgment.
+
+See [EVALS.md](EVALS.md) for the pre-release results, the failure found during forward testing, and the post-fix reruns.
+
+## Design boundaries
+
+Role2Reel does **not**:
+
+- turn uncertainty into fact or invent evidence to make a rewrite smoother;
+- give every character the author's knowledge;
+- require dialogue or narration in every shot;
+- impose a universal shot length, hook, camera move, or marketing CTA;
+- assume remembered limits for Seedance or any other changing video product;
+- promise a higher adoption rate without blinded, comparable human evaluation.
+
+## Repository map
+
+```text
+SKILL.md                  skill router and invariants
+agents/openai.yaml        Codex UI metadata
+references/               task-specific creative and production guidance
+assets/templates/         reusable project contracts
+scripts/                  initializer, audits, validation, packaging
+tests/                    unit and forward-evaluation cases
+docs/                     public-facing visual assets
+```
+
+## Origins and independence
+
+Role2Reel was independently implemented from a user-developed character-judgment hypothesis and a review of two MIT-licensed community projects. It does not copy their source code, prose, prompt examples, templates, tests, or assets. Exact review commits and attribution are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+Role2Reel is not affiliated with, endorsed by, or sponsored by ByteDance, Dreamina, Jimeng, Seedance, OpenAI, or the referenced community projects. Product names and trademarks belong to their respective owners.
+
+## Contributing
+
+The most valuable contribution is not another universal writing rule. It is a reproducible failure case, a human final edit, and a reason why the candidate was accepted, modified, or rejected. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE) © 2026 niuyupeng and Role2Reel contributors.

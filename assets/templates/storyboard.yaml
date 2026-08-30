@@ -1,0 +1,18 @@
+schema_version: 1
+scene_id: null
+total_duration_s: null
+aspect_ratio: null
+shots:
+  - shot_id: S001
+    start_s: 0.0
+    end_s: null
+    duty: null
+    visual_event: null
+    framing_and_angle: null
+    camera_behavior: static
+    movement_motive: null
+    blocking: []
+    performance_cause: null
+    dialogue_sound: null
+    continuity: []
+    transition: cut

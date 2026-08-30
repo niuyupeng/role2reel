@@ -1,0 +1,16 @@
+schema_version: 1
+provider: null
+model: null
+primary_mode: null
+verified_constraints:
+  checked_at: null
+  source: null
+  items: []
+assets:
+  - source_id: null
+    media_type: null
+    borrow: []
+    target: null
+    interval_s: null
+    preserve: []
+    exclude: []

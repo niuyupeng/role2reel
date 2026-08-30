@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-labelledby="title desc">
+  <title id="title">Role2Reel</title>
+  <desc id="desc">Human-first AI video direction: person, drama, shot, reel.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0b12"/>
+      <stop offset="0.55" stop-color="#16132a"/>
+      <stop offset="1" stop-color="#23103b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="0.5" stop-color="#ec4899"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="480" rx="28" fill="url(#bg)"/>
+  <circle cx="1110" cy="75" r="180" fill="#8b5cf6" opacity="0.08"/>
+  <circle cx="180" cy="440" r="250" fill="#ec4899" opacity="0.06"/>
+  <g transform="translate(82 76)">
+    <text x="0" y="102" fill="#ffffff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="88" font-weight="800" letter-spacing="-4">Role<tspan fill="url(#accent)">2</tspan>Reel</text>
+    <rect x="2" y="129" width="520" height="5" rx="2.5" fill="url(#accent)"/>
+    <text x="2" y="188" fill="#d8d6e5" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="27" font-weight="500">Build the person. Shape the drama.</text>
+    <text x="2" y="228" fill="#d8d6e5" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="27" font-weight="500">Design the shot. Generate the reel.</text>
+    <text x="2" y="290" fill="#9f9aae" font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="23">先把人立住，再让戏发生，最后才让镜头开机。</text>
+  </g>
+  <g transform="translate(760 91)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="0" width="420" height="298" rx="28" stroke="#413b57" stroke-width="3"/>
+    <path d="M42 224 C88 182, 116 204, 155 165 S225 119, 268 144 S337 105, 378 68" stroke="url(#accent)" stroke-width="7" filter="url(#glow)"/>
+    <circle cx="88" cy="90" r="34" stroke="#f59e0b" stroke-width="6"/>
+    <path d="M36 168 C43 125, 62 112, 88 112 C114 112, 133 125, 140 168" stroke="#f59e0b" stroke-width="6"/>
+    <path d="M175 61 h93 a18 18 0 0 1 18 18 v38 a18 18 0 0 1-18 18 h-40 l-24 24 v-24 h-29 a18 18 0 0 1-18-18 V79 a18 18 0 0 1 18-18z" stroke="#ec4899" stroke-width="5"/>
+    <rect x="277" y="184" width="101" height="68" rx="9" stroke="#8b5cf6" stroke-width="5"/>
+    <path d="M289 198 h23 M324 198 h18 M354 198 h12 M289 238 h18 M319 238 h25 M356 238 h10" stroke="#8b5cf6" stroke-width="7"/>
+  </g>
+</svg>

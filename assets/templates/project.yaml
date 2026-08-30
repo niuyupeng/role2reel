@@ -1,0 +1,14 @@
+schema_version: 1
+project:
+  title: null
+  language: null
+  target_format: null
+  audience: null
+  duration_seconds: null
+  aspect_ratio: null
+source_contract:
+  supplied_files: []
+  immutable_facts: []
+  permitted_adaptations: []
+  unresolved_questions: []
+deliverables: []

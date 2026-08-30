@@ -1,0 +1,4 @@
+shot_id,start_s,end_s,duty,visual,framing,movement,performance,dialogue_sound,continuity
+S001,0,3.5,Establish evidence,Full suitcase visible before the question,Wide,static,Mother watches from doorway,Fabric and room tone,Suitcase open
+S002,3.5,7,Let the test land on the listener,Daughter presses clothing down,Medium,static,Daughter hears then answers,Mother off screen and zipper,Suitcase remains open
+S003,7,10.5,Reveal the inference,Both remain divided by doorway,Two-shot,static,Mother names the contradiction,Dialogue then silence,Screen direction held
