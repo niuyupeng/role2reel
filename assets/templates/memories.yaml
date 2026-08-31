@@ -1,12 +1,33 @@
 schema_version: 1
+compiled_provenance:
+  compiled_for_character_id: null
+  compiled_for_package_context_id: null
+  life_path_branch_id: null
+  compiled_from_lock_revision: null
+  compiled_from_fact_boundary_sha256: null
+  compiled_from_candidate_sha256: null
+  compiled_from_biography_revision: null
+  compiled_from_biography_sha256: null
+  source_refs: []
 character_id: null
 memories:
   - id: memory-001
+    claim_status: null
+    source_refs: []
+    compiled_from_lock_revision: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    author_lock: false
     objective_event: null
     perceived_event: null
     belief_formed_then: null
+    choice_made: null
+    feedback_received: null
+    strategy_update: null
     current_meaning: null
     current_accuracy: unknown
+    evidence_against: []
+    competing_explanations: []
     emotional_force: null
     relationship_relevance: []
     retrieval_cues: []

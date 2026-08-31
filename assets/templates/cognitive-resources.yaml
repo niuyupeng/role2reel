@@ -1,16 +1,35 @@
 schema_version: 1
+compiled_provenance:
+  compiled_for_character_id: null
+  compiled_for_package_context_id: null
+  life_path_branch_id: null
+  compiled_from_lock_revision: null
+  compiled_from_fact_boundary_sha256: null
+  compiled_from_candidate_sha256: null
+  compiled_from_biography_revision: null
+  compiled_from_biography_sha256: null
+  source_refs: []
 character_id: null
 resources:
   - id: resource-001
     type: belief
     content: null
     source: null
+    source_refs: []
+    compiled_from_lock_revision: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
     confidence: null
     domains: []
     conditions_that_change_it: []
+    evidence_against: []
 expertise:
   known_domains: []
   partial_domains: []
   excluded_domains: []
 misconceptions: []
 analogies_and_categories: []
+information_boundary_resource_ids: []
+attention_bias_resource_ids: []
+default_attribution_resource_ids: []
+value_priority_resource_ids: []

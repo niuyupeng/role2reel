@@ -21,6 +21,10 @@ Merge or remove a shot whose duty duplicates its neighbors without adding timing
 
 Before finalizing, compare every pair of adjacent shots. If one continuous view can show both the first reaction and the held ending state without a new reveal, spatial relation, sound source, or audience task, merge them. Do not add a separate closing hold merely to create a final shot.
 
+For a short scene, also compare shot boundaries with spoken-unit boundaries. If nearly every line starts a new shot, treat the draft as line-count-driven and rebuild it from the fewest continuous views that preserve the real state changes. When the user explicitly asks not to cut by dialogue and does not impose a shot count, default to strictly fewer shots than spoken units: let one shot carry several lines and combine a silent opening or reaction with an adjacent view whenever its duty remains legible. Exceed that diagnostic only for a genuinely non-interchangeable audience task, and make that exception visible in the requested shot-duty field.
+
+When silence is itself a requested or useful shot duty, keep at least one chosen silent shot wholly free of dialogue; a spoken shot with a quiet tail is a silent beat, not a silent shot. In a minimal exchange, concentrate the spoken units into a continuous master and reserve the second view for the silent state change instead of creating one shot per line.
+
 ## Choose the cut point
 
 Cut when the audience's perceptual task changes, not automatically at punctuation or speaker changes. Consider:

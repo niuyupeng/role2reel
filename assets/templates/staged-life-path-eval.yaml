@@ -1,0 +1,134 @@
+schema_version: 1
+record_id: null
+case_id: FT-14
+status: planned
+artifact_set:
+  project_root: null
+  workbench_file: null
+  biography_file: null
+  relationship_ledger_file: null
+  locked_fact_boundary_sha256: null
+  locked_candidate_sha256: null
+  life_path_lock_revision: null
+  approved_biography_revision: null
+  approved_biography_sha256: null
+  deep_audit_command: null
+  deep_audit_passed: false
+compile_phase:
+  fresh_task_id: null
+  model_and_version: null
+  input_file_hashes: []
+  output_artifact_files: []
+  canonical_source_refs: []
+  compile_audit_passed: false
+scene_phase:
+  fresh_task_id: null
+  model_and_version: null
+  received_compiled_assets_only: false
+  excluded_inputs:
+    - long_biography
+    - rejected_candidates
+    - prior_generation_transcript
+  input_file_hashes: []
+  scene_output_file: null
+  output_hash: null
+counterfactual_runs:
+  - kind: locked_baseline
+    status: planned
+    fresh_task_id: null
+    model_and_version: null
+    changed_inputs: []
+    variant_context:
+      kind: locked_baseline
+      occupational_context_file: null
+    input_file_hashes: []
+    canonical_source_refs: []
+    output_file: null
+    output_hash: null
+    blind_output_id: null
+  - kind: branch_swap
+    status: planned
+    fresh_task_id: null
+    model_and_version: null
+    changed_inputs:
+      - variant_context.workbench_file
+    variant_context:
+      kind: branch_swap
+      workbench_file: null
+      biography_file: null
+    input_file_hashes: []
+    canonical_source_refs: []
+    output_file: null
+    output_hash: null
+    blind_output_id: null
+  - kind: occupational_context_swap
+    status: planned
+    fresh_task_id: null
+    model_and_version: null
+    changed_inputs:
+      - variant_context.occupational_context_file
+    variant_context:
+      kind: occupational_context_swap
+      occupational_context_file: null
+      preserved_candidate_sha256: null
+    input_file_hashes: []
+    canonical_source_refs: []
+    output_file: null
+    output_hash: null
+    blind_output_id: null
+  - kind: causal_node_ablation
+    status: planned
+    fresh_task_id: null
+    model_and_version: null
+    changed_inputs:
+      - variant_context.ablated_source_ref
+    variant_context:
+      kind: causal_node_ablation
+      workbench_file: null
+      biography_file: null
+      ablated_source_ref: null
+    input_file_hashes: []
+    canonical_source_refs: []
+    output_file: null
+    output_hash: null
+    blind_output_id: null
+  - kind: dialogue_deletion
+    status: planned
+    fresh_task_id: null
+    model_and_version: null
+    changed_inputs:
+      - variant_context.source_output_sha256
+    variant_context:
+      kind: dialogue_deletion
+      source_run_kind: locked_baseline
+      source_output_sha256: null
+      removed_dialogue_units: null
+    input_file_hashes: []
+    canonical_source_refs: []
+    output_file: null
+    output_hash: null
+    blind_output_id: null
+traceability:
+  visible_deltas:
+    - run_kind: null
+      observed_delta: null
+      locked_source_refs: []
+      baseline_task_id: null
+      baseline_output_sha256: null
+      variant_task_id: null
+      variant_output_sha256: null
+      traceable: null
+  explicit_branch_leaks: []
+  semantic_branch_leak_review: pending
+blind_review:
+  randomized_output_ids: []
+  reviewer_ids: []
+  actor_playability: []
+  character_identifiability: []
+  nonverbal_replacement: []
+  relationship_truth: []
+  read_aloud_naturalness: []
+  repair_reasons: []
+claim_boundary:
+  behavior_pass: false
+  reason: actual staged runs and blinded review are pending

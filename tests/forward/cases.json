@@ -19,13 +19,13 @@
       "id": "FT-02",
       "title": "Subtext dialogue with private knowledge boundaries",
       "should_invoke": true,
-      "request": "根据下面资料写 8–10 轮可演对白。母亲想确认女儿是否还回来，女儿想在出门前不说破。结尾停在母亲问到核心、女儿未回答。允许动作和沉默；不要解释人物心理，不要输出分析。",
-      "input": "公共：清晨卧室，行李箱开着；女儿只说去广州出差两天；母亲看见三件厚毛衣和一张装框合影。母亲私有：三个月前女儿隐瞒过一次面试；她不知道新公司、期限、租住地址、票是单程。她不爱直接指控，常借吃穿住行发问。女儿私有：已接受栖鹭影业九个月外派，买了单程票，租住17-3；她相信母亲没看见任何文件。受压时只答字面问题，并一直收拾东西。",
+      "request": "根据资料写 8–10 轮可演对白。角色甲想确认封存记录是否被动过，角色乙想阻止追查但不暴露原因。结尾停在甲问到核心、乙未回答。允许动作和沉默；不要解释心理，不要输出分析。",
+      "input": "公共：闭馆后的资料室，一只封存盒在桌上，封条翘起。甲知道封条昨天完好，不知道谁来过。乙知道第三人下午取走过一页又放回，自己替其重新贴过封条；乙以为甲没看到登记簿。甲受压时先核对物件，不直接指控。乙受压时收拾现场，只回答字面问题。",
       "hard_invariants": [
-        "Mother must not know 栖鹭影业, 九个月, 17-3, or 单程.",
-        "Daughter must not volunteer those secrets before the ending.",
-        "The exchange must progress from test to literal evasion to upgraded question.",
-        "The final spoken turn is the mother's core question followed only by silence or action."
+        "Character A must not know who opened the box or why.",
+        "Character B must not volunteer the third person's action or the replaced page before the ending.",
+        "The exchange must progress through observable tests, evasion, and an upgraded question.",
+        "The final spoken turn is A's core question followed only by action or silence."
       ],
       "human_rubric": ["precise subtext", "distinct tactics", "playability"]
     },
@@ -33,8 +33,8 @@
       "id": "FT-03",
       "title": "Storyboard by state change rather than line count",
       "should_invoke": true,
-      "request": "把下面对白做成28秒、16:9、单场景专业分镜表。按观众需要感知的状态变化拆镜，不按台词拆镜。字段只要：编号、时间段、画面与动作、台词与声音、镜头职责、镜头依据。允许固定机位和无台词镜头；不要新增台词、旁白、BGM、CTA。",
-      "input": "母：厚外套带了吗？ 女：广州用不上。 母：那就不是去两天。（女儿把拉链拉到头。）母：票哪天的？ 女：明早。 母：我问回来的。（女儿的手停住。）",
+      "request": "把下面场景做成 28 秒、16:9、单场景专业分镜表。按观众需要感知的状态变化拆镜，不按台词拆镜。字段只要：编号、时间段、画面与动作、台词与声音、镜头职责、镜头依据。允许固定机位和无台词镜头；不要新增台词、旁白、BGM、CTA。",
+      "input": "甲把翘起的封条放到灯下。甲：你下午来过？乙继续把散页归齐。乙：来关窗。甲翻开登记簿。甲：我问的不是窗。乙的手停在最后一页。",
       "hard_invariants": [
         "The timeline covers exactly 0–28 seconds with no gap or overlap.",
         "Use fewer shots than spoken units and include at least one silent shot.",
@@ -87,13 +87,120 @@
       "title": "Respect a one-take static-camera constraint",
       "should_invoke": true,
       "request": "把下面场景转成可执行拍摄说明。严格使用单一固定广角机位、18秒一镜到底；不切镜、不推拉摇移、不加BGM、旁白或新台词。只给一行机位说明和0–18秒动作时间轴。",
-      "input": "空厨房。父亲把钥匙放桌上。女儿看着钥匙说：‘你还回来吗？’父亲不回答。第14秒水壶响。",
+      "input": "空排练室。角色甲把一本签名册放到长椅上。角色乙看着签名册说：‘你签了吗？’甲不回答。第14秒走廊铃响。",
       "hard_invariants": [
         "Exactly one static wide shot covers 0–18 seconds.",
-        "The kettle sounds at second 14 after the key and question.",
+        "The corridor bell sounds at second 14 after the book and question.",
         "Add no cuts, camera movement, dialogue, narration, music, CTA, or logo."
       ],
       "human_rubric": ["action clarity", "use of silence and off-screen sound"]
+    },
+    {
+      "id": "FT-08",
+      "title": "Generate author-controlled causal paths from sparse material",
+      "should_invoke": true,
+      "request": "从下面材料分离事实、可观察痕迹、证言、未知与冲突，再给至少三条因果主干真正不同的人生路径骨架。只到候选层：不要替我选择、打成唯一赢家、锁定、扩写长篇人物小传、改大纲或写对白。",
+      "input": "锁定事实：角色甲在故事开场前回到离开多年的故地，随身带着一份磨损严重的旧资料。可观察痕迹：甲能纠正当地记录中的一个日期，随后又说自己可能记错。证言：角色乙说甲当年主动离开；甲说自己没有选择。未知：离开的直接原因、旧资料的意义、甲乙关系为何中断。冲突：两份证言不能同时按字面完全成立。",
+      "hard_invariants": [
+        "Keep locked facts, traces, testimony, unknowns, and contradictions in distinct epistemic categories.",
+        "Give every fact-boundary item a stable ID and source reference; candidate supports, conflicts, and unknowns cite those IDs, and real-world feasibility remains explicit.",
+        "Provide at least three fact-compatible candidates with different causal spines and creative consequences, not renamed details or trait adjectives.",
+        "Each candidate connects context and knowledge to interpretation, choice, cost, feedback, update, residue, and present triggers.",
+        "Do not select, rank a unique winner, lock, expand a full biography, rewrite the outline, or present a candidate as discovered truth."
+      ],
+      "human_rubric": ["causal diversity", "author agency", "epistemic discipline", "creative usefulness"]
+    },
+    {
+      "id": "FT-09",
+      "title": "Keep rejected paths out of the locked runtime",
+      "evaluation_scope": "author-approved light unit fixture; not production-deep evidence",
+      "should_invoke": true,
+      "request": "作者明确锁定候选 B。请输出正式运行资产摘要和一个 6 节拍无姓名场景；另附一个标明‘仅反事实、非正史’的 A 路径对照。不要使用 C。正式内容不得泄漏未选分支，不要让人物解释前史。",
+      "input": "测试分层：作者明确批准 light，仅用于分支隔离单元测试，不代表 production deep，也不计入长传回灌证据。相同现状：角色面对熟人要求其立刻公开承诺。候选A：过去形成‘求助会制造无法偿还的债’。候选B：过去形成‘含糊拒绝会复制自己最反感的失约’。候选C：过去形成‘公开被赞许往往意味着随后被控制’。锁定：B。",
+      "hard_invariants": [
+        "The official runtime and scene derive only from locked candidate B.",
+        "Candidate A appears only in a clearly separated counterfactual and candidate C does not appear.",
+        "The result remains labeled as an author-approved light unit fixture and is never presented as a completed deep workflow.",
+        "The A and B runs differ materially in attention, private interpretation, first response, relationship move, or expression channel.",
+        "Neither run recites its backstory, and identity comes from strategy rather than a catchphrase."
+      ],
+      "human_rubric": ["branch isolation", "path-to-behavior causality", "surface restraint"]
+    },
+    {
+      "id": "FT-10",
+      "title": "Separate a locked life from occupational means and test ablation",
+      "evaluation_scope": "author-approved light unit fixture; staged deep evidence is FT-14",
+      "should_invoke": true,
+      "request": "运行三次同一场景：A保留锁定前史并使用职业环境甲；B保留同一前史但换成职业环境乙；C回到环境甲但删除形成节点。只比较注意、价值排序、关系策略、可用工具和可见表面，不写完整剧本。",
+      "input": "测试分层：作者明确批准 light，仅作反事实单元测试。锁定前史：角色曾替亲近者隐瞒一个错误，后来因公开后果理解到‘先私下保护人，再决定是否共同承担’。当前刺激：同伴在众人面前要求角色立刻表态。职业环境甲提供精确记录工具；职业环境乙提供可靠的人际求证网络。形成节点消融版删除上述隐瞒与后果。",
+      "hard_invariants": [
+        "Runs A and B preserve the core value order and relationship strategy while changing only genuinely context-dependent knowledge, tools, or feasible actions.",
+        "Run C changes a downstream appraisal, threshold, or strategy for an explainable reason; otherwise the removed node is declared decorative.",
+        "No occupational context directly supplies personality, morality, or speaking style.",
+        "The comparison remains grounded in the current cue and does not narrate the full past."
+      ],
+      "human_rubric": ["counterfactual validity", "causal traceability", "non-stereotyped behavior"]
+    },
+    {
+      "id": "FT-11",
+      "title": "Compress shared context without explanatory dialogue",
+      "evaluation_scope": "author-approved light unit fixture; staged deep evidence is FT-14",
+      "should_invoke": true,
+      "request": "根据共同语境契约写一个 20 秒、最多一句台词的场景。先用动作、空间、目光、停顿或沉默；不要解释旧事。场内另有一个不知情者，其反应必须与知情者不同。",
+      "input": "测试分层：作者明确批准 light，仅作共同语境单元测试。共享契约：角色甲和乙过去共同约定，把一枚物件立起表示‘停止争执，先处理眼前问题’；两人都知道对方记得并认可这个信号。角色丙当时不在场，也从未听说该约定。现在争执升级，甲把同类物件立在桌上。乙仍对旧事有不同私人感受，但理解该信号。",
+      "hard_invariants": [
+        "A and B may coordinate through the established cue while C cannot decode its private meaning.",
+        "No character recaps the origin or explains the cue afterward.",
+        "Use nonverbal behavior first and no more than one strategically necessary spoken line.",
+        "B's visible response reflects both mutual knowledge and a distinct private meaning rather than generic synchronized behavior."
+      ],
+      "human_rubric": ["shared-context precision", "nonverbal playability", "knowledge integrity"]
+    },
+    {
+      "id": "FT-12",
+      "title": "Expose an outline conflict without silently rewriting canon",
+      "evaluation_scope": "author-approved light unit fixture; staged deep evidence is FT-14",
+      "should_invoke": true,
+      "request": "审查既定情节与锁定人生机制的兼容性。只输出：冲突、为什么冲突、三类可选修正、各自代价、必须由作者决定的问题。不得自动改写正史或替作者选。",
+      "input": "测试分层：作者明确批准 light，仅作大纲冲突单元测试。锁定人生机制：角色在公开场合宁可承担实际损失，也不会作自己认为不真实的公开承认；已有多次一致行为和关系后果。既定大纲下一场要求角色在无新增压力、无关系变化、无误解的情况下立即作虚假公开承认，只为让后续追逐发生。此情节和人物正史都标为作者锁定。",
+      "hard_invariants": [
+        "Explicitly identify the incompatibility between the locked life and the locked outline beat.",
+        "Preserve both canon layers while offering options such as earning a transition, adding sufficient pressure or misconception, or author-authorized beat revision.",
+        "State the dramatic and continuity cost of each option.",
+        "Do not silently force the character, rewrite either lock, or choose on the author's behalf."
+      ],
+      "human_rubric": ["conflict diagnosis", "author control", "repair usefulness"]
+    },
+    {
+      "id": "FT-13",
+      "title": "Do not mislabel a short draft as a locked deep biography",
+      "should_invoke": true,
+      "request": "把我下面这份约两千字的人物稿直接标为 deep 已完成并锁定，然后生成正式对白。若不满足 deep 契约，也不要扩写，只告诉我当前合法状态和下一步。",
+      "input": "作者已选择一条候选路径，但只写了一个很短的阶段摘要；没有完整关系史、共同语境、当前残余清单或三万中文字符正文。",
+      "hard_invariants": [
+        "Do not mark the biography complete or locked and do not compile official dialogue.",
+        "Keep the branch selected or draft, state the unmet 30,000-countable-Han-character and causal-coverage requirements, and preserve author control.",
+        "Do not pad, fabricate completion, downgrade an important character, or treat the short summary as runtime canon."
+      ],
+      "human_rubric": ["depth-contract integrity", "scope restraint"]
+    },
+    {
+      "id": "FT-14",
+      "title": "Stage a real deep biography through compilation into isolated scene runs",
+      "should_invoke": true,
+      "evaluation_scope": "staged deep end-to-end; external audited artifacts required",
+      "execution_mode": "staged_external_artifacts",
+      "request": "按 staged deep 协议执行，不要把这条规格本身算作通过：第一步接收并审计真实 locked workbench 与已获作者批准的 deep biography；第二步在独立任务编译人物、记忆、关系和共同语境资产；第三步开启 fresh task，只给编译资产而不再给长传或候选，生成场景；随后分别做分支替换、职业环境替换、形成节点消融、台词删除和演员盲评。缺少任何真实附件或实际运行记录时必须标为 pending。",
+      "input": "运行器在临时目录注入：通过审计的 workbench、至少三万可计汉字且作者批准的 biography、项目级 shared-event registry、待审大纲与场景刺激。规格文件不内嵌或伪造这些附件。",
+      "hard_invariants": [
+        "Phase 1 records a passing mechanical audit, locked fact-boundary and candidate hashes, path revision, and path-bound approved biography revision/body hash for actual files.",
+        "Phase 2 writes existing in-root runtime artifacts with exact file hashes and canonical locked source closure, and passes automatic branch, fact, revision, biography, and shared-event checks.",
+        "Phase 3 runs in a fresh task that receives compiled assets but not the long biography, rejected candidates, hidden alternatives, or prior generation transcript.",
+        "Branch swap, occupational-context swap, node ablation, and dialogue deletion are separate recorded runs; every claimed visible delta points to a locked node or is rejected as untraceable.",
+        "Rejected or unlocked material has zero explicit provenance leakage, while semantic leakage remains a blinded human check.",
+        "No case-definition, schema check, missing-artifact response, or unverified passing record is reported as a behavioral pass; a completed record must also pass audit_staged_eval.py."
+      ],
+      "human_rubric": ["causal individuality", "actor playability", "nonverbal restraint", "relationship truth", "semantic branch isolation"]
     }
   ]
 }

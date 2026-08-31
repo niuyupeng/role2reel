@@ -21,6 +21,9 @@ Role2Reel is a human-first Codex skill for transforming rough story material int
 ```text
 raw material
   -> meaning-preserving humanization
+  -> competing causal life paths from facts, traces, unknowns, and conflicts
+  -> author selection / composition / lock
+  -> deep-biography expansion / exact-revision author approval
   -> character knowledge, memory, judgment, and strategy
   -> consequential dialogue and dramatic beats
   -> shots with an audience-facing duty
@@ -32,6 +35,7 @@ raw material
 | Layer | Role2Reel asks |
 |---|---|
 | Humanization | What did the speaker actually mean, who owns the claim, and how certain are they? |
+| Life path | Which different lives fit the evidence, which one does the author lock, and how does it change the character's current judgment? |
 | Character | What can this person know, remember, infer, misunderstand, want, and risk now? |
 | Dialogue | What change are they trying to produce in the other person, and what do they withhold? |
 | Scene | What changes in information, power, intimacy, intention, emotion, or physical state? |
@@ -40,17 +44,25 @@ raw material
 
 The central rule is simple:
 
-> **A character's private interpretation can be rich. Their spoken explanation should be restrained.**
+> **A character's private interpretation can be rich. Their visible explanation should be restrained.**
 
-That creates lines like:
+The resulting surface may be an action, a change in distance, a look, a stopped movement, a pause, silence, or—only when the current strategy still needs it—a line. The audience can feel a lived past without receiving a spoken biography.
+
+## Multi-candidate life-path development
+
+Role2Reel treats a current identity, relationship, achievement, or other summary label as a constraint—not a personality. The same visible present can be reached through materially different lives. The life-path layer separates facts, traces, testimony, rumors, unknowns, and conflicts; generates at least three causally different candidate histories; and gives the writer full authority to select, edit, combine, reject, regenerate, lock, or later unlock them. The path decision is bound to one stable character-package identity plus the exact fact snapshot, candidate hash, branch, and lock revision. A locked causal branch may be expanded, but it can enter the screenplay runtime only after the author separately approves that same character/package context plus the exact biography revision and body hash.
+
+For a consequential character marked `deep`, the locked-path Chinese biography defaults to at least 30,000 countable Han characters. Candidate outlines stay compact until selection and causal lock, so length is spent on the chosen life rather than several padded alternatives. The completed draft must pass mechanical provenance, revision, length, and obvious-repetition checks, then receive author approval for that exact content. Runtime files are real, hash-bound artifacts with canonical path sources; shared histories bind every participant to the same event registry and exact approved biography. Causal, temporal, relationship, shared-context, semantic-leakage, and artistic density still require human review. This is creative narrative abduction, not a prediction about a real person's hidden past.
+
+The result should remain mostly invisible on screen:
 
 ```text
-母亲：票哪天的？
-女儿：明早。
-母亲：我问回来的。
+locked life-path residue + present relationship and risk
+  -> appraisal -> first impulse -> social strategy
+  -> action / gaze / expression / silence / dialogue
 ```
 
-The past, suspicion, relationship, and demand are present without being explained to the audience.
+Occupation can supply a tool after that appraisal. It does not get to decide who the person is.
 
 ## Install in Codex
 
@@ -101,6 +113,14 @@ $role2reel 根据人物各自知道的信息，写一场有潜台词的两人对
 ```
 
 ```text
+$role2reel 从这份大纲、人物小传和已写场景中分离事实、痕迹、未知与冲突，先给我至少三条因果不同的人生路径；等我选择或修改后再继续。
+```
+
+```text
+$role2reel 把我锁定的人生路径扩写成 deep 级中文人物小传；通过机械审计后，等我批准这份小传的准确 revision 与 body hash，再编译为人物、记忆、关系、共同语境和场景运行资产。
+```
+
+```text
 $role2reel 把这场戏做成 28 秒分镜；按观众需要感知的变化拆镜，不按台词拆镜。
 ```
 
@@ -111,13 +131,13 @@ $role2reel 把分镜适配成视频生成提示词。逐个锁定参考图、动
 For a persistent production workspace, the installation-independent route is to ask the skill to initialize it:
 
 ```text
-$role2reel 在当前工作目录初始化 my-film 项目，人物是“江瑟、牛老师”，首场戏编号 scene-001。
+$role2reel 在当前工作目录初始化 my-film 项目，人物是“角色甲、角色乙”，首场戏编号 scene-001。
 ```
 
 For a direct CLI call after a manual clone, run this from the repository root:
 
 ```bash
-python3 scripts/init_project.py ./my-film --characters "江瑟,牛老师" --scene scene-001
+python3 scripts/init_project.py ./my-film --characters "角色甲,角色乙" --scene scene-001
 ```
 
 On Windows, use `py -3` in place of `python3` for the direct CLI and validation commands below.
@@ -128,14 +148,17 @@ If a workspace already has scene and relationship contracts, adding a new partic
 ## Included production system
 
 - meaning-ledger humanization that preserves uncertainty and authorship;
+- multi-candidate life-path generation, writer selection/composition, content-bound causal-path locks, separate exact-biography approval, 30,000-Han-character deep-biography gates, downstream provenance, and counterfactual tests;
 - character runtime, episodic memory, relationship ledger, knowledge boundary, and second-order belief;
+- shared-memory contracts for mutual knowledge, private meanings, looks, codes, jokes, taboos, and compressed nonverbal exchange;
 - scene contract, private goals, turn-state simulation, and beat mapping;
 - natural Chinese dialogue guidance based on judgment and interaction rather than filler words;
 - shot-duty storyboarding, motivated camera, causal performance, physics, sound, and continuity;
 - provider-neutral asset-role contracts and causal timelines;
 - reusable YAML, CSV, Markdown, and Fountain templates;
 - deterministic project initialization, dialogue linting, storyboard timing checks, packaging, and repository validation;
-- forward-evaluation cases for fidelity, subtext, shot duty, asset isolation, and restraint.
+- life-path and staged-evaluation auditors for exact fact/candidate/biography/artifact bindings, without claiming to score artistic quality;
+- forward-evaluation specifications for fidelity, subtext, shot duty, asset isolation, restraint, life-path counterfactuals, and staged deep compilation; FT-01–FT-13 have development cold regressions, while formal recorded runs, FT-14, and blinded human evaluation remain pending.
 
 ## Validate locally
 
@@ -152,13 +175,15 @@ PyYAML is used only for repository validation and YAML storyboard auditing; init
 
 The linters deliberately report review signals rather than claiming to measure artistic quality. Behavioral cases under `tests/forward/` separate machine-checkable invariants from blinded human judgment.
 
-See [EVALS.md](EVALS.md) for the pre-release results, the failure found during forward testing, and the post-fix reruns.
+See [EVALS.md](EVALS.md) for the historical release record, current deterministic checks, development cold-run failures and post-fix regressions, and the still-pending production-deep and human evaluations.
 
 ## Design boundaries
 
 Role2Reel does **not**:
 
 - turn uncertainty into fact or invent evidence to make a rewrite smoother;
+- infer a personality from an occupation, school, credential, status, diagnosis, zodiac sign, or other category;
+- present candidate histories as recovered truth about a real person, or let an unlocked branch enter canon;
 - give every character the author's knowledge;
 - require dialogue or narration in every shot;
 - impose a universal shot length, hook, camera move, or marketing CTA;

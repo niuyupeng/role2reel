@@ -33,7 +33,19 @@ RELATIONSHIP_PLACEHOLDER = """relationships:
     secrets_held: []
     prohibited_topics: []
     believes_other_knows: []
+    history_refs: []
     recent_changes: []"""
+
+CHARACTER_SOURCES_PLACEHOLDER = """character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []"""
 
 SCENE_CHARACTERS_PLACEHOLDER = """characters:
   - id: null
@@ -52,16 +64,23 @@ TURN_PLACEHOLDER = """turns:
     perceived_cue: null
     literal_read: null
     retrieved_factors: []
+    activated_shared_memory_keys: []
     attribution: null
     judgment_or_question: null
+    first_impulse: null
+    impulse_modulation: null
+    respond_or_withhold: null
     stance: null
     confidence: null
     social_objective: null
     strategy: null
     surface:
-      dialogue: null
       action: null
+      spatial_relation: null
+      gaze: null
+      expression: null
       silence: false
+      dialogue: null
     observable_by_others: []
     consequence: []
     residual_state: null"""
@@ -192,6 +211,7 @@ def _render_relationships(character_ids: list[str]) -> str:
                 "    secrets_held: []",
                 "    prohibited_topics: []",
                 "    believes_other_knows: []",
+                "    history_refs: []",
                 "    recent_changes: []",
             ]
         )
@@ -219,6 +239,27 @@ def _render_scene_characters(character_ids: list[str]) -> str:
     return "\n".join(lines)
 
 
+def _render_character_sources(character_ids: list[str]) -> str:
+    if not character_ids:
+        return "character_sources: []"
+    lines = ["character_sources:"]
+    for char_id in character_ids:
+        lines.extend(
+            [
+                f"  - character_id: {yaml_string(char_id)}",
+                f"    package_context_id: {yaml_string(f'character-package-{char_id}')}",
+                "    life_path_branch_id: null",
+                "    compiled_from_lock_revision: null",
+                "    compiled_from_fact_boundary_sha256: null",
+                "    compiled_from_candidate_sha256: null",
+                "    compiled_from_biography_revision: null",
+                "    compiled_from_biography_sha256: null",
+                "    source_refs: []",
+            ]
+        )
+    return "\n".join(lines)
+
+
 def _render_turns(character_ids: list[str]) -> str:
     if not character_ids:
         return "turns: []"
@@ -231,16 +272,23 @@ def _render_turns(character_ids: list[str]) -> str:
                 "    perceived_cue: null",
                 "    literal_read: null",
                 "    retrieved_factors: []",
+                "    activated_shared_memory_keys: []",
                 "    attribution: null",
                 "    judgment_or_question: null",
+                "    first_impulse: null",
+                "    impulse_modulation: null",
+                "    respond_or_withhold: null",
                 "    stance: null",
                 "    confidence: null",
                 "    social_objective: null",
                 "    strategy: null",
                 "    surface:",
-                "      dialogue: null",
                 "      action: null",
+                "      spatial_relation: null",
+                "      gaze: null",
+                "      expression: null",
                 "      silence: false",
+                "      dialogue: null",
                 "    observable_by_others: []",
                 "    consequence: []",
                 "    residual_state: null",
@@ -291,16 +339,22 @@ def initialize(
         )
         for template_name, filename in (
             ("cognitive-resources.yaml", "cognitive-resources.yaml"),
+            ("life-path-workbench.yaml", "life-path-workbench.yaml"),
             ("memories.yaml", "memories.yaml"),
         ):
+            replacements = {"character_id: null": f"character_id: {yaml_string(char_id)}"}
+            if template_name == "life-path-workbench.yaml":
+                replacements["package_context_id: null"] = (
+                    f"package_context_id: {yaml_string(f'character-package-{char_id}')}"
+                )
             materialize(
                 template_name,
                 char_dir / filename,
-                {"character_id: null": f"character_id: {yaml_string(char_id)}"},
+                replacements,
                 force=force,
                 created=created,
                 skipped=skipped,
-        )
+            )
         speech_path = char_dir / "speech-samples.md"
         if speech_path.is_symlink():
             raise ValueError(f"Refusing to write through a symbolic link: {speech_path}")
@@ -336,6 +390,7 @@ def initialize(
         "scene-contract.yaml",
         scene_dir / "scene-contract.yaml",
         {
+            CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids),
             "  id: null": f"  id: {yaml_string(scene_id)}",
             SCENE_CHARACTERS_PLACEHOLDER: _render_scene_characters(character_ids),
         },
@@ -346,12 +401,23 @@ def initialize(
     materialize(
         "turn-state.yaml",
         scene_dir / "turn-state.yaml",
-        {**scene_replacement, TURN_PLACEHOLDER: _render_turns(character_ids)},
+        {
+            **scene_replacement,
+            CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids),
+            TURN_PLACEHOLDER: _render_turns(character_ids),
+        },
         force=force,
         created=created,
         skipped=skipped,
     )
-    materialize("beat-map.yaml", scene_dir / "beat-map.yaml", scene_replacement, force=force, created=created, skipped=skipped)
+    materialize(
+        "beat-map.yaml",
+        scene_dir / "beat-map.yaml",
+        {**scene_replacement, CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids)},
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
     materialize("main.fountain", target / "04-screenplay" / "main.fountain", {}, force=force, created=created, skipped=skipped)
     materialize("storyboard.yaml", target / "05-storyboard" / "storyboard.yaml", scene_replacement, force=force, created=created, skipped=skipped)
     materialize("storyboard.csv", target / "05-storyboard" / "storyboard.csv", {}, force=force, created=created, skipped=skipped)

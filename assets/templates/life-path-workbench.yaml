@@ -1,0 +1,148 @@
+schema_version: 1
+character_id: null
+package_context_id: null
+fact_boundary:
+  author_locked_facts:
+    - id: null
+      content: null
+      source_refs: []
+  observable_traces:
+    - id: null
+      content: null
+      source_refs: []
+  self_reports_and_testimony:
+    - id: null
+      content: null
+      source_refs: []
+  rumors_misunderstandings_and_disputes:
+    - id: null
+      content: null
+      source_refs: []
+  author_preferences:
+    - id: null
+      content: null
+      source_refs: []
+  permitted_changes:
+    - id: null
+      content: null
+      source_refs: []
+  unknowns:
+    - id: null
+      content: null
+      source_refs: []
+  conflicts:
+    - id: null
+      content: null
+      source_refs: []
+candidates:
+  - id: path-001
+    status: candidate
+    derived_from: []
+    premise: null
+    causal_spine:
+      - id: node-001
+        period: null
+        environment_and_relationships: []
+        event_or_pattern: null
+        known_then: []
+        constraints_and_options: []
+        interpretation: null
+        choice: null
+        cost: null
+        feedback: null
+        belief_or_strategy_update: null
+        unresolved_residue: null
+        present_triggers: []
+    feasibility:
+      supports: []
+      conflicts: []
+      unknowns: []
+      real_world_feasibility: null
+    creative_consequences:
+      theme: []
+      character_arc: []
+      relationships: []
+      present_response: []
+selection:
+  state: open
+  selected_branch_id: null
+  rejected_branch_ids: []
+  author_decision:
+    actor: null
+    source_ref: null
+    decision_text: null
+    approved_character_id: null
+    approved_package_context_id: null
+    approved_branch_id: null
+    approved_fact_boundary_sha256: null
+    approved_candidate_sha256: null
+    approved_lock_revision: null
+  author_lock: false
+  lock_revision: 0
+  locked_fact_boundary_sha256: null
+  locked_candidate_sha256: null
+  unlock_history: []
+deep_biography:
+  mode: unclassified
+  status: not_started
+  tier_author_decision:
+    actor: null
+    source_ref: null
+    decision_text: null
+  biography_revision: 0
+  author_approval:
+    state: pending
+    approved_character_id: null
+    approved_package_context_id: null
+    approved_branch_id: null
+    approved_fact_boundary_sha256: null
+    approved_candidate_sha256: null
+    approved_path_lock_revision: null
+    approved_biography_revision: null
+    approved_body_sha256: null
+    decision:
+      actor: null
+      source_ref: null
+      decision_text: null
+  minimum_chinese_characters: 30000
+  biography_file: null
+  coverage_stages:
+    - stage_id: null
+      period: null
+      source_node_refs: []
+      environment_and_relationships: []
+      interpretation_and_choices: []
+      cost_feedback_updates: []
+      current_residues: []
+  shared_history_refs: []
+  shared_event_ids: []
+  relationship_ledger_file: null
+compiled_runtime:
+  compiled_for_character_id: null
+  compiled_for_package_context_id: null
+  compiled_from_lock_revision: null
+  compiled_from_fact_boundary_sha256: null
+  compiled_from_candidate_sha256: null
+  compiled_from_biography_revision: null
+  compiled_from_biography_sha256: null
+  source_refs: []
+  artifact_files: []
+  formal_scene_compilation: false
+outline_review:
+  input_outline_ref: null
+  input_outline_file: null
+  input_outline_sha256: null
+  input_outline_version: null
+  reviewed_against_lock_revision: null
+  reviewed_against_fact_boundary_sha256: null
+  reviewed_against_candidate_sha256: null
+  status: not_started
+  conflicts:
+    - id: null
+      description: null
+      options_and_costs: []
+      status: unresolved
+      author_decision:
+        actor: null
+        source_ref: null
+        decision_text: null

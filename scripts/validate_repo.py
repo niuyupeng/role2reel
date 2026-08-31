@@ -19,6 +19,9 @@ REQUIRED_TEMPLATES = {
     "project.yaml",
     "character.yaml",
     "cognitive-resources.yaml",
+    "life-path-workbench.yaml",
+    "life-path-biography.md",
+    "staged-life-path-eval.yaml",
     "memories.yaml",
     "relationship-ledger.yaml",
     "scene-contract.yaml",
@@ -32,7 +35,7 @@ REQUIRED_TEMPLATES = {
     "calibration-record.yaml",
     "main.fountain",
 }
-IGNORED_DIRS = {".git", "dist", "__pycache__", ".pytest_cache", ".venv"}
+IGNORED_DIRS = {".git", "dist", "test-results", "__pycache__", ".pytest_cache", ".venv"}
 
 
 def iter_files(root: Path):

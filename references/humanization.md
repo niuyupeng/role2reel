@@ -10,6 +10,8 @@ Humanization is not the addition of filler words, slang, or random verbal tics. 
 
 Infer the narrowest mode that satisfies the request. Label a change as adaptation when it materially redistributes or dramatizes content.
 
+Faithful cleanup and speakable-monologue modes must not invent temperament, jargon, verbal tics, biography, or certainty from a speaker's occupation, school, region, diagnosis, or status. Dramatic adaptation may use authored prehistory only when that material is already locked; otherwise preserve the source voice or label alternatives as candidate fiction.
+
 ## Build a meaning ledger
 
 Before rewriting substantial material, record compactly:

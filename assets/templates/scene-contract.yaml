@@ -1,4 +1,14 @@
 schema_version: 1
+character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []
 scene:
   id: null
   slugline: null
@@ -6,6 +16,7 @@ scene:
   physical_constraints: []
   immutable_facts: []
   source_lines_to_preserve: []
+  shared_memory_keys_in_scope: []
 start_state:
   information: []
   power: null

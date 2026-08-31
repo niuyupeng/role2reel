@@ -1,4 +1,14 @@
 schema_version: 1
+character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []
 scene_id: null
 turns:
   - turn: 1
@@ -6,16 +16,23 @@ turns:
     perceived_cue: null
     literal_read: null
     retrieved_factors: []
+    activated_shared_memory_keys: []
     attribution: null
     judgment_or_question: null
+    first_impulse: null
+    impulse_modulation: null
+    respond_or_withhold: null
     stance: null
     confidence: null
     social_objective: null
     strategy: null
     surface:
-      dialogue: null
       action: null
+      spatial_relation: null
+      gaze: null
+      expression: null
       silence: false
+      dialogue: null
     observable_by_others: []
     consequence: []
     residual_state: null

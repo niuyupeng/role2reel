@@ -5,10 +5,28 @@ method: null
 model_and_version: null
 prompt_version: null
 source_hash: null
+pre_scene_prediction:
+  recorded_before_scene_version: null
+  life_path_branch_id: null
+  life_path_lock_revision: null
+  predicted_notice: []
+  predicted_attribution: []
+  predicted_first_impulse: []
+  predicted_tactic: []
+  predicted_surface_delta: []
+  would_not_predict: []
 candidate: null
 decision: null
 human_final: null
 edit_reasons: []
+editing_outcomes:
+  adoption: null
+  whole_scene_no_rewrite: null
+  edit_magnitude: null
+  explanatory_dialogue_deleted_count: null
+  name_hidden_identification: null
+  read_aloud_naturalness: null
+  relationship_truth: null
 scores:
   source_fidelity: null
   naturalness: null

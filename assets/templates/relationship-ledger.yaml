@@ -13,4 +13,60 @@ relationships:
     secrets_held: []
     prohibited_topics: []
     believes_other_knows: []
+    history_refs: []
     recent_changes: []
+shared_event_registry:
+  - event_id: shared-event-001
+    event_revision: null
+    event_sha256: null
+    author_approval:
+      state: pending
+      approved_event_id: null
+      approved_event_revision: null
+      approved_event_sha256: null
+      decision:
+        actor: null
+        source_ref: null
+        decision_text: null
+    objective_core: null
+    time_window:
+      start: null
+      end: null
+      precision: null
+    participants:
+      - character_id: null
+        workbench_file: null
+        branch_id: null
+        life_path_lock_revision: null
+        locked_fact_boundary_sha256: null
+        locked_candidate_sha256: null
+        biography_revision: null
+        approved_biography_sha256: null
+        node_refs: []
+        perception_version: null
+        memory_version: null
+shared_memory_contracts:
+  - shared_memory_key: shared-001
+    shared_event_id: null
+    participants: []
+    perception_by_character: {}
+    private_meaning_by_character: {}
+    mutual_knowledge:
+      knows_event_by_character: {}
+      believes_others_know: {}
+      shorthand_established_by: []
+    triggers: []
+    shorthand:
+      code_fragments: []
+      objects_or_sounds: []
+      glance_or_gesture: []
+      running_joke: null
+      prohibited_topic: null
+    group_default_interpretation: null
+    private_variations: {}
+    permitted_surfaces: []
+    exposition_policy:
+      recap_to_mutual_knowers: forbidden
+      disclose_to_outsider: only_if_tactically_required
+      audience_may_not_know_cause: true
+    misfire_conditions: []

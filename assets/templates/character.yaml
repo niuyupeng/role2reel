@@ -1,9 +1,42 @@
 schema_version: 1
+compiled_provenance:
+  compiled_for_character_id: null
+  compiled_for_package_context_id: null
+  life_path_branch_id: null
+  compiled_from_lock_revision: null
+  compiled_from_fact_boundary_sha256: null
+  compiled_from_candidate_sha256: null
+  compiled_from_biography_revision: null
+  compiled_from_biography_sha256: null
+  source_refs: []
 character:
   id: null
   name: null
   dramatic_role: null
   immutable_facts: []
+role_context:
+  labels: []
+  demonstrated_affordances: []
+  demonstrated_constraints: []
+  demonstrated_expertise: []
+  does_not_imply: []
+formation:
+  life_path_branch_id: null
+  life_path_lock_revision: null
+  locked_candidate_sha256: null
+  biography_revision: null
+  learned_expectations: []
+  conditional_strategies: []
+  live_contradictions: []
+  first_impulses: []
+  default_relationship_moves: []
+  defenses_and_coping: []
+  source_map:
+    - runtime_claim_id: null
+      target_field: null
+      source_refs: []
+      scope_and_conditions: []
+      exceptions_or_disconfirming_cues: []
 stable_system:
   drives: []
   values: []

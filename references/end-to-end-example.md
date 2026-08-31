@@ -2,64 +2,69 @@
 
 ## Source situation
 
-A mother sees that her daughter has packed far more than a two-day business trip requires. The daughter says she is going to Guangzhou for work but has not admitted that she accepted a temporary posting there.
+Two fictional characters share a room with an established rule against handling each other's private items. Character B has opened a sealed note addressed to Character A after recognizing the handwriting, then returned it beneath a drinking glass. Character A notices that the glass has moved and the envelope has acquired a fresh crease, but does not know what B did or why.
 
 ## Meaning and knowledge
 
-- Objective event: the daughter plans to leave for the posting tomorrow.
-- Mother knows: claimed two-day trip, amount of luggage, daughter's recent distance.
-- Mother suspects: a longer departure; she does not know about the accepted posting.
-- Daughter believes: direct disclosure will trigger opposition.
-- Relationship pressure: concern is expressed through practical care; direct emotional language feels exposing.
+- Objective event: Character B opened the note, read it, and put it back before Character A entered.
+- Character A knows: the earlier position of the glass, the condition of the envelope, and the pair's rule about private items.
+- Character A suspects: Character B handled the note; A does not know whether B opened it or what prompted the interest.
+- Character B knows: the note's contents and that the handwriting connects to an unresolved private association that A does not know B witnessed.
+- Character B believes: admitting to the breach will force a second disclosure that feels more dangerous than the first.
+- Relationship pressure: A seeks precision when trust is at risk; B tries to contain exposure by answering narrowly, then reveals too much through an unprompted denial.
 
 ## Turn logic
 
 | Cue | Character judgment | Tactic | Surface | Consequence |
 |---|---|---|---|---|
-| Large suitcase | Mother thinks the trip story is incomplete | Test through practical detail | “厚外套带了吗？” | Daughter must answer without addressing duration |
-| “广州用不上” | Mother hears literal evasion | Tighten inference | “那就不是去两天。” | Hidden issue becomes shared |
-| Daughter closes zipper | Mother reads refusal to volunteer | Ask a normal-looking logistics question | “票哪天的？” | Daughter can still answer selectively |
-| “明早” | Mother confirms evasion | Expose the real question | “我问回来的。” | Return becomes the scene's demand |
+| The glass no longer matches its old ring on the table | A thinks the area was disturbed but withholds the accusation | Test through an ordinary housekeeping question | “桌面擦过了？” | B must either explain the changed surface or refuse the premise |
+| “水洒了” | A accepts the possibility but tests how far the handling went | Narrow the question to the object covering the note | “杯子也拿起来了？” | B admits touching the setup without addressing the note |
+| A turns over the newly creased envelope and remains silent | B reads the silence as an accusation | Deny the more serious act before it is named | “信没拆。” | B exposes knowledge of the question A had not yet asked |
+| The unprompted denial | A's suspicion becomes materially stronger, though not certain | Mark the contradiction without claiming omniscience | “我没问信。” | Trust and conversational control shift; B must choose the next disclosure |
 
 ## Playable scene
 
 ```fountain
-INT. 女儿卧室 - 夜
+INT. 合用房间 - 傍晚
 
-床上摊着一只塞满的行李箱。母亲站在门口，没有进去。
+桌上，一只空玻璃杯压着未拆的信封。角色甲进门，停住。
 
-母亲
-厚外套带了吗？
+角色甲
+桌面擦过了？
 
-女儿没抬头，把衣角压进箱子。
+水槽边，角色乙把手擦干。
 
-女儿
-广州用不上。
+角色乙
+水洒了。
 
-母亲
-那就不是去两天。
+角色甲提起杯子。杯底原先留下的浅印和现在错开半寸。
 
-拉链卡住。女儿换了个方向，拉到底。
+角色甲
+杯子也拿起来了？
 
-母亲
-票哪天的？
+角色乙
+就一下。
 
-女儿
-明早。
+角色甲把信封翻过来。封口旁多了一道新折痕。角色甲还没开口。
 
-母亲
-我问回来的。
+角色乙
+信没拆。
+
+角色甲看了角色乙一眼，把信封放回那道旧杯印上。
+
+角色甲
+我没问信。
 ```
 
 ## Beat-to-shot sketch
 
 | Shot | Time | Duty | Picture and performance | Camera | Sound |
 |---|---:|---|---|---|---|
-| 01 | 0.0-3.5 | Establish distance and evidence | Wide: full suitcase foreground, daughter at bed, mother held in doorway | Static; doorway divides them | Fabric, room tone |
-| 02 | 3.5-7.0 | Let the test land on the listener | Daughter medium; she hears “厚外套” and presses clothing down before answering | Slow, nearly imperceptible push only if supported | Mother's line off screen, zipper teeth |
-| 03 | 7.0-10.5 | Reveal the mother's inference | Two-shot across the room; neither crosses the threshold | Static | “那就不是去两天。” then silence |
-| 04 | 10.5-14.5 | Turn a practical question into the real demand | Close on stuck zipper, then hold daughter as “我问回来的” arrives off screen | No decorative move | Zipper stops; final line; no score required |
+| 01 | 0.0-4.0 | Establish the shared space and displaced evidence | Wide: glass and envelope foreground; Character A stops on entry while Character B remains by the sink | Static; preserve the distance between both characters and the table | Room tone, a final drop from the tap |
+| 02 | 4.0-8.0 | Let the ordinary test create a cover story | Hold Character B drying their hands before answering “水洒了” | Medium, no push required | Cloth against skin; Character A's question off screen |
+| 03 | 8.0-12.0 | Make A's suspicion legible without granting certainty | Insert: the lifted glass reveals two offset rings; return to A for “杯子也拿起来了？” | One motivated cut from evidence to judgment | Glass touches wood; B answers after a short hold |
+| 04 | 12.0-17.5 | Turn silence into pressure and the denial into evidence | A rotates the envelope; hold both characters as B says “信没拆” before A has asked about it | Static two-shot; end on the envelope returned to the old ring | Paper, the unprompted denial, then “我没问信。”; no score required |
 
 ## Adapter note
 
-Lock identity, wardrobe, suitcase, doorway geography, eyelines, and the zipper's state across shots. If a motion reference is supplied for packing, borrow only hand action and timing; exclude its actor identity, clothing, room, and camera path. Confirm the chosen video model's current duration and reference-input capabilities before converting this sketch into provider syntax.
+Lock identity, wardrobe, room geography, glass position, both table rings, envelope orientation, and the fresh crease across shots. If a motion reference is supplied for lifting the glass or handling paper, borrow only the relevant hand action and timing; exclude its actor identity, clothing, environment, and camera path. Confirm the chosen video model's current duration and reference-input capabilities before converting this sketch into provider syntax.

@@ -23,25 +23,32 @@ class InitializerTests(unittest.TestCase):
     def test_initializes_unicode_characters_without_overwrite(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / "project"
-            created, skipped = initialize(target, ["江瑟", "牛老师"], "离开", False)
+            created, skipped = initialize(target, ["角色甲", "角色乙"], "场景一", False)
             self.assertGreaterEqual(len(created), 18)
             self.assertEqual(skipped, [])
-            self.assertTrue((target / "02-characters" / "江瑟" / "character.yaml").is_file())
-            self.assertTrue((target / "02-characters" / "牛老师" / "memories.yaml").is_file())
-            self.assertTrue((target / "03-scene" / "离开" / "scene-contract.yaml").is_file())
+            self.assertTrue((target / "02-characters" / "角色甲" / "character.yaml").is_file())
+            self.assertTrue((target / "02-characters" / "角色乙" / "memories.yaml").is_file())
+            self.assertTrue((target / "02-characters" / "角色乙" / "life-path-workbench.yaml").is_file())
+            self.assertTrue((target / "03-scene" / "场景一" / "scene-contract.yaml").is_file())
             self.assertTrue((target / "01-humanized").is_dir())
-            first_content = (target / "02-characters" / "江瑟" / "character.yaml").read_text(encoding="utf-8")
-            self.assertIn('name: "江瑟"', first_content)
-            scene_content = (target / "03-scene" / "离开" / "scene-contract.yaml").read_text(encoding="utf-8")
-            turn_content = (target / "03-scene" / "离开" / "turn-state.yaml").read_text(encoding="utf-8")
+            first_content = (target / "02-characters" / "角色甲" / "character.yaml").read_text(encoding="utf-8")
+            self.assertIn('name: "角色甲"', first_content)
+            scene_content = (target / "03-scene" / "场景一" / "scene-contract.yaml").read_text(encoding="utf-8")
+            turn_content = (target / "03-scene" / "场景一" / "turn-state.yaml").read_text(encoding="utf-8")
             relationship_content = (target / "02-characters" / "relationship-ledger.yaml").read_text(encoding="utf-8")
-            self.assertIn('  - id: "江瑟"', scene_content)
-            self.assertIn('  - id: "牛老师"', scene_content)
+            life_path_content = (target / "02-characters" / "角色乙" / "life-path-workbench.yaml").read_text(encoding="utf-8")
+            self.assertIn('  - id: "角色甲"', scene_content)
+            self.assertIn('  - id: "角色乙"', scene_content)
             self.assertNotIn("character_id: null", turn_content)
-            self.assertIn('from_character: "江瑟"', relationship_content)
-            self.assertIn('to_character: "牛老师"', relationship_content)
+            self.assertIn('from_character: "角色甲"', relationship_content)
+            self.assertIn('to_character: "角色乙"', relationship_content)
+            self.assertIn('character_id: "角色乙"', life_path_content)
+            self.assertIn('package_context_id: "character-package-角色乙"', life_path_content)
+            self.assertIn("mode: unclassified", life_path_content)
+            self.assertIn("shared_memory_contracts:", relationship_content)
+            self.assertIn("first_impulse: null", turn_content)
 
-            created_again, skipped_again = initialize(target, ["江瑟", "牛老师"], "离开", False)
+            created_again, skipped_again = initialize(target, ["角色甲", "角色乙"], "场景一", False)
             self.assertEqual(created_again, [])
             self.assertEqual(len(skipped_again), len(created))
 
@@ -66,6 +73,24 @@ class InitializerTests(unittest.TestCase):
             initialize(target, ["COM1"], "NUL", False)
             self.assertTrue((target / "02-characters" / "id-com1" / "character.yaml").is_file())
             self.assertTrue((target / "03-scene" / "id-nul" / "scene-contract.yaml").is_file())
+
+    def test_v01_workspace_remains_usable_without_retroactive_life_path_files(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "legacy-project"
+            legacy_dir = target / "02-characters" / "legacy"
+            legacy_dir.mkdir(parents=True)
+            (target / "project.yaml").write_text("schema_version: 1\n", encoding="utf-8")
+            legacy_profile = legacy_dir / "character.yaml"
+            legacy_content = 'schema_version: 1\ncharacter:\n  id: "legacy"\n  name: "旧角色"\n'
+            legacy_profile.write_text(legacy_content, encoding="utf-8")
+
+            created, skipped = initialize(target, ["新增角色"], "unused", False, profiles_only=True)
+
+            self.assertEqual(skipped, [])
+            self.assertTrue(any(path.name == "life-path-workbench.yaml" for path in created))
+            self.assertEqual(legacy_profile.read_text(encoding="utf-8"), legacy_content)
+            self.assertFalse((legacy_dir / "life-path-workbench.yaml").exists())
+            self.assertEqual(audit_text("旧角色\n原样保留。\n"), [])
 
 
 class DialogueAuditTests(unittest.TestCase):
@@ -247,6 +272,19 @@ class RepositoryTests(unittest.TestCase):
             broken.write_text("def broken(:\n", encoding="utf-8")
             errors = validate(clone)
             self.assertTrue(any("Python syntax error in scripts" in error for error in errors))
+
+    def test_validator_ignores_local_forward_run_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            clone = Path(directory) / "role2reel"
+            shutil.copytree(
+                ROOT,
+                clone,
+                ignore=shutil.ignore_patterns(".git", "dist", "test-results", "__pycache__"),
+            )
+            results = clone / "test-results"
+            results.mkdir()
+            (results / "private-run.py").write_text("def not_valid(:\n", encoding="utf-8")
+            self.assertEqual(validate(clone), [])
 
     def test_validator_rejects_malformed_yaml_and_template_directory(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
