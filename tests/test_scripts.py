@@ -29,24 +29,38 @@ class InitializerTests(unittest.TestCase):
             self.assertTrue((target / "02-characters" / "角色甲" / "character.yaml").is_file())
             self.assertTrue((target / "02-characters" / "角色乙" / "memories.yaml").is_file())
             self.assertTrue((target / "02-characters" / "角色乙" / "life-path-workbench.yaml").is_file())
+            self.assertTrue((target / "02-characters" / "角色乙" / "life-path-reading.md").is_file())
+            self.assertTrue((target / "02-characters" / "角色乙" / "speech-corpus.yaml").is_file())
             self.assertTrue((target / "03-scene" / "场景一" / "scene-contract.yaml").is_file())
             self.assertTrue((target / "01-humanized").is_dir())
+            self.assertTrue((target / "01-humanized" / "meaning-ledger.yaml").is_file())
+            self.assertTrue((target / "01-humanized" / "humanized-draft.md").is_file())
+            self.assertTrue((target / "06-continuity" / "visual-bible.yaml").is_file())
+            self.assertTrue((target / "07-adapter" / "video-task.yaml").is_file())
             first_content = (target / "02-characters" / "角色甲" / "character.yaml").read_text(encoding="utf-8")
             self.assertIn('name: "角色甲"', first_content)
             scene_content = (target / "03-scene" / "场景一" / "scene-contract.yaml").read_text(encoding="utf-8")
+            beat_content = (target / "03-scene" / "场景一" / "beat-map.yaml").read_text(encoding="utf-8")
             turn_content = (target / "03-scene" / "场景一" / "turn-state.yaml").read_text(encoding="utf-8")
+            speech_content = (target / "02-characters" / "角色乙" / "speech-corpus.yaml").read_text(encoding="utf-8")
             relationship_content = (target / "02-characters" / "relationship-ledger.yaml").read_text(encoding="utf-8")
             life_path_content = (target / "02-characters" / "角色乙" / "life-path-workbench.yaml").read_text(encoding="utf-8")
             self.assertIn('  - id: "角色甲"', scene_content)
             self.assertIn('  - id: "角色乙"', scene_content)
             self.assertNotIn("character_id: null", turn_content)
+            self.assertIn('character_id: "角色乙"', speech_content)
             self.assertIn('from_character: "角色甲"', relationship_content)
             self.assertIn('to_character: "角色乙"', relationship_content)
+            self.assertIn('character_sources:\n      - character_id: "角色甲"', relationship_content)
+            self.assertIn('package_context_id: "character-package-角色乙"', relationship_content)
             self.assertIn('character_id: "角色乙"', life_path_content)
             self.assertIn('package_context_id: "character-package-角色乙"', life_path_content)
             self.assertIn("mode: unclassified", life_path_content)
             self.assertIn("shared_memory_contracts:", relationship_content)
             self.assertIn("first_impulse: null", turn_content)
+            self.assertIn("decision_traces:", turn_content)
+            self.assertIn("character_runtime_scopes:", scene_content)
+            self.assertIn('beat_map_id: "场景一-beats"', beat_content)
 
             created_again, skipped_again = initialize(target, ["角色甲", "角色乙"], "场景一", False)
             self.assertEqual(created_again, [])
@@ -91,6 +105,70 @@ class InitializerTests(unittest.TestCase):
             self.assertEqual(legacy_profile.read_text(encoding="utf-8"), legacy_content)
             self.assertFalse((legacy_dir / "life-path-workbench.yaml").exists())
             self.assertEqual(audit_text("旧角色\n原样保留。\n"), [])
+
+    def test_rejects_symlinked_destination_parent_without_external_write(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "project"
+            outside = root / "outside"
+            target.mkdir()
+            outside.mkdir()
+            sentinel = outside / "keep.txt"
+            sentinel.write_text("outside stays unchanged", encoding="utf-8")
+            linked_parent = target / "02-characters"
+            try:
+                linked_parent.symlink_to(outside, target_is_directory=True)
+            except (NotImplementedError, OSError) as exc:
+                self.skipTest(f"Symlinks unavailable: {exc}")
+
+            with self.assertRaises(ValueError):
+                initialize(target, ["角色甲"], "scene", False)
+
+            self.assertEqual(sentinel.read_text(encoding="utf-8"), "outside stays unchanged")
+            self.assertEqual({path.name for path in outside.iterdir()}, {"keep.txt"})
+
+    def test_force_rejects_hard_linked_template_destination(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "project"
+            target.mkdir()
+            external = root / "external-project.yaml"
+            external.write_text("external: unchanged\n", encoding="utf-8")
+            os.link(external, target / "project.yaml")
+
+            with self.assertRaises(ValueError):
+                initialize(target, [], "scene", True)
+
+            self.assertEqual(external.read_text(encoding="utf-8"), "external: unchanged\n")
+
+    def test_force_rejects_hard_linked_speech_samples(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "project"
+            initialize(target, ["A"], "scene", False)
+            speech_path = target / "02-characters" / "a" / "speech-samples.md"
+            speech_path.unlink()
+            external = root / "external-speech.md"
+            external.write_text("private external speech\n", encoding="utf-8")
+            os.link(external, speech_path)
+
+            with self.assertRaises(ValueError):
+                initialize(target, ["A"], "scene", True)
+
+            self.assertEqual(external.read_text(encoding="utf-8"), "private external speech\n")
+
+    def test_force_still_replaces_an_existing_regular_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "project"
+            initialize(target, [], "scene", False)
+            project_file = target / "project.yaml"
+            project_file.write_text("custom: stale\n", encoding="utf-8")
+
+            created, skipped = initialize(target, [], "scene", True)
+
+            self.assertIn(project_file, created)
+            self.assertEqual(skipped, [])
+            self.assertNotEqual(project_file.read_text(encoding="utf-8"), "custom: stale\n")
 
 
 class DialogueAuditTests(unittest.TestCase):

@@ -1,14 +1,23 @@
 # Multi-candidate life-path development
 
-This layer gives consequential characters a lived pre-story history before they are asked to carry plot or dialogue. It turns sparse story material into author-controlled creative hypotheses, then compiles the chosen history back into the existing Role2Reel character and scene runtime.
+This layer gives consequential fictional characters a lived pre-story history before they are asked to carry plot or dialogue. It turns sparse story material into author-controlled creative hypotheses, then compiles the chosen history back into the existing Role2Reel character and scene runtime.
 
-It is narrative abduction, not fortune-telling, psychological diagnosis, social polling, or discovery of a real person's private past.
+Role2Reel includes a deliberately fortune-reading-shaped creative method: **命线反演 (fictional life-path reverse inference; 类推命式虚构人物前史推演)**. It borrows one useful imaginative operation from a reading—several hidden lives may explain the same few present signs—without claiming supernatural knowledge, probability, psychological diagnosis, social consensus, or discovery of a real person's private past. See [fatecasting.md](fatecasting.md) for the author-facing method.
 
 ## When to use it
 
 Use this workflow when the user asks for a character biography or life trajectory, when a main or recurring character is defined mostly by current labels and plot functions, or when different characters keep producing interchangeable judgments, actions, and dialogue.
 
 Do not force it into typo-only correction, faithful transcript cleanup, a minor functional role, or an already locked character whose requested scene is fully supported by existing canon. Multi-agent review can help during development or evaluation, but it is not a required runtime architecture.
+
+## Separate exploration from production lock
+
+Use two explicit modes:
+
+- `explore`: present at least three readable, genuinely causal life readings. They are fictional possibilities, not canon, probabilities, or an invitation for the model to choose a winner. The author may select, edit, splice, reject, regenerate, or preserve an unknown. Keep IDs and hashes out of the reading flow unless the author asks for the audit view.
+- `production-lock`: translate an author-chosen or author-composed reading into the formal fact boundary, candidate spine, provenance, decision, and lock records below. Only this mode can authorize biography expansion or downstream compilation, and only after an actual author decision.
+
+Do not make a user complete production paperwork merely to compare possibilities. Conversely, do not treat enthusiasm for an exploratory reading as a formal path lock. `assets/templates/life-path-reading.md` is the readable exploration surface; `assets/templates/life-path-workbench.yaml` remains the auditable production record.
 
 ## Establish the fact boundary
 
@@ -32,6 +41,8 @@ For a living or identifiable real person, do not infer private or sensitive hist
 ## Generate comparable candidates before long-form expansion
 
 Produce at least three causally distinct, fact-compatible outlines before writing a deep biography. The author may ask for more, but no scorer or model may automatically choose a single winner.
+
+In `explore` mode, present those outlines first as readable life readings rather than schema dumps. Each reading should let the author feel the route from present traces through ordinary years, choices, pressures, costs, self-story, and unresolved residue to the character's opening impulse. Include a counter-reading that explains the same fixed traces through a materially different causal route. Use the divergence method in [fatecasting.md](fatecasting.md); do not derive a path from a demographic, educational, occupational, or status stereotype.
 
 Candidates must differ in how the person reached the present and in the creative consequences of that route. Changing names, places, dates, résumé items, or trait adjectives is not a different path.
 
@@ -60,9 +71,9 @@ For each candidate, expose:
 - basic real-world feasibility;
 - likely effects on theme, character arc, relationships, and present response.
 
-For a candidate-only handoff, do not compress these audit fields into an unreferenced prose summary. Show each fact-boundary item as `id + category + content + source_ref`. Then show, for every candidate, explicit `supports`, `conflicts`, and `unknowns` lists that cite those IDs, a feasibility note, creative consequences, and causal nodes that retain context, available knowledge, interpretation, choice, cost, feedback, update, residue, and present trigger. A source reference may point to a labeled clause or section of the supplied material; it must not pretend that an external source was checked when none was provided.
+For a formal candidate-only handoff in `production-lock` mode, do not compress these audit fields into an unreferenced prose summary. Show each fact-boundary item as `id + category + content + source_ref`. Then show, for every candidate, explicit `supports`, `conflicts`, and `unknowns` lists that cite those IDs, a feasibility note, creative consequences, and causal nodes that retain context, available knowledge, interpretation, choice, cost, feedback, update, residue, and present trigger. A source reference may point to a labeled clause or section of the supplied material; it must not pretend that an external source was checked when none was provided. This formal view follows the author-facing reading; it does not replace it.
 
-These are materials for author judgment, not probabilities that claim to reveal which hidden past is true.
+These are materials for author judgment, not probabilities that claim to reveal which hidden past is true. Do not rank them as most likely, safest, strongest, or best unless the author supplies a separate creative criterion and explicitly asks for a comparison against that criterion; even then, the comparison cannot make the selection or lock on the author's behalf.
 
 ## Preserve author control
 
@@ -81,6 +92,8 @@ The lock declaration must point to an actual author decision in the conversation
 ## Expand the locked path into a deep biography
 
 For a main or important character that must keep driving plot, relationships, and dialogue, `deep` mode defaults to a minimum of **30,000 countable Chinese Han characters** in the full biography body derived from the locked path. An initialized but unclassified role remains `unclassified` until the workflow establishes its story function. The system must not silently downgrade an important character. A project may explicitly choose a lighter tier for a minor or functional role and record that author decision. Meeting the threshold and passing the mechanical audit do not constitute author approval.
+
+A `light` path used for an isolated behavior or dialogue test remains a light fixture even when the resulting scene is excellent. Keep `evaluation_scope: light behavior fixture; not deep-biography evidence` (or an unambiguous Chinese equivalent) visible in the delivered test artifact. This label is metadata, not screenplay dialogue, and prevents a small successful sample from being cited as completion of the deep biography or fused production chain.
 
 The candidate outlines remain compact until the author selects or compatibly composes one, resolves its contradictions, and explicitly locks that route. Only that locked route is expanded by default. If the author explicitly asks for several full alternatives, each route must be separately locked for that experiment and every alternative presented as full must satisfy its own declared depth contract. Every full alternative used downstream also requires separate approval of its exact biography revision and body hash.
 
@@ -118,7 +131,9 @@ The long biography is offline story history, not scene-prompt material. Compile 
 
 Use a small number of scene-relevant personal or shared memories at runtime. Never place the complete long biography in a scene prompt.
 
-The compilation ledger separates locked life-path source references from artifact file records. The runtime and every record bind `compiled_for_character_id` and `compiled_for_package_context_id`, then name a type, project-root-contained UTF-8 regular file, exact file SHA-256, canonical `life-path:<branch>/<node>` source closure, fact-boundary hash, candidate hash, path-lock revision, biography revision, and body hash. Per-character structured assets carry the same identity inside `compiled_provenance`. Multi-character scene, turn-state, and beat-map assets use `character_sources[]`; each character workbench audits its own exact entry, while project-level cross-workbench review is still required for the other entries. Known structured artifacts must also contain canonical references in their own data; the current character's record and file reference sets must agree. A compiled relationship ledger must be the exact file declared by the workbench. Its ordinary relationship and shared-memory claim sections receive the same branch and closure scan, while its shared-event registry receives the cross-workbench participant audit. This makes silent file edits, cross-character replay, provenance exemptions, and omitted explicit provenance fail mechanically, while semantic support for each creative claim remains a human review question.
+The compilation ledger separates locked life-path source references from artifact file records. The runtime and every record bind `compiled_for_character_id` and `compiled_for_package_context_id`, then name a type, project-root-contained UTF-8 regular file, exact file SHA-256, canonical `life-path:<branch>/<node>` source closure, fact-boundary hash, candidate hash, path-lock revision, biography revision, and body hash. Per-character structured assets carry the same identity inside `compiled_provenance`. Every shared structured artifact from scene through video—scene contract, turn state, beat map, storyboard, continuity, visual bible, asset contract, and video task—uses `character_sources[]`; each character workbench audits its own exact entry, while project-level cross-workbench review is still required for the other entries. Known structured artifacts must also contain canonical references in their own data; the current character's record and file reference sets must agree.
+
+A compiled relationship ledger must be the exact file declared by the workbench. Relationship claims, common-ground propositions, second-order beliefs, and shared-memory contracts may carry per-record `character_sources[]`, so a claim derived from two lives does not force A's workbench to validate B's branch against A's candidates. The current workbench audits only its matching source record; the other participant still needs its own workbench audit. The shared-event registry continues to receive the stronger cross-workbench participant audit. This makes silent file edits, cross-character replay, provenance exemptions, and omitted explicit provenance fail mechanically, while semantic support for each creative claim remains a human review question.
 
 Compile character, memory, and relationship assets before revisiting the outline. If an existing plot beat requires a choice incompatible with the locked life, report the conflict and offer options such as adding sufficient pressure, earning a transition, preserving intentional contradiction, or revising the beat. Do not automatically rewrite author canon or force the character to serve the plot. Narrow character-only compilation need not have an outline, but formal scene or screenplay compilation binds the exact project-contained outline file and SHA-256 as well as its version, fact-boundary hash, candidate hash and lock revision reviewed, conflicts, options and costs, author decisions, and status. Changing the outline invalidates that review. Scene-like content activates this gate from a declared type, path, or high-confidence structural discriminator; labeling it `other_structured` or setting a Boolean false cannot disable it. An unresolved hard conflict blocks formal scene compilation.
 

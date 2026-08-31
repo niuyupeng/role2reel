@@ -1,5 +1,36 @@
 schema_version: 1
+character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []
+contract_version: 2
+storyboard_id: null
+revision: 1
+delivery_depth: professional
 scene_id: null
+source_bindings:
+  - role: meaning
+    source_id: null
+    revision: null
+    sha256: null
+  - role: scene
+    source_id: null
+    revision: null
+    sha256: null
+  - role: beats
+    source_id: null
+    revision: null
+    sha256: null
+visual_bible_binding:
+  visual_bible_id: null
+  revision: null
+  sha256: null
 total_duration_s: null
 aspect_ratio: null
 shots:
@@ -7,12 +38,30 @@ shots:
     start_s: 0.0
     end_s: null
     duty: null
+    state_in: null
+    state_out: null
     visual_event: null
     framing_and_angle: null
     camera_behavior: static
     movement_motive: null
     blocking: []
     performance_cause: null
-    dialogue_sound: null
+    dialogue:
+      mode: null
+      lines: []
+    sound:
+      ambience: []
+      effects: []
+      music_function: null
+      acoustic_silence: false
+    asset_refs:
+      - asset_id: null
+        revision: null
+        role: null
+        use: []
+        target: null
     continuity: []
     transition: cut
+    handoff:
+      to_shot_id: null
+      state: null

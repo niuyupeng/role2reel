@@ -1,0 +1,106 @@
+schema_version: 1
+character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []
+video_task_id: null
+revision: 1
+delivery_depth: professional
+provider:
+  name: provider_neutral
+  interface: null
+  model_version: null
+capability_verification:
+  status: not_required
+  checked_at: null
+  source: null
+  supported_primary_modes: []
+primary_mode: null
+source_bindings:
+  storyboard:
+    artifact_id: null
+    revision: null
+    sha256: null
+  continuity:
+    artifact_id: null
+    revision: null
+    sha256: null
+  visual_bible:
+    artifact_id: null
+    revision: null
+    sha256: null
+  asset_contract:
+    artifact_id: null
+    revision: null
+    sha256: null
+output:
+  duration_s: null
+  aspect_ratio: null
+  final_state: null
+global_locks:
+  identity:
+    status: locked
+    reason: null
+    entries: []
+  wardrobe:
+    status: locked
+    reason: null
+    entries: []
+  space:
+    status: locked
+    reason: null
+    entries: []
+  voice:
+    status: not_applicable
+    reason: No spoken voice in this task.
+    entries: []
+# Every consumed media source must point to one of these uses by `use_id`.
+# A valid use resolves to asset-contract.borrow_authorizations, targets OUTPUT,
+# covers the exact consumed output interval, and borrows the literal mode role:
+# conditioning | extension_source | edit_source | transition_source_a |
+# transition_source_b | panel_source.
+# Example:
+# - use_id: USE-CLIP-A
+#   authorization_id: AUTH-CLIP-A
+#   source_ref: {asset_id: CLIP-A, revision: 1}
+#   borrow: [edit_source]
+#   targets: [OUTPUT]
+#   interval: {start_s: 0.0, end_s: 4.0}
+reference_uses: []
+timeline:
+  - segment_id: T001
+    start_s: 0.0
+    end_s: null
+    observable_event: null
+    state_in: null
+    state_out: null
+    camera: null
+    performance: null
+    sound: null
+    asset_refs: []
+# Fill exactly one mode contract. Every media ref inside it has the shape
+# {asset_id: ..., revision: ..., use_id: ...}; the matching use above is not
+# optional. Transition contracts include
+# source_a_protected_interval, bridge_window, and source_b_protected_interval.
+# Multi-panel entries include binding_properties and excluded_properties, while
+# the contract sets unrequested_additions.policy: deny and explicitly lists
+# cta, logo, and decorative_effects among its denied categories.
+# Example edit source binding:
+# mode_contracts:
+#   edit:
+#     source_clip_ref: {asset_id: CLIP-A, revision: 1, use_id: USE-CLIP-A}
+#     protected_elements: [identity, background, voice]
+#     targets:
+#       - target_id: wardrobe-color
+#         operation: change only the declared color
+#         interval: {start_s: 0.0, end_s: 4.0}
+#         preserve: [shape, motion, occlusion]
+mode_contracts: {}
+targeted_exclusions: []
+handoff_state: null

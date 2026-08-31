@@ -36,3 +36,51 @@ turns:
     observable_by_others: []
     consequence: []
     residual_state: null
+decision_traces:
+  - turn: 1
+    character_id: null
+    comprehension_retrieval:
+      cognitive_resource_ids: []
+      memory_ids: []
+      relationship_claim_ids: []
+      common_ground_proposition_ids: []
+      second_order_belief_ids: []
+      checked_unknown_or_excluded_resource_ids: []
+    private_interpretation: null
+    pragmatic_attribution: null
+    inferences:
+      - status: null
+        proposition: null
+        knowledge_status: null
+        confidence: null
+        evidence_refs: []
+        competing_explanations: []
+    belief_delta:
+      - status: null
+        proposition: null
+        prior_knowledge_status: null
+        new_knowledge_status: null
+        prior_confidence: null
+        new_confidence: null
+        evidence_refs: []
+        update_reason: null
+    first_impulse: null
+    stance: null
+    confidence: null
+    confidence_boundary: null
+    social_objective: null
+    strategy: null
+    expression_retrieval:
+      retrieval_status: null
+      speech_corpus_entry_ids: []
+      relationship_register: null
+      action_or_silence_options: []
+      wording_options: []
+    suppressed_expression_options:
+      - option_ref: null
+        suppression_reason: null
+    impulse_modulation: null
+    respond_or_withhold: null
+    output:
+      legacy_turn_surface_ref: 1
+      selected_expression_option_ref: null

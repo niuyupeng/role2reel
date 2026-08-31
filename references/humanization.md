@@ -27,6 +27,32 @@ Before rewriting substantial material, record compactly:
 
 Use this ledger as a fidelity check, not as content that must appear in the final answer.
 
+For reusable or downstream production work, persist the ledger with
+`assets/templates/meaning-ledger.yaml` and bind it to the exact source revision or
+file hash. Save the corresponding rewrite with
+`assets/templates/humanized-draft.md`. A storyboard or video task derived directly
+from rough material must cite either that approved draft or an explicitly locked
+scene meaning; otherwise stop at a reversible draft. The ledger is backstage
+evidence, not an extra form the author must read before seeing useful text.
+
+Resolve a relative `source.path` from the directory containing the meaning ledger.
+Before downstream use, run
+`python scripts/audit_humanization.py <raw-source> <meaning-ledger.yaml> <humanized-draft.md> --source-revision <revision>`.
+The ledger approval binds its ID/revision to the source revision/hash; the draft
+approval separately binds the draft ID/revision and normalized body hash to that
+exact ledger file and source. This is a staleness and replay check, not a semantic
+fidelity score or proof that the recorded approver acted.
+
+Keep three layers separate:
+
+1. **Source meaning:** what the supplied material actually says, including its
+   uncertainty, ownership, chronology, and contradictions.
+2. **Permitted transformation:** cleanup, speakable reshaping, or dramatic
+   redistribution explicitly allowed by the author.
+3. **Created fiction:** any new action, setting, causal link, or character history.
+   Label it as an alternative until the author accepts it; never smuggle it into a
+   fidelity rewrite.
+
 ## Classify roughness before editing
 
 - Remove accidental ASR duplication, false starts with no semantic function, obvious filler loops, and formatting noise.
@@ -65,5 +91,7 @@ After rewriting, compare source and result:
 4. Chronology and cause are not silently reversed.
 5. The emotional direction survives even when wording changes.
 6. The requested mode is respected: cleanup does not quietly become adaptation.
+7. Any downstream scene, storyboard, or video task points to this exact source and
+   approved-draft revision rather than an earlier or silently changed version.
 
 When the source is ambiguous, preserve the ambiguity or surface one concise question. Do not solve it by invention.

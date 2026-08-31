@@ -15,10 +15,28 @@ class ForwardCaseContractTests(unittest.TestCase):
         payload = json.loads(CASES_PATH.read_text(encoding="utf-8"))
         self.assertEqual(payload["schema_version"], 1)
         cases = payload["cases"]
-        self.assertGreaterEqual(len(cases), 14)
+        self.assertGreaterEqual(len(cases), 22)
         ids = [case["id"] for case in cases]
         self.assertEqual(len(ids), len(set(ids)))
-        self.assertTrue({"FT-08", "FT-09", "FT-10", "FT-11", "FT-12", "FT-13", "FT-14"}.issubset(ids))
+        self.assertTrue(
+            {
+                "FT-08",
+                "FT-09",
+                "FT-10",
+                "FT-11",
+                "FT-12",
+                "FT-13",
+                "FT-14",
+                "FT-15",
+                "FT-16",
+                "FT-17",
+                "FT-18",
+                "FT-19",
+                "FT-20",
+                "FT-21",
+                "FT-22",
+            }.issubset(ids)
+        )
         routing_should_trigger = {case["should_invoke"] for case in cases}
         self.assertEqual(routing_should_trigger, {True, False})
         for case in cases:
@@ -42,6 +60,9 @@ class ForwardCaseContractTests(unittest.TestCase):
         staged = next(case for case in cases if case["id"] == "FT-14")
         self.assertEqual(staged["execution_mode"], "staged_external_artifacts")
         self.assertIn("pending", staged["request"])
+        fused = next(case for case in cases if case["id"] == "FT-18")
+        self.assertEqual(fused["execution_mode"], "staged_external_artifacts")
+        self.assertIn("pending", fused["request"])
 
     def test_staged_deep_record_contract(self) -> None:
         root = Path(__file__).resolve().parents[1]

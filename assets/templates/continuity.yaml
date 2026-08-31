@@ -1,15 +1,71 @@
 schema_version: 1
+character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []
+contract_version: 2
+continuity_id: null
+revision: 1
+source_bindings:
+  storyboard:
+    artifact_id: null
+    revision: null
+    sha256: null
+  visual_bible:
+    artifact_id: null
+    revision: null
+    sha256: null
 global_locks:
-  characters: []
-  wardrobe: []
-  props_and_ownership: []
-  location_geometry: []
-  light_and_time: []
-  screen_direction: []
-  voice_and_sound: []
+  identity:
+    status: locked
+    reason: null
+    entries:
+      - lock_id: null
+        target_ref:
+          asset_id: null
+          revision: null
+        property: identity
+        value: null
+  wardrobe:
+    status: locked
+    reason: null
+    entries:
+      - lock_id: null
+        target_ref:
+          asset_id: null
+          revision: null
+        property: wardrobe_state
+        value: null
+  space:
+    status: locked
+    reason: null
+    entries:
+      - lock_id: null
+        target_ref:
+          asset_id: null
+          revision: null
+        property: location_geometry
+        value: null
+  voice:
+    status: not_applicable
+    reason: No spoken voice in this scene.
+    entries: []
 state_changes:
-  - item: null
+  - change_id: null
+    item_ref: null
     before: null
-    trigger: null
+    trigger_shot_id: null
+    trigger_event: null
     after: null
-shot_handoffs: []
+shot_handoffs:
+  - from_shot_id: S001
+    to_shot_id: null
+    state_out: null
+    next_state_in: null
+    match_points: []

@@ -1,0 +1,37 @@
+schema_version: 1
+character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []
+visual_bible_id: null
+revision: 1
+project_id: null
+source_bindings: []
+assets:
+  - asset_id: null
+    revision: 1
+    asset_type: null
+    label: null
+    source:
+      kind: authored_spec
+      locator: null
+      sha256: null
+    canonical_features: []
+    protected_features: []
+    allowed_variations: []
+    notes: null
+relationships:
+  - relation_id: null
+    from_asset_ref:
+      asset_id: null
+      revision: null
+    relation: null
+    to_asset_ref:
+      asset_id: null
+      revision: null

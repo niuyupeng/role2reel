@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 from scripts.audit_dialogue import audit_text, likely_dialogue_lines
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class FountainDialogueParsingTests(unittest.TestCase):
@@ -41,6 +45,30 @@ MOTHER (V.O.) ^
                 text = f"{heading}\n总而言之，这是一行动作，不是对白。\n"
                 self.assertEqual(likely_dialogue_lines(text), [])
                 self.assertEqual(audit_text(text), [])
+
+    def test_private_state_labels_and_backstory_recitals_are_review_warnings(self) -> None:
+        text = """角色甲
+我的判断是他在试探我，所以我的立场是先拒绝。
+
+角色乙
+我之所以从来不求你，是因为当年那件事，所以我才变成现在这样。
+"""
+
+        self.assertEqual(
+            {finding.code for finding in audit_text(text)},
+            {"private-analysis-spill", "backstory-recital"},
+        )
+
+
+class SceneGuidanceContractTests(unittest.TestCase):
+    def test_line_cap_is_a_ceiling_and_mute_pass_deletes_redundant_speech(self) -> None:
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        scene_guidance = (ROOT / "references" / "scene-dialogue.md").read_text(encoding="utf-8")
+
+        self.assertIn("A line cap is a ceiling, never a quota", skill)
+        self.assertIn("Run a **mute pass**", scene_guidance)
+        self.assertIn("same state change and next choice remain legible, delete it", skill)
+        self.assertIn("evaluation_scope: light behavior fixture; not deep-biography evidence", skill)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,41 @@ This document separates historical results, currently reproducible deterministic
 | Forward manifest FT-01–FT-14 | v0.2.0-beta.1 | Schema validated only | Case definitions and the staged-deep record contract are well formed; no generation claim |
 | Development cold runs and post-fix regressions for FT-01–FT-13 | v0.2.0-beta.1 | Completed informally | Case-level generation behavior in this Codex development session; not a formal recorded or human study |
 | FT-14 staged deep run, three-arm comparison, and blinded human review | v0.2.0-beta.1 | Pending | No production-deep, comparative, adoption, or human-performance result may yet be claimed |
+| Repository validation, unit tests, and release packaging | v0.3.0-beta.1 candidate | Completed locally | Additive 命线反演, CharacterOS, storyboard, continuity, and video-task contracts behave as tested |
+| Forward manifest FT-01–FT-22 | v0.3.0-beta.1 candidate | Schema validated only | New 命线反演, two-stage retrieval, fused-pipeline, extension, edit, transition, and multi-panel case definitions are well formed; this alone is no behavior claim |
+| FT-15–FT-17 independent development cold runs | v0.3.0-beta.1 candidate | Completed informally after recorded failures and repairs | Case-level model behavior under separate model review; not a human or production-deep study |
+| FT-19–FT-22 video-mode development runs | v0.3.0-beta.1 candidate | Partial | Hard-case planning behavior was exercised; the post-fix FT-21/FT-22 prose runs were not complete executable `video-task.yaml` packages |
+| FT-18 full fused staged run and FT-14 production-deep run | v0.3.0-beta.1 candidate | Pending | Missing real author-approved deep artifacts, isolated full-chain execution, actor review, and adoption decisions |
+
+## Current v0.3.0-beta.1 candidate deterministic validation
+
+The additive v0.3 candidate source tree was checked locally on 2026-08-31:
+
+| Check | Current result |
+|---|---|
+| Skill Creator `quick_validate.py` under UTF-8 mode | Pass |
+| Role2Reel repository validator | Pass; 85 files checked |
+| Python unit tests | 185 discovered; 180 pass and 5 symlink-capability tests skipped on local Windows |
+| Release packaging | Pass; 85 allowlisted files packaged; ZIP integrity pass |
+| Forward-case manifest contract | Pass; 22 case definitions, including FT-15–FT-22 |
+
+New deterministic coverage checks the visible `explore` versus backstage `production-lock` 命线反演 surfaces; counter-reading and author-operation contracts; separate cognitive-resource and speech-corpus artifacts; two-stage turn references and approved expression evidence; proposition-level common ground and directional second-order belief provenance; exact raw-source/meaning-ledger/humanized-draft identity and approvals; source-bound concise/professional storyboards; visual-asset revisions; explicit continuity locks and state handoffs; deny-by-default reference borrowing; immutable local-media bytes or provider asset versions; exactly one provider-neutral video mode; exact timelines; extension seams; edit targets and protected regions; transition endpoints and bridges; multi-panel mappings; and current-capability evidence for provider-specific tasks. Modern production auditors fail closed without the real bound upstream files; explicit unbound-structure modes are draft lint only. Existing v0.1 and v0.2 compatibility tests remain in the same suite.
+
+These checks still cannot prove that candidate lives are semantically diverse, that a 30,000-character biography has causal or artistic density, that a model truly used a resource rather than copied an ID, that a provider will honor a task, or that actors and production teams prefer the result.
+
+## v0.3.0-beta.1 development cold-run status: partial evidence
+
+Fresh generators received the routed skill material and case request without the case's hard invariants or prior outputs. Separate model reviewers then scored the retained results. These are development-session model checks, not blinded human evaluation, actor review, or production adoption evidence.
+
+| Scope | Retained result | What happened |
+|---|---|---|
+| FT-15 | 3/3 hard-case passes | Three fresh 命线反演 outputs preserved four causally different readable lives, a counter-reading, per-route residue and opening behavior, and author control without selecting a winner |
+| FT-16 | Initial 0/3; post-fix 3/3 | The first runs skipped or flattened the cognition/expression middle and over-explained; repaired guidance then preserved the two retrieval stages and relationship-specific strategy with restrained surfaces |
+| FT-17 | Initial 2/3; intermediate strict 0/3; final post-fix 3/3 | One first-run scene used redundant, controlling dialogue; a mute-pass repair fixed the behavior, but the next outputs omitted the required `light` evidence label; after both repairs, three fresh scenes passed path-to-behavior causality, total-line and duration limits, nonverbal-first playability, and the light/deep boundary |
+| FT-19 / FT-20 | One development planning pass each | Extension and protected-edit outputs met the listed hard-case behavior, but this is not provider execution evidence |
+| FT-21 / FT-22 | Initial hard-invariant failures; post-fix behavior pass, formal package fail | Transition and multi-panel repairs met the case behavior in fresh prose runs, but those runs omitted parts of the exact executable `video-task.yaml` binding contract and therefore are not production-contract passes |
+
+The failed FT-17 drafts and both later repair stages remain in ignored local development artifacts; the final passing scenes were not substituted retroactively for the failures. FT-14 and FT-18 remain pending because no development agent may fabricate the real author path decision, separately approved 30,000-character biography, isolated full-chain tasks, actor/blinded review, or production adoption decision those cases require.
 
 ## Historical v0.1.0 record
 

@@ -374,16 +374,22 @@ def enable_compilation(root: Path, payload: dict, digest: str, files: dict[str, 
     artifact_types = {
         "character.yaml": "character",
         "cognitive-resources.yaml": "cognitive_resources",
+        "speech-corpus.yaml": "speech_corpus",
         "memories.yaml": "memories",
         "relationship-ledger.yaml": "relationship_ledger",
         "scene-contract.yaml": "scene_contract",
         "turn-state.yaml": "turn_state",
         "beat-map.yaml": "beat_map",
+        "storyboard.yaml": "storyboard",
+        "continuity.yaml": "continuity",
+        "visual-bible.yaml": "visual_bible",
+        "asset-contract.yaml": "asset_contract",
+        "video-task.yaml": "video_task",
         "main.fountain": "screenplay",
     }
     for name, content in files.items():
         artifact_type = artifact_types.get(Path(name).name, "other_structured")
-        if artifact_type in {"character", "cognitive_resources", "memories"} and "compiled_provenance" not in content:
+        if artifact_type in {"character", "cognitive_resources", "speech_corpus", "memories"} and "compiled_provenance" not in content:
             identity_header = (
                 "compiled_provenance:\n"
                 f"  compiled_for_character_id: {payload['character_id']}\n"
@@ -393,7 +399,7 @@ def enable_compilation(root: Path, payload: dict, digest: str, files: dict[str, 
         if artifact_type == "character" and re.search(r"(?m)^character:\s*", content) is None and '"character"' not in content:
             content += f"character:\n  id: {payload['character_id']}\n"
         elif (
-            artifact_type in {"cognitive_resources", "memories"}
+            artifact_type in {"cognitive_resources", "speech_corpus", "memories"}
             and re.search(r"(?m)^character_id:\s*", content) is None
             and '"character_id"' not in content
         ):
@@ -884,6 +890,34 @@ class LifePathAuditTests(unittest.TestCase):
             found = codes(audit_file(write_manifest(root, payload), require_locked=True))
             self.assertIn("artifact-source-closure-mismatch", found)
 
+    def test_common_ground_and_second_order_claims_are_provenance_scoped(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = locked_manifest()
+            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
+            ledger = {
+                "schema_version": 1,
+                "relationships": [],
+                "relationship_claim_records": [],
+                "common_ground_propositions": [
+                    {"id": "cg-1", "source_refs": ["life-path:path-b/node-1"]}
+                ],
+                "second_order_beliefs": [
+                    {"id": "sob-1", "source_refs": ["life-path:path-a/node-1"]}
+                ],
+                "shared_event_registry": [],
+                "shared_memory_contracts": [],
+            }
+            enable_compilation(
+                root,
+                payload,
+                digest,
+                {"relationship-ledger.yaml": json.dumps(ledger, ensure_ascii=False)},
+            )
+            found = codes(audit_file(write_manifest(root, payload), require_locked=True))
+            self.assertIn("rejected-branch-reference", found)
+
     def test_structured_runtime_artifact_cannot_omit_claim_provenance(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -894,6 +928,25 @@ class LifePathAuditTests(unittest.TestCase):
             payload["compiled_runtime"]["source_refs"] = ["life-path:path-a/node-1"]
             write_manifest(root, payload)
             self.assertIn("missing-claim-provenance", codes(audit_file(manifest, require_locked=True)))
+
+    def test_speech_corpus_is_a_character_bound_runtime_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload, manifest, digest = self.ready_fixture(root)
+            enable_compilation(
+                root,
+                payload,
+                digest,
+                {
+                    "speech-corpus.yaml": (
+                        "schema_version: 1\n"
+                        "source_refs: [life-path:path-a/node-1]\n"
+                        "entries: []\n"
+                    )
+                },
+            )
+            write_manifest(root, payload)
+            self.assertEqual(audit_file(manifest, require_locked=True), [])
 
     def test_artifact_internal_biography_hash_is_checked(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -996,6 +1049,176 @@ class LifePathAuditTests(unittest.TestCase):
             payload["compiled_runtime"]["formal_scene_compilation"] = True
             set_outline_review(root, payload)
             self.assertEqual(audit_file(write_manifest(root, payload), require_locked=True), [])
+
+    def test_shared_production_artifacts_scope_each_character_package(self) -> None:
+        filenames = (
+            "storyboard.yaml",
+            "continuity.yaml",
+            "visual-bible.yaml",
+            "asset-contract.yaml",
+            "video-task.yaml",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for filename in filenames:
+                with self.subTest(filename=filename):
+                    case_root = root / filename.replace(".", "-")
+                    case_root.mkdir()
+                    payload = locked_manifest("character-a")
+                    digest = write_and_approve(case_root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+                    current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
+                    document = {
+                        "schema_version": 1,
+                        "character_sources": [
+                            current_source,
+                            {
+                                "character_id": "character-b",
+                                "package_context_id": "package-character-b",
+                                "source_refs": ["life-path:other-path/other-node"],
+                            },
+                        ],
+                    }
+                    enable_compilation(case_root, payload, digest, {filename: json.dumps(document, ensure_ascii=False)})
+                    record = payload["compiled_runtime"]["artifact_files"][0]
+                    record["source_refs"] = ["life-path:path-a/node-1"]
+                    payload["compiled_runtime"]["source_refs"] = ["life-path:path-a/node-1"]
+                    payload["compiled_runtime"]["formal_scene_compilation"] = True
+                    set_outline_review(case_root, payload)
+                    self.assertEqual(audit_file(write_manifest(case_root, payload), require_locked=True), [])
+
+    def test_multi_character_nested_claims_are_scoped_and_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = locked_manifest("character-a")
+            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
+            document = {
+                "schema_version": 1,
+                "character_sources": [
+                    current_source,
+                    {
+                        "character_id": "character-b",
+                        "package_context_id": "package-character-b",
+                        "source_refs": ["life-path:other-path/other-node"],
+                    },
+                ],
+                "scene_id": "scene-shared",
+                "character_runtime_scopes": [
+                    {
+                        "character_id": "character-a",
+                        "knowledge_boundary": [{"source_refs": ["life-path:path-a/node-1"]}],
+                    },
+                    {
+                        "character_id": "character-b",
+                        "knowledge_boundary": [{"source_refs": ["life-path:other-path/other-node"]}],
+                    },
+                ],
+            }
+            enable_compilation(root, payload, digest, {"scene-contract.yaml": json.dumps(document, ensure_ascii=False)})
+            payload["compiled_runtime"]["artifact_files"][0]["source_refs"] = ["life-path:path-a/node-1"]
+            payload["compiled_runtime"]["source_refs"] = ["life-path:path-a/node-1"]
+            payload["compiled_runtime"]["formal_scene_compilation"] = True
+            set_outline_review(root, payload)
+            manifest = write_manifest(root, payload)
+            self.assertEqual(audit_file(manifest, require_locked=True), [])
+
+            document["character_runtime_scopes"][0]["knowledge_boundary"][0]["source_refs"] = ["life-path:path-b/node-1"]
+            scene_path = root / "scene-contract.yaml"
+            scene_path.write_text(json.dumps(document, ensure_ascii=False), encoding="utf-8")
+            payload["compiled_runtime"]["artifact_files"][0]["sha256"] = file_sha256(scene_path)
+            found = codes(audit_file(write_manifest(root, payload), require_locked=True))
+            self.assertTrue({"character-source-nested-closure-mismatch", "rejected-branch-reference"}.issubset(found))
+
+    def test_relationship_claim_character_sources_ignore_other_workbench_refs(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = locked_manifest("character-a")
+            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
+            current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
+            ledger = {
+                "schema_version": 1,
+                "relationships": [],
+                "relationship_claim_records": [
+                    {
+                        "id": "claim-shared",
+                        "from_character": "character-a",
+                        "to_character": "character-b",
+                        "claim": "A shared claim with separately scoped origins.",
+                        "character_sources": [
+                            current_source,
+                            {
+                                "character_id": "character-b",
+                                "package_context_id": "package-character-b",
+                                "source_refs": ["life-path:other-path/other-node"],
+                            },
+                        ],
+                    }
+                ],
+                "common_ground_propositions": [],
+                "second_order_beliefs": [],
+                "shared_event_registry": [],
+                "shared_memory_contracts": [],
+            }
+            enable_compilation(root, payload, digest, {"relationship-ledger.yaml": json.dumps(ledger, ensure_ascii=False)})
+            payload["compiled_runtime"]["artifact_files"][0]["source_refs"] = ["life-path:path-a/node-1"]
+            payload["compiled_runtime"]["source_refs"] = ["life-path:path-a/node-1"]
+            self.assertEqual(audit_file(write_manifest(root, payload), require_locked=True), [])
+
+    def test_relationship_participant_requires_its_own_source_record(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = locked_manifest("character-a")
+            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
+            ledger = {
+                "schema_version": 1,
+                "relationships": [],
+                "relationship_claim_records": [
+                    {
+                        "id": "claim-missing-a",
+                        "from_character": "character-a",
+                        "to_character": "character-b",
+                        "character_sources": [
+                            {
+                                "character_id": "character-b",
+                                "package_context_id": "package-character-b",
+                                "source_refs": ["life-path:path-a/node-1"],
+                            }
+                        ],
+                    }
+                ],
+                "common_ground_propositions": [],
+                "second_order_beliefs": [],
+                "shared_event_registry": [],
+                "shared_memory_contracts": [],
+            }
+            enable_compilation(root, payload, digest, {"relationship-ledger.yaml": json.dumps(ledger, ensure_ascii=False)})
+            found = codes(audit_file(write_manifest(root, payload), require_locked=True))
+            self.assertIn("relationship-participant-source-mismatch", found)
+
+    def test_scene_participants_require_character_source_coverage(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = locked_manifest("character-a")
+            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
+            document = {
+                "schema_version": 1,
+                "character_sources": [current_source],
+                "scene": {"id": "scene-two"},
+                "characters": [{"id": "character-a"}, {"id": "character-b"}],
+                "character_runtime_scopes": [{"character_id": "character-a"}, {"character_id": "character-b"}],
+            }
+            enable_compilation(root, payload, digest, {"scene-contract.yaml": json.dumps(document, ensure_ascii=False)})
+            payload["compiled_runtime"]["artifact_files"][0]["source_refs"] = ["life-path:path-a/node-1"]
+            payload["compiled_runtime"]["source_refs"] = ["life-path:path-a/node-1"]
+            payload["compiled_runtime"]["formal_scene_compilation"] = True
+            set_outline_review(root, payload)
+            self.assertIn(
+                "missing-participant-character-source",
+                codes(audit_file(write_manifest(root, payload), require_locked=True)),
+            )
 
     def test_multi_character_scene_requires_current_package_source(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

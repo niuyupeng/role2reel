@@ -10,17 +10,40 @@ compiled_provenance:
   compiled_from_biography_sha256: null
   source_refs: []
 character_id: null
+contract:
+  purpose: comprehension_and_private_judgment
+  excludes:
+    - preferred_wording
+    - catchphrases
+    - dialogue_surface
 resources:
   - id: resource-001
+    character_id: null
     type: belief
+    knowledge_status: null
     content: null
     source: null
     source_refs: []
     compiled_from_lock_revision: null
     compiled_from_candidate_sha256: null
     compiled_from_biography_revision: null
+    biography_node_refs: []
     confidence: null
+    confidence_basis: []
+    confidence_limits: []
     domains: []
+    retrieval_cues: []
+    relationship_scope: []
+    context_scope: []
+    private_interpretation_effect: null
+    attribution_effect: null
+    inference_affordances: []
+    last_update:
+      turn_ref: null
+      prior_knowledge_status: null
+      prior_confidence: null
+      evidence_refs: []
+      change_reason: null
     conditions_that_change_it: []
     evidence_against: []
 expertise:
@@ -33,3 +56,17 @@ information_boundary_resource_ids: []
 attention_bias_resource_ids: []
 default_attribution_resource_ids: []
 value_priority_resource_ids: []
+comprehension_retrieval_policy:
+  retrieve_before_expression: true
+  include_statuses:
+    - known
+    - inferred
+    - suspected
+    - mistaken
+    - unknown
+  rank_by:
+    - cue_relevance
+    - relationship_relevance
+    - unresolved_force
+    - confidence_and_recency
+  preserve_unknowns: true

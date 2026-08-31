@@ -201,6 +201,121 @@
         "No case-definition, schema check, missing-artifact response, or unverified passing record is reported as a behavioral pass; a completed record must also pass audit_staged_eval.py."
       ],
       "human_rubric": ["causal individuality", "actor playability", "nonverbal restraint", "relationship truth", "semantic branch isolation"]
+    },
+    {
+      "id": "FT-15",
+      "title": "Infer several readable fictional lives from the same sparse present",
+      "should_invoke": true,
+      "request": "对这个虚构人物做一次命线反演。先给作者看的可读版本：四条真正不同的开场前人生，其中至少一条反直觉。说明每条解释了哪些现状痕迹、还解释不了什么、会留下什么代价与关系残余、开场遇压时先注意和先做什么。不要替我选，不要给概率，不要锁定，不要写三万字，也不要先倒出哈希和字段表。",
+      "input": "锁定事实：故事开场时，人物在离开十二年后回到一座旧城，带着一把磨损的钥匙；当前没有已知门锁与它匹配。可观察痕迹：被问‘为什么现在回来’时，人物只说‘安排变了’，并把椅子从窗边挪开。未知：当年为何离开、钥匙属于哪里、回来的真正目的、对窗边位置的反应来自什么。全部为虚构创作材料。",
+      "hard_invariants": [
+        "Present at least four readable candidate lives whose causal mechanisms, relationship costs, self-stories, residues, and opening impulses materially differ rather than merely renaming dates or status labels.",
+        "Include at least one non-obvious counter-reading and mixed causality such as agency with pressure, effort with avoidance, support with debt, or success with damage without turning those pairs into fixed templates.",
+        "For each reading, distinguish explained traces, unresolved traces, predicted residual evidence, and a testable first attention or action at story opening.",
+        "Do not rank, score, assign probability, choose, lock, expand a deep biography, expose audit bureaucracy first, or present any path as recovered truth."
+      ],
+      "human_rubric": ["surprising retrospective coherence", "causal diversity", "writer-facing readability", "author agency"]
+    },
+    {
+      "id": "FT-16",
+      "title": "Separate comprehension retrieval from expression retrieval",
+      "should_invoke": true,
+      "request": "用同一个人物和同一句刺激分别跑两个关系场景。输出紧凑运行态和可见表面，不写隐藏长推理。必须先调用认知资源理解，再调用对应关系语域的语言语料决定怎样说或不说；不能只换口头禅。",
+      "input": "当前刺激：对方说‘这次你可以开口求我们。’锁定认知资源：人物把公开求助理解为同时产生关系债与被评价风险，但并不认为求助本身可耻；遇压先确认代价由谁定义。关系一：多年共同承担过后果的亲近者，已有可互相打断的共同语境。关系二：刚建立合作的新伙伴，彼此尚未确认边界。语言语料已分别批准：关系一允许省略主语、半句和纠正；关系二倾向完整问句、保留条件和延迟承诺。",
+      "hard_invariants": [
+        "Each run shows comprehension-resource references before private interpretation, inference, belief or confidence delta, stance, and social objective, followed by separate expression-corpus references.",
+        "The core interpretation and value order remain recognizable while relationship knowledge and approved register cause materially different strategy and surface expression.",
+        "The result may choose action, gaze, pause, silence, or a line; it does not verbalize the entire private interpretation or invent a catchphrase.",
+        "Only observable surface and compact state/evidence fields are exposed, not hidden chain-of-thought."
+      ],
+      "human_rubric": ["two-stage retrieval", "relationship-specific voice", "surface restraint", "speaker distinctiveness"]
+    },
+    {
+      "id": "FT-17",
+      "title": "Compile a chosen reading into nonverbal-first scene behavior",
+      "evaluation_scope": "author-approved light behavior fixture; not deep-biography evidence",
+      "should_invoke": true,
+      "request": "作者已选定下面的 light 命线读法，只用于行为验证。把它编成一个不超过25秒、最多两句台词的场景。先让经历改变人物看什么、如何归因、第一反应和关系动作；能用距离、目光、手上动作、停顿或沉默完成的不要解释。",
+      "input": "选定读法：人物过去并非害怕承担，而是多次发现公开的即时承诺会剥夺共同商量的空间，因此形成‘先把亲近者从众人注视里带出来，再决定共同承担什么’的策略。当前：一群人围着人物和同伴，催人物立刻替同伴作保证；同伴没有开口。",
+      "hard_invariants": [
+        "The selected past changes first attention, attribution, response, and relationship move rather than appearing as narrated exposition.",
+        "Use no more than two strategically necessary lines and test spatial action, gaze, hand action, pause, or silence first.",
+        "Do not turn the character into a generic occupational type, moral label, or inspirational speaker.",
+        "Keep the fixture labeled light and do not claim that it proves a 30,000-character biography workflow."
+      ],
+      "human_rubric": ["path-to-behavior causality", "nonverbal compression", "actor playability"]
+    },
+    {
+      "id": "FT-18",
+      "title": "Stage the complete fused pipeline without faking missing evidence",
+      "evaluation_scope": "full fused staged protocol; external artifacts and human decisions required",
+      "execution_mode": "staged_external_artifacts",
+      "should_invoke": true,
+      "request": "完整跑一次：原始口述→meaning ledger与人化稿→命线反演候选→作者选择/拼接/锁定→三万字小传与独立批准→认知库和语言语料库→大纲冲突复核→双阶段逐轮状态→精炼场景→专业分镜→单模式视频任务→盲评。缺任何真实作者决定、附件、独立任务或盲评记录时必须标 pending，不能拿模板或测试通过冒充完成。",
+      "input": "运行器在临时项目中注入真实原始材料和项目约束；规格本身不内嵌作者选择、三万字小传、模型输出或人工评审。",
+      "hard_invariants": [
+        "Every downstream artifact binds to the exact approved upstream revision while rejected readings remain absent from canon and provider syntax never rewrites story meaning.",
+        "Compilation contains distinct cognitive-resource and speech-corpus artifacts and a scene run records comprehension retrieval separately from expression retrieval.",
+        "The storyboard binds the approved scene meaning and visual assets; the video task uses exactly one mode with deny-by-default reference borrowing and a continuous causal timeline.",
+        "No missing-artifact response, schema pass, deterministic audit, model self-rating, or development-only run is reported as a completed behavioral or adoption result."
+      ],
+      "human_rubric": ["end-to-end fidelity", "causal individuality", "dialogue restraint", "shot motivation", "production executability"]
+    },
+    {
+      "id": "FT-19",
+      "title": "Create a seam-safe forward extension task",
+      "should_invoke": true,
+      "request": "把给定结尾镜头整理成前向续写视频任务。只选一个主模式；锁定接缝前后的身份、服装、空间、光线、声音和物体状态，写连续时间轴与最终交接状态。未指明继承的源视频属性一律不得借用。",
+      "input": "源片段最后一帧：固定中景，人物停在关闭的抽屉前，右手尚未接触把手；室内只有远处交通声。续写意图：人物听见门外一次敲击后才收回手，退半步看向门；不新增人物、不打开抽屉、不加对白或音乐。素材中另有不相关的片头字幕和早段手持晃动。",
+      "hard_invariants": [
+        "Use exactly one forward-extension mode and identify the exact source seam and direction.",
+        "State seam-in and seam-out identity, wardrobe, space, light, sound, prop, pose, and camera continuity with cause before reaction.",
+        "Exclude the title text, earlier handheld motion, new people, drawer opening, dialogue, and music under deny-by-default borrowing.",
+        "Provide a continuous timeline and an explicit final handoff state."
+      ],
+      "human_rubric": ["seam continuity", "causal timing", "task executability"]
+    },
+    {
+      "id": "FT-20",
+      "title": "Create a protected local video edit task",
+      "should_invoke": true,
+      "request": "把这个局部修改整理成视频编辑任务。明确目标区间、目标对象、操作、必须保持区和禁止改变项；只选一个编辑模式，不要借机重做整段。",
+      "input": "现有片段0–12秒。只在4.8–6.5秒移除桌面反光中误出现的灯架；保持演员脸、身体、衣服、手部动作、杯子、桌面纹理、镜头、光线、对白、环境声、时长和首尾帧不变。",
+      "hard_invariants": [
+        "Use exactly one edit mode and bind the edit to the stated interval, target, and removal operation.",
+        "Enumerate every protected visual, performance, audio, timing, and boundary property and preserve the original structure outside the target.",
+        "Do not add creative changes, regenerate the performer, alter duration, or treat an ordinary prompt as an edit contract.",
+        "State a verification criterion for target removal and protected-region stability."
+      ],
+      "human_rubric": ["edit isolation", "preservation precision", "repair minimality"]
+    },
+    {
+      "id": "FT-21",
+      "title": "Create a two-source transition with an explicit bridge",
+      "should_invoke": true,
+      "request": "为两个已定片段设计一个双视频转场任务。只用一个转场模式，分别锁 A 的结束状态、B 的开始状态和桥接窗口；不能把普通镜间转场字段当成双视频转场。",
+      "input": "片段A结束：空走廊，固定广角，白昼冷光，一扇门刚关上，门牌仍在轻晃。片段B开始：同一机位与走廊，夜间暖色应急灯，门牌已经静止，远端清洁车缓慢进入。意图：让门牌晃动衰减成为时间流逝的桥，不新增人物或文字。",
+      "hard_invariants": [
+        "Use exactly one two-source transition mode and bind source A, source B, their protected intervals, and one explicit bridge window.",
+        "Preserve both endpoint compositions and define a causally legible handoff from diminishing sign motion to later stillness and changed light.",
+        "Do not invent people, text, camera movement, or source leakage beyond explicitly borrowed properties.",
+        "Keep ordinary shot-to-shot transition metadata distinct from this executable two-source task."
+      ],
+      "human_rubric": ["endpoint preservation", "bridge coherence", "temporal readability"]
+    },
+    {
+      "id": "FT-22",
+      "title": "Map a multi-panel board into one exact video task",
+      "should_invoke": true,
+      "request": "把四格分镜映射成一个多格生成任务。只选一个主模式；每格绑定 panel、shot、时间段、画面职责和连续性，不能把格子顺序当成默认时间线，也不能补未要求的对白和运镜。",
+      "input": "P1：房间全景，人物在门口停住。P2：桌面物件位置发生细小偏移。P3：人物看物件，不看屋内另一人。P4：另一人的手停在收拾动作中。总时长16秒，固定机位体系，无对白、无音乐，只保留室内底噪与一次远处电梯声。",
+      "hard_invariants": [
+        "Use exactly one multi-panel mode and provide an explicit panel-to-shot-to-time mapping that covers 0–16 seconds without gap or overlap.",
+        "Give each panel a distinct audience-facing duty and define identity, geography, prop-state, eyeline, sound, and state handoffs.",
+        "Do not infer timing solely from panel order or add dialogue, music, camera movement, CTA, logo, or decorative effects.",
+        "State which panel properties are binding references and which source attributes remain excluded."
+      ],
+      "human_rubric": ["panel mapping", "shot duty", "continuity", "sound restraint"]
     }
   ]
 }

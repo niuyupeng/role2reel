@@ -1,4 +1,4 @@
 interface:
   display_name: "Role2Reel"
-  short_description: "Human-first dialogue, scenes, and storyboards"
-  default_prompt: "Use $role2reel to turn this material into human dialogue, a playable scene, and purposeful shots."
+  short_description: "命线反演：从人物一生到自然对白与电影镜头"
+  default_prompt: "Use $role2reel to preserve this material's meaning, run 命线反演 to offer several possible fictional lives when the character is underbuilt, let me choose, then carry the locked person into natural dialogue, purposeful shots, and an executable video task."

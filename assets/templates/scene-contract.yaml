@@ -11,12 +11,15 @@ character_sources:
     source_refs: []
 scene:
   id: null
+  revision: 1
   slugline: null
   dramatic_question: null
   physical_constraints: []
   immutable_facts: []
   source_lines_to_preserve: []
   shared_memory_keys_in_scope: []
+  common_ground_proposition_ids_in_scope: []
+  second_order_belief_ids_in_scope: []
 start_state:
   information: []
   power: null
@@ -33,6 +36,24 @@ characters:
     misunderstands: []
     believes_others_know: []
     available_strategies: []
+character_runtime_scopes:
+  - character_id: null
+    knowledge_boundary:
+      - proposition_id: null
+        proposition: null
+        knowledge_status: null
+        confidence: null
+        confidence_basis: []
+        source_refs: []
+        last_update_ref: null
+    common_ground_proposition_ids: []
+    second_order_belief_ids: []
+    cognitive_resource_ids: []
+    memory_ids: []
+    relationship_claim_ids: []
+    speech_corpus_entry_ids: []
+    forbidden_generic_phrasing_ids: []
+    relationship_register: null
 end_state:
   required_changes: []
   open_questions: []

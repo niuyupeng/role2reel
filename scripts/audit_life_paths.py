@@ -123,6 +123,7 @@ OUTLINE_REVIEW_STATUSES = {"not_started", "clear", "conflict_pending", "resolved
 ARTIFACT_TYPES = {
     "character",
     "cognitive_resources",
+    "speech_corpus",
     "memories",
     "relationship_ledger",
     "scene_contract",
@@ -130,13 +131,36 @@ ARTIFACT_TYPES = {
     "beat_map",
     "screenplay",
     "storyboard",
+    "continuity",
+    "visual_bible",
+    "asset_contract",
+    "video_task",
     "video_prompt",
     "other_structured",
 }
-FORMAL_SCENE_ARTIFACT_TYPES = {"scene_contract", "turn_state", "beat_map", "screenplay", "storyboard", "video_prompt"}
+FORMAL_SCENE_ARTIFACT_TYPES = {
+    "scene_contract",
+    "turn_state",
+    "beat_map",
+    "screenplay",
+    "storyboard",
+    "continuity",
+    "asset_contract",
+    "video_task",
+    "video_prompt",
+}
 STRUCTURED_ARTIFACT_TYPES = ARTIFACT_TYPES - {"screenplay", "video_prompt"}
-PER_CHARACTER_ARTIFACT_TYPES = {"character", "cognitive_resources", "memories"}
-MULTI_CHARACTER_ARTIFACT_TYPES = {"scene_contract", "turn_state", "beat_map"}
+PER_CHARACTER_ARTIFACT_TYPES = {"character", "cognitive_resources", "speech_corpus", "memories"}
+MULTI_CHARACTER_ARTIFACT_TYPES = {
+    "scene_contract",
+    "turn_state",
+    "beat_map",
+    "storyboard",
+    "continuity",
+    "visual_bible",
+    "asset_contract",
+    "video_task",
+}
 ID_PATTERN = re.compile(r"^[\w.-]+$", re.UNICODE)
 REFERENCE_PATTERN = re.compile(r"life-path:([\w.-]+)/([\w.-]+)", re.UNICODE)
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
@@ -462,8 +486,13 @@ def _structured_artifact_kind(value: Any) -> Optional[str]:
             "turn_state": "turn_state",
             "beat_map": "beat_map",
             "storyboard": "storyboard",
+            "continuity": "continuity",
+            "visual_bible": "visual_bible",
+            "asset_contract": "asset_contract",
+            "video_task": "video_task",
             "video_prompt": "video_prompt",
             "relationship_ledger": "relationship_ledger",
+            "speech_corpus": "speech_corpus",
         }
         if normalized in aliases:
             return aliases[normalized]
@@ -478,18 +507,86 @@ def _structured_artifact_kind(value: Any) -> Optional[str]:
         return "beat_map"
     if isinstance(value.get("shots"), list) and len(keys & {"scene_id", "duration", "continuity", "audio"}) >= 1:
         return "storyboard"
+    if "video_task_id" in keys and "primary_mode" in keys:
+        return "video_task"
+    if "continuity_id" in keys and "shot_handoffs" in keys:
+        return "continuity"
+    if "visual_bible_id" in keys and isinstance(value.get("assets"), list):
+        return "visual_bible"
+    if "contract_id" in keys and "default_borrow_policy" in keys:
+        return "asset_contract"
     return None
 
 
-def _relationship_ledger_claim_scope(value: Any, character_id: Any) -> dict[str, Any]:
+def _relationship_ledger_claim_scope(
+    value: Any,
+    character_id: Any,
+    *,
+    findings: Optional[list[Finding]] = None,
+    location: str = "relationship_ledger",
+) -> dict[str, Any]:
     """Return claim-bearing ledger sections scoped to the workbench being compiled."""
     if not isinstance(value, dict):
         return {}
     scope = {
         key: value[key]
-        for key in ("compiled_provenance", "source_refs", "relationships", "shared_memory_contracts")
+        for key in (
+            "compiled_provenance",
+            "source_refs",
+        )
         if key in value
     }
+
+    participant_fields = {
+        "relationships": ("from_character", "to_character"),
+        "relationship_claim_records": ("from_character", "to_character"),
+        "common_ground_propositions": ("participants",),
+        "second_order_beliefs": ("holder_character_id", "about_character_id"),
+        "shared_memory_contracts": ("participants",),
+    }
+    for section, fields in participant_fields.items():
+        records = value.get(section)
+        if not isinstance(records, list):
+            continue
+        scoped_records: list[dict[str, Any]] = []
+        for record_index, record in enumerate(records, start=1):
+            if not isinstance(record, dict):
+                continue
+            involved = False
+            has_participant_field = any(field in record for field in fields)
+            for field in fields:
+                candidate = record.get(field)
+                if candidate == character_id or (isinstance(candidate, list) and character_id in candidate):
+                    involved = True
+            character_sources = record.get("character_sources")
+            if isinstance(character_sources, list):
+                matching_sources = [
+                    item
+                    for item in character_sources
+                    if isinstance(item, dict) and item.get("character_id") == character_id
+                ]
+                if findings is not None and (
+                    (involved and len(matching_sources) != 1)
+                    or (not involved and bool(matching_sources))
+                ):
+                    findings.append(
+                        Finding(
+                            "relationship-participant-source-mismatch",
+                            "error",
+                            f"{location}.{section}[{record_index}]",
+                            "Record participants and per-character provenance sources must cover each other exactly for the audited character.",
+                        )
+                    )
+                if not involved and not matching_sources:
+                    continue
+                scoped_record = dict(record)
+                scoped_record["character_sources"] = matching_sources if matching_sources else character_sources
+                scoped_records.append(scoped_record)
+                continue
+            if involved or not has_participant_field:
+                scoped_records.append(record)
+        if scoped_records:
+            scope[section] = scoped_records
     scoped_events: list[dict[str, Any]] = []
     events = value.get("shared_event_registry")
     if isinstance(events, list):
@@ -513,6 +610,53 @@ def _relationship_ledger_claim_scope(value: Any, character_id: Any) -> dict[str,
     if scoped_events:
         scope["shared_event_registry"] = scoped_events
     return scope
+
+
+def _scoped_nested_life_path_refs(value: Any, character_id: Any) -> set[str]:
+    """Collect nested refs owned by one character, excluding aggregate character_sources declarations."""
+    refs: set[str] = set()
+    if isinstance(value, list):
+        for item in value:
+            refs.update(_scoped_nested_life_path_refs(item, character_id))
+        return refs
+    if not isinstance(value, dict):
+        if isinstance(value, str):
+            refs.update(f"life-path:{branch}/{node}" for branch, node in _references(value))
+        return refs
+    owner = value.get("character_id")
+    if _has_content(owner) and owner != character_id:
+        return refs
+    for key, item in value.items():
+        if key == "character_sources":
+            continue
+        refs.update(_scoped_nested_life_path_refs(item, character_id))
+    return refs
+
+
+def _artifact_participant_ids(artifact_type: str, value: Any) -> set[str]:
+    """Extract only high-confidence character IDs from shared artifact structures."""
+    if not isinstance(value, dict):
+        return set()
+    result: set[str] = set()
+    if artifact_type == "scene_contract":
+        for item in value.get("characters", []) if isinstance(value.get("characters"), list) else []:
+            if isinstance(item, dict) and _has_content(item.get("id")):
+                result.add(str(item["id"]))
+        for item in value.get("character_runtime_scopes", []) if isinstance(value.get("character_runtime_scopes"), list) else []:
+            if isinstance(item, dict) and _has_content(item.get("character_id")):
+                result.add(str(item["character_id"]))
+    elif artifact_type == "turn_state":
+        for section in ("turns", "decision_traces"):
+            for item in value.get(section, []) if isinstance(value.get(section), list) else []:
+                if isinstance(item, dict) and _has_content(item.get("character_id")):
+                    result.add(str(item["character_id"]))
+    elif artifact_type == "storyboard":
+        for shot in value.get("shots", []) if isinstance(value.get("shots"), list) else []:
+            dialogue = shot.get("dialogue") if isinstance(shot, dict) else None
+            for line in dialogue.get("lines", []) if isinstance(dialogue, dict) and isinstance(dialogue.get("lines"), list) else []:
+                if isinstance(line, dict) and _has_content(line.get("speaker_id")):
+                    result.add(str(line["speaker_id"]))
+    return result
 
 
 def _time_scalar_kind(value: Any) -> Optional[str]:
@@ -617,6 +761,8 @@ def _audit_structured_downstream(
 ) -> None:
     if isinstance(value, list):
         for index, item in enumerate(value, start=1):
+            if isinstance(item, dict) and _has_content(item.get("character_id")) and item.get("character_id") != character_id:
+                continue
             _audit_structured_downstream(
                 item,
                 f"{location}[{index}]",
@@ -644,6 +790,10 @@ def _audit_structured_downstream(
                     locked_branch_id=locked_branch_id,
                     downstream=True,
                 )
+        return
+
+    owner_character_id = value.get("character_id")
+    if _has_content(owner_character_id) and owner_character_id != character_id:
         return
 
     character_sources = value.get("character_sources")
@@ -1909,8 +2059,21 @@ def audit_manifest(
         if (
             artifact_type in FORMAL_SCENE_ARTIFACT_TYPES
             or Path(artifact_file).suffix.lower() == ".fountain"
-            or basename in {"scene-contract.yaml", "turn-state.yaml", "beat-map.yaml", "storyboard.yaml", "storyboard.json", "storyboard.csv"}
-            or any(segment in normalized_artifact_path.split("/") for segment in {"03-scene", "04-screenplay", "05-storyboard", "07-adapter"})
+            or basename in {
+                "scene-contract.yaml",
+                "turn-state.yaml",
+                "beat-map.yaml",
+                "storyboard.yaml",
+                "storyboard.json",
+                "storyboard.csv",
+                "continuity.yaml",
+                "asset-contract.yaml",
+                "video-task.yaml",
+            }
+            or any(
+                segment in normalized_artifact_path.split("/")
+                for segment in {"03-scene", "04-screenplay", "05-storyboard", "06-continuity", "07-adapter"}
+            )
         ):
             inferred_formal_scene_artifact = True
 
@@ -2011,7 +2174,12 @@ def audit_manifest(
                                     "Compiled relationship-ledger artifact does not match the exact ledger declared by the workbench.",
                                 )
                             )
-                        ledger_claim_scope = _relationship_ledger_claim_scope(structured_artifact, character_id)
+                        ledger_claim_scope = _relationship_ledger_claim_scope(
+                            structured_artifact,
+                            character_id,
+                            findings=findings,
+                            location=f"{location}.relationship_claims",
+                        )
                         scope_text = json.dumps(ledger_claim_scope, ensure_ascii=False, default=str)
                         file_refs = {f"life-path:{branch}/{node}" for branch, node in _references(scope_text)}
                         _audit_structured_downstream(
@@ -2100,10 +2268,26 @@ def audit_manifest(
                                         "missing-character-sources",
                                         "error",
                                         location,
-                                        "Scene, turn-state, and beat-map artifacts require character_sources provenance.",
+                                        "Shared scene-to-video artifacts require character_sources provenance for every participating character package.",
                                     )
                                 )
                             else:
+                                source_character_ids = {
+                                    str(item.get("character_id"))
+                                    for item in character_sources
+                                    if isinstance(item, dict) and _has_content(item.get("character_id"))
+                                }
+                                participant_ids = _artifact_participant_ids(artifact_type, structured_artifact)
+                                missing_participant_sources = participant_ids - source_character_ids
+                                if missing_participant_sources:
+                                    findings.append(
+                                        Finding(
+                                            "missing-participant-character-source",
+                                            "error",
+                                            location,
+                                            f"Shared artifact participants lack character_sources provenance: {sorted(missing_participant_sources)}.",
+                                        )
+                                    )
                                 matching_sources = [
                                     item
                                     for item in character_sources
@@ -2114,6 +2298,16 @@ def audit_manifest(
                                 if len(matching_sources) == 1:
                                     current_refs = _string_list(matching_sources[0].get("source_refs"))
                                     file_refs = set(current_refs or [])
+                                    nested_refs = _scoped_nested_life_path_refs(structured_artifact, character_id)
+                                    if nested_refs and nested_refs != file_refs:
+                                        findings.append(
+                                            Finding(
+                                                "character-source-nested-closure-mismatch",
+                                                "error",
+                                                location,
+                                                "The current character_sources source_refs must exactly match canonical refs used by current-character nested claims when such claims are present.",
+                                            )
+                                        )
                                 else:
                                     file_refs = set()
             if not file_refs:

@@ -2,6 +2,16 @@ schema_version: 1
 relationships:
   - from_character: null
     to_character: null
+    character_sources:
+      - character_id: null
+        package_context_id: null
+        life_path_branch_id: null
+        compiled_from_lock_revision: null
+        compiled_from_fact_boundary_sha256: null
+        compiled_from_candidate_sha256: null
+        compiled_from_biography_revision: null
+        compiled_from_biography_sha256: null
+        source_refs: []
     public_relationship: null
     trust: null
     intimacy: null
@@ -15,6 +25,98 @@ relationships:
     believes_other_knows: []
     history_refs: []
     recent_changes: []
+relationship_claim_records:
+  - id: relationship-claim-001
+    from_character: null
+    to_character: null
+    character_sources:
+      - character_id: null
+        package_context_id: null
+        life_path_branch_id: null
+        compiled_from_lock_revision: null
+        compiled_from_fact_boundary_sha256: null
+        compiled_from_candidate_sha256: null
+        compiled_from_biography_revision: null
+        compiled_from_biography_sha256: null
+        source_refs: []
+    dimension: null
+    claim: null
+    knowledge_status: null
+    confidence: null
+    confidence_basis: []
+    source_refs: []
+    compiled_from_lock_revision: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    biography_node_refs: []
+    last_update:
+      turn_ref: null
+      prior_value: null
+      new_value: null
+      evidence_refs: []
+      change_reason: null
+common_ground_propositions:
+  - id: common-ground-001
+    participants: []
+    character_sources:
+      - character_id: null
+        package_context_id: null
+        life_path_branch_id: null
+        compiled_from_lock_revision: null
+        compiled_from_fact_boundary_sha256: null
+        compiled_from_candidate_sha256: null
+        compiled_from_biography_revision: null
+        compiled_from_biography_sha256: null
+        source_refs: []
+    proposition: null
+    common_ground_status: null
+    status_by_character: {}
+    confidence_by_character: {}
+    evidence_refs: []
+    source_refs: []
+    compiled_from_lock_revision: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    biography_node_refs: []
+    last_update:
+      turn_ref: null
+      prior_status: null
+      new_status: null
+      evidence_refs: []
+      change_reason: null
+second_order_beliefs:
+  - id: second-order-001
+    holder_character_id: null
+    about_character_id: null
+    character_sources:
+      - character_id: null
+        package_context_id: null
+        life_path_branch_id: null
+        compiled_from_lock_revision: null
+        compiled_from_fact_boundary_sha256: null
+        compiled_from_candidate_sha256: null
+        compiled_from_biography_revision: null
+        compiled_from_biography_sha256: null
+        source_refs: []
+    proposition_kind: null
+    proposition: null
+    knowledge_status: null
+    confidence: null
+    confidence_basis: []
+    evidence_refs: []
+    source_refs: []
+    compiled_from_lock_revision: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    biography_node_refs: []
+    last_update:
+      turn_ref: null
+      prior_knowledge_status: null
+      new_knowledge_status: null
+      prior_confidence: null
+      new_confidence: null
+      evidence_refs: []
+      change_reason: null
 shared_event_registry:
   - event_id: shared-event-001
     event_revision: null
@@ -49,12 +151,24 @@ shared_memory_contracts:
   - shared_memory_key: shared-001
     shared_event_id: null
     participants: []
+    character_sources:
+      - character_id: null
+        package_context_id: null
+        life_path_branch_id: null
+        compiled_from_lock_revision: null
+        compiled_from_fact_boundary_sha256: null
+        compiled_from_candidate_sha256: null
+        compiled_from_biography_revision: null
+        compiled_from_biography_sha256: null
+        source_refs: []
     perception_by_character: {}
     private_meaning_by_character: {}
     mutual_knowledge:
       knows_event_by_character: {}
       believes_others_know: {}
       shorthand_established_by: []
+      common_ground_proposition_ids: []
+      second_order_belief_ids: []
     triggers: []
     shorthand:
       code_fragments: []

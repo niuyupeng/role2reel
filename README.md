@@ -12,7 +12,7 @@
 
 **Build the person. Shape the drama. Design the shot. Generate the reel.**
 
-Role2Reel is a human-first Codex skill for transforming rough story material into believable dialogue, playable scenes, purposeful storyboards, and model-ready video prompts.
+Role2Reel is a human-first Codex skill that combines two systems in one production chain: the original humanization → CharacterOS → natural dialogue → scene → storyboard → video-direction system, and **命线反演** (fictional life-path reverse inference), a writer-controlled way to infer several possible fictional lives from a character's sparse present.
 
 **先把人立住，再让戏发生，最后才让镜头开机。**
 
@@ -21,13 +21,15 @@ Role2Reel is a human-first Codex skill for transforming rough story material int
 ```text
 raw material
   -> meaning-preserving humanization
-  -> competing causal life paths from facts, traces, unknowns, and conflicts
-  -> author selection / composition / lock
-  -> deep-biography expansion / exact-revision author approval
-  -> character knowledge, memory, judgment, and strategy
-  -> consequential dialogue and dramatic beats
+  -> 命线反演: several surprising-but-plausible pasts from present traces
+  -> author select / edit / splice / reject / keep unknown
+  -> causal deep biography / exact-revision approval
+  -> cognitive-resource library + speech corpus
+  -> memory / relationship / knowledge / common ground
+  -> private interpretation / judgment / strategy
+  -> action / gaze / pause / silence / minimum necessary dialogue
   -> shots with an audience-facing duty
-  -> continuity-safe video-model prompts
+  -> continuity-safe, single-mode video tasks
 ```
 
 ## What makes it different
@@ -35,8 +37,8 @@ raw material
 | Layer | Role2Reel asks |
 |---|---|
 | Humanization | What did the speaker actually mean, who owns the claim, and how certain are they? |
-| Life path | Which different lives fit the evidence, which one does the author lock, and how does it change the character's current judgment? |
-| Character | What can this person know, remember, infer, misunderstand, want, and risk now? |
+| 命线反演 | What radically different lives could have produced these same present traces—and which parts does the writer choose? |
+| CharacterOS | What can this person notice, know, remember, infer, misunderstand, want, risk, and say in this relationship now? |
 | Dialogue | What change are they trying to produce in the other person, and what do they withhold? |
 | Scene | What changes in information, power, intimacy, intention, emotion, or physical state? |
 | Storyboard | Why must this shot exist for the audience? |
@@ -48,18 +50,34 @@ The central rule is simple:
 
 The resulting surface may be an action, a change in distance, a look, a stopped movement, a pause, silence, or—only when the current strategy still needs it—a line. The audience can feel a lived past without receiving a spoken biography.
 
-## Multi-candidate life-path development
+## 命线反演
 
-Role2Reel treats a current identity, relationship, achievement, or other summary label as a constraint—not a personality. The same visible present can be reached through materially different lives. The life-path layer separates facts, traces, testimony, rumors, unknowns, and conflicts; generates at least three causally different candidate histories; and gives the writer full authority to select, edit, combine, reject, regenerate, lock, or later unlock them. The path decision is bound to one stable character-package identity plus the exact fact snapshot, candidate hash, branch, and lock revision. A locked causal branch may be expanded, but it can enter the screenplay runtime only after the author separately approves that same character/package context plus the exact biography revision and body hash.
+Give Role2Reel a story outline, half a script, a short character note, or only a few present-day traces. It reads the present the way a compelling fictional “life reading” would: not to announce one hidden truth, but to expose several lives the summary label has concealed.
 
-For a consequential character marked `deep`, the locked-path Chinese biography defaults to at least 30,000 countable Han characters. Candidate outlines stay compact until selection and causal lock, so length is spent on the chosen life rather than several padded alternatives. The completed draft must pass mechanical provenance, revision, length, and obvious-repetition checks, then receive author approval for that exact content. Runtime files are real, hash-bound artifacts with canonical path sources; shared histories bind every participant to the same event registry and exact approved biography. Causal, temporal, relationship, shared-context, semantic-leakage, and artistic density still require human review. This is creative narrative abduction, not a prediction about a real person's hidden past.
+Each reading must have a different causal engine, not merely different dates or credentials. It shows what the path explains, what it leaves unresolved, which cost still exists in the body or relationships, what story the character tells themself, and what they would notice or do first when the film opens. At least one is a counter-reading that resists the obvious interpretation. Effort may coexist with avoidance; support with debt; agency with pressure; success with damage; uneventful years with a late turn.
+
+The writer stays in charge:
+
+```text
+“选 B。”
+“把 A 的第二阶段和 C 的结尾拼起来，冲突处先留白。”
+“这三条都不对，再来三条，别再写成体面上升线。”
+```
+
+Only after that creative decision does Role2Reel materialize the audit record and expand the chosen route. IDs and hashes stay backstage; the writer sees readable lives first.
+
+Role2Reel treats a current identity, relationship, achievement, or other summary label as a constraint—not a personality. The same visible present can be reached through materially different lives. It separates facts, traces, testimony, rumors, unknowns, and conflicts; presents at least three causally different readings; and gives the writer full authority to select, edit, combine, reject, regenerate, lock, or later unlock them. The eventual production lock is bound to one stable character package and exact source snapshot. A locked causal branch may be expanded, but it enters screenplay runtime only after the writer separately approves that exact biography revision.
+
+For a consequential character marked `deep`, the locked-path Chinese biography defaults to at least 30,000 countable Han characters. It must contain ordinary life as well as turning points: relationships forming and fraying, failed attempts, avoidance, work, habits, changing values, debts, misremembering, and present residue. Candidate readings stay compact until selection, so length is spent on the chosen life rather than padded alternatives. Mechanical checks can verify provenance, revision, length, and obvious repetition; causal density, individuality, relationship truth, and actor usefulness still need people. 命线反演 is a fiction-development instrument—not factual divination, profiling, diagnosis, or a way to recover a real person's private history.
 
 The result should remain mostly invisible on screen:
 
 ```text
-locked life-path residue + present relationship and risk
-  -> appraisal -> first impulse -> social strategy
-  -> action / gaze / expression / silence / dialogue
+locked-life residue + present relationship and risk
+  -> comprehension retrieval -> private interpretation -> belief update
+  -> judgment / stance / social objective
+  -> speech-corpus retrieval or suppression
+  -> action / distance / gaze / pause / silence / necessary dialogue
 ```
 
 Occupation can supply a tool after that appraisal. It does not get to decide who the person is.
@@ -117,6 +135,10 @@ $role2reel 从这份大纲、人物小传和已写场景中分离事实、痕迹
 ```
 
 ```text
+$role2reel 对这个虚构人物做一次“命线反演”：同一个开场现状，给我四种真正不同的过去，其中至少一条反直觉。先给可读的人生方案，不要替我选，不要展开三万字。
+```
+
+```text
 $role2reel 把我锁定的人生路径扩写成 deep 级中文人物小传；通过机械审计后，等我批准这份小传的准确 revision 与 body hash，再编译为人物、记忆、关系、共同语境和场景运行资产。
 ```
 
@@ -147,18 +169,18 @@ If a workspace already has scene and relationship contracts, adding a new partic
 
 ## Included production system
 
-- meaning-ledger humanization that preserves uncertainty and authorship;
-- multi-candidate life-path generation, writer selection/composition, content-bound causal-path locks, separate exact-biography approval, 30,000-Han-character deep-biography gates, downstream provenance, and counterfactual tests;
-- character runtime, episodic memory, relationship ledger, knowledge boundary, and second-order belief;
+- persistent meaning-ledger humanization that preserves uncertainty and authorship;
+- author-facing 命线反演 readings plus backstage multi-candidate locks, separate exact-biography approval, 30,000-Han-character deep-biography gates, downstream provenance, and counterfactual tests;
+- CharacterOS with separate cognitive-resource and speech-corpus libraries, two-stage retrieval, episodic memory, relationship ledger, knowledge boundary, common ground, and second-order belief;
 - shared-memory contracts for mutual knowledge, private meanings, looks, codes, jokes, taboos, and compressed nonverbal exchange;
 - scene contract, private goals, turn-state simulation, and beat mapping;
 - natural Chinese dialogue guidance based on judgment and interaction rather than filler words;
 - shot-duty storyboarding, motivated camera, causal performance, physics, sound, and continuity;
-- provider-neutral asset-role contracts and causal timelines;
+- provider-neutral single-mode video-task contracts, deny-by-default asset roles, exact causal timelines, and a Seedance downstream adapter that requires current-interface verification at execution time;
 - reusable YAML, CSV, Markdown, and Fountain templates;
 - deterministic project initialization, dialogue linting, storyboard timing checks, packaging, and repository validation;
 - life-path and staged-evaluation auditors for exact fact/candidate/biography/artifact bindings, without claiming to score artistic quality;
-- forward-evaluation specifications for fidelity, subtext, shot duty, asset isolation, restraint, life-path counterfactuals, and staged deep compilation; FT-01–FT-13 have development cold regressions, while formal recorded runs, FT-14, and blinded human evaluation remain pending.
+- forward-evaluation specifications for fidelity, subtext, shot duty, asset isolation, restraint, life-path counterfactuals, and staged deep compilation. FT-15–FT-17 now have retained informal failure→repair→rerun records; FT-19–FT-22 have partial video-mode behavior checks. FT-14, FT-18, executable provider runs, and blinded human evaluation remain pending.
 
 ## Validate locally
 
@@ -171,7 +193,7 @@ python3 -m unittest discover -s tests -v
 python3 scripts/package_skill.py
 ```
 
-PyYAML is used only for repository validation and YAML storyboard auditing; initialization, packaging, dialogue auditing, and CSV/JSON storyboard auditing use the Python standard library.
+PyYAML is the declared dependency for YAML templates and the YAML-capable production auditors. Initialization, packaging, dialogue auditing, and CSV/JSON storyboard timing checks otherwise use the Python standard library; the bundled scripts make no network requests.
 
 The linters deliberately report review signals rather than claiming to measure artistic quality. Behavioral cases under `tests/forward/` separate machine-checkable invariants from blinded human judgment.
 
@@ -183,7 +205,7 @@ Role2Reel does **not**:
 
 - turn uncertainty into fact or invent evidence to make a rewrite smoother;
 - infer a personality from an occupation, school, credential, status, diagnosis, zodiac sign, or other category;
-- present candidate histories as recovered truth about a real person, or let an unlocked branch enter canon;
+- present 命线反演 readings as recovered truth about a real person, assign them probabilities, or let an unlocked branch enter canon;
 - give every character the author's knowledge;
 - require dialogue or narration in every shot;
 - impose a universal shot length, hook, camera move, or marketing CTA;

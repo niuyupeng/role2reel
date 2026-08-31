@@ -6,8 +6,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
+import stat
 import unicodedata
 from pathlib import Path
 
@@ -22,6 +24,16 @@ MAX_COMPONENT_LENGTH = 80
 RELATIONSHIP_PLACEHOLDER = """relationships:
   - from_character: null
     to_character: null
+    character_sources:
+      - character_id: null
+        package_context_id: null
+        life_path_branch_id: null
+        compiled_from_lock_revision: null
+        compiled_from_fact_boundary_sha256: null
+        compiled_from_candidate_sha256: null
+        compiled_from_biography_revision: null
+        compiled_from_biography_sha256: null
+        source_refs: []
     public_relationship: null
     trust: null
     intimacy: null
@@ -85,6 +97,74 @@ TURN_PLACEHOLDER = """turns:
     consequence: []
     residual_state: null"""
 
+CHARACTER_RUNTIME_SCOPES_PLACEHOLDER = """character_runtime_scopes:
+  - character_id: null
+    knowledge_boundary:
+      - proposition_id: null
+        proposition: null
+        knowledge_status: null
+        confidence: null
+        confidence_basis: []
+        source_refs: []
+        last_update_ref: null
+    common_ground_proposition_ids: []
+    second_order_belief_ids: []
+    cognitive_resource_ids: []
+    memory_ids: []
+    relationship_claim_ids: []
+    speech_corpus_entry_ids: []
+    forbidden_generic_phrasing_ids: []
+    relationship_register: null"""
+
+DECISION_TRACES_PLACEHOLDER = """decision_traces:
+  - turn: 1
+    character_id: null
+    comprehension_retrieval:
+      cognitive_resource_ids: []
+      memory_ids: []
+      relationship_claim_ids: []
+      common_ground_proposition_ids: []
+      second_order_belief_ids: []
+      checked_unknown_or_excluded_resource_ids: []
+    private_interpretation: null
+    pragmatic_attribution: null
+    inferences:
+      - status: null
+        proposition: null
+        knowledge_status: null
+        confidence: null
+        evidence_refs: []
+        competing_explanations: []
+    belief_delta:
+      - status: null
+        proposition: null
+        prior_knowledge_status: null
+        new_knowledge_status: null
+        prior_confidence: null
+        new_confidence: null
+        evidence_refs: []
+        update_reason: null
+    first_impulse: null
+    stance: null
+    confidence: null
+    confidence_boundary: null
+    social_objective: null
+    strategy: null
+    expression_retrieval:
+      retrieval_status: null
+      speech_corpus_entry_ids: []
+      relationship_register: null
+      action_or_silence_options: []
+      wording_options: []
+    suppressed_expression_options:
+      - option_ref: null
+        suppression_reason: null
+    impulse_modulation: null
+    respond_or_withhold: null
+    output:
+      legacy_turn_surface_ref: 1
+      selected_expression_option_ref: null"""
+
 
 def slugify(value: str, fallback: str) -> str:
     normalized_source = unicodedata.normalize("NFKC", value).strip().lower()
@@ -103,26 +183,95 @@ def yaml_string(value: str) -> str:
     return json.dumps(value, ensure_ascii=False)
 
 
+def _absolute_without_resolving(path: Path) -> Path:
+    """Return a normalized absolute path without following filesystem links."""
+
+    return Path(os.path.abspath(os.fspath(path)))
+
+
+def _path_prefixes(path: Path):
+    current = Path(path.anchor)
+    yield current
+    for part in path.parts[1:]:
+        current = current / part
+        yield current
+
+
+def _is_reparse_point(path: Path) -> bool:
+    try:
+        metadata = os.lstat(os.fspath(path))
+    except FileNotFoundError:
+        return False
+    attributes = getattr(metadata, "st_file_attributes", 0)
+    reparse_attribute = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
+    return stat.S_ISLNK(metadata.st_mode) or bool(attributes & reparse_attribute)
+
+
+def _assert_no_link_components(path: Path) -> None:
+    for component in _path_prefixes(path):
+        if _is_reparse_point(component):
+            raise ValueError(
+                "Refusing to traverse a symbolic link, junction, or reparse point: "
+                f"{component}"
+            )
+
+
+def _safe_destination(project_root: Path, destination: Path) -> Path:
+    """Validate a destination lexically and canonically against its project root."""
+
+    root = _absolute_without_resolving(project_root)
+    candidate = _absolute_without_resolving(destination)
+    try:
+        candidate.relative_to(root)
+    except ValueError as exc:
+        raise ValueError(f"Destination escapes the requested project root: {candidate}") from exc
+
+    # Check the whole existing chain before resolving it so a link cannot silently
+    # redefine either the requested root or a destination parent.
+    _assert_no_link_components(root)
+    _assert_no_link_components(candidate)
+    resolved_root = root.resolve(strict=False)
+    resolved_candidate = candidate.resolve(strict=False)
+    try:
+        resolved_candidate.relative_to(resolved_root)
+    except ValueError as exc:
+        raise ValueError(
+            f"Resolved destination escapes the requested project root: {candidate}"
+        ) from exc
+    return candidate
+
+
+def _reject_force_through_hard_link(destination: Path, *, force: bool) -> None:
+    if not force or not destination.exists():
+        return
+    metadata = destination.stat()
+    if metadata.st_nlink > 1:
+        raise ValueError(f"Refusing to replace a multiply linked file: {destination}")
+
+
 def materialize(
     template_name: str,
     destination: Path,
     replacements: dict[str, str],
     *,
+    project_root: Path,
     force: bool,
     created: list[Path],
     skipped: list[Path],
 ) -> None:
+    destination = _safe_destination(project_root, destination)
     source = TEMPLATES / template_name
     if not source.is_file():
         raise FileNotFoundError(f"Missing template: {source}")
-    if destination.is_symlink():
-        raise ValueError(f"Refusing to write through a symbolic link: {destination}")
     if destination.exists() and not destination.is_file():
         raise IsADirectoryError(f"Expected a file destination: {destination}")
     if destination.exists() and not force:
         skipped.append(destination)
         return
+    _reject_force_through_hard_link(destination, force=force)
     destination.parent.mkdir(parents=True, exist_ok=True)
+    destination = _safe_destination(project_root, destination)
+    _reject_force_through_hard_link(destination, force=force)
     if replacements:
         content = source.read_text(encoding="utf-8")
         for old, new in replacements.items():
@@ -200,6 +349,25 @@ def _render_relationships(character_ids: list[str]) -> str:
             [
                 f"  - from_character: {yaml_string(source)}",
                 f"    to_character: {yaml_string(target)}",
+                "    character_sources:",
+            ]
+        )
+        for participant in (source, target):
+            lines.extend(
+                [
+                    f"      - character_id: {yaml_string(participant)}",
+                    f"        package_context_id: {yaml_string(f'character-package-{participant}')}",
+                    "        life_path_branch_id: null",
+                    "        compiled_from_lock_revision: null",
+                    "        compiled_from_fact_boundary_sha256: null",
+                    "        compiled_from_candidate_sha256: null",
+                    "        compiled_from_biography_revision: null",
+                    "        compiled_from_biography_sha256: null",
+                    "        source_refs: []",
+                ]
+            )
+        lines.extend(
+            [
                 "    public_relationship: null",
                 "    trust: null",
                 "    intimacy: null",
@@ -297,6 +465,85 @@ def _render_turns(character_ids: list[str]) -> str:
     return "\n".join(lines)
 
 
+def _render_character_runtime_scopes(character_ids: list[str]) -> str:
+    if not character_ids:
+        return "character_runtime_scopes: []"
+    lines = ["character_runtime_scopes:"]
+    for char_id in character_ids:
+        lines.extend(
+            [
+                f"  - character_id: {yaml_string(char_id)}",
+                "    knowledge_boundary: []",
+                "    common_ground_proposition_ids: []",
+                "    second_order_belief_ids: []",
+                "    cognitive_resource_ids: []",
+                "    memory_ids: []",
+                "    relationship_claim_ids: []",
+                "    speech_corpus_entry_ids: []",
+                "    forbidden_generic_phrasing_ids: []",
+                "    relationship_register: null",
+            ]
+        )
+    return "\n".join(lines)
+
+
+def _render_decision_traces(character_ids: list[str]) -> str:
+    if not character_ids:
+        return "decision_traces: []"
+    lines = ["decision_traces:"]
+    for number, char_id in enumerate(character_ids, start=1):
+        lines.extend(
+            [
+                f"  - turn: {number}",
+                f"    character_id: {yaml_string(char_id)}",
+                "    comprehension_retrieval:",
+                "      cognitive_resource_ids: []",
+                "      memory_ids: []",
+                "      relationship_claim_ids: []",
+                "      common_ground_proposition_ids: []",
+                "      second_order_belief_ids: []",
+                "      checked_unknown_or_excluded_resource_ids: []",
+                "    private_interpretation: null",
+                "    pragmatic_attribution: null",
+                "    inferences:",
+                "      - status: null",
+                "        proposition: null",
+                "        knowledge_status: null",
+                "        confidence: null",
+                "        evidence_refs: []",
+                "        competing_explanations: []",
+                "    belief_delta:",
+                "      - status: null",
+                "        proposition: null",
+                "        prior_knowledge_status: null",
+                "        new_knowledge_status: null",
+                "        prior_confidence: null",
+                "        new_confidence: null",
+                "        evidence_refs: []",
+                "        update_reason: null",
+                "    first_impulse: null",
+                "    stance: null",
+                "    confidence: null",
+                "    confidence_boundary: null",
+                "    social_objective: null",
+                "    strategy: null",
+                "    expression_retrieval:",
+                "      retrieval_status: null",
+                "      speech_corpus_entry_ids: []",
+                "      relationship_register: null",
+                "      action_or_silence_options: []",
+                "      wording_options: []",
+                "    suppressed_expression_options: []",
+                "    impulse_modulation: null",
+                "    respond_or_withhold: null",
+                "    output:",
+                f"      legacy_turn_surface_ref: {number}",
+                "      selected_expression_option_ref: null",
+            ]
+        )
+    return "\n".join(lines)
+
+
 def initialize(
     target: Path,
     characters: list[str],
@@ -304,11 +551,14 @@ def initialize(
     force: bool,
     profiles_only: bool = False,
 ) -> tuple[list[Path], list[Path]]:
-    target = target.resolve()
+    target = _absolute_without_resolving(target)
+    _assert_no_link_components(target)
     target.mkdir(parents=True, exist_ok=True)
+    _assert_no_link_components(target)
     created: list[Path] = []
     skipped: list[Path] = []
 
+    _safe_destination(target, target / "02-characters")
     existing_ids, _ = _existing_characters(target)
     assigned = _assign_character_ids(target, characters)
     character_ids = [char_id for char_id, _ in assigned]
@@ -324,8 +574,33 @@ def initialize(
         )
 
     if not profiles_only:
-        (target / "01-humanized").mkdir(parents=True, exist_ok=True)
-        materialize("project.yaml", target / "project.yaml", {}, force=force, created=created, skipped=skipped)
+        materialize(
+            "project.yaml",
+            target / "project.yaml",
+            {},
+            project_root=target,
+            force=force,
+            created=created,
+            skipped=skipped,
+        )
+        materialize(
+            "meaning-ledger.yaml",
+            target / "01-humanized" / "meaning-ledger.yaml",
+            {},
+            project_root=target,
+            force=force,
+            created=created,
+            skipped=skipped,
+        )
+        materialize(
+            "humanized-draft.md",
+            target / "01-humanized" / "humanized-draft.md",
+            {},
+            project_root=target,
+            force=force,
+            created=created,
+            skipped=skipped,
+        )
 
     for char_id, name in assigned:
         char_dir = target / "02-characters" / char_id
@@ -333,6 +608,7 @@ def initialize(
             "character.yaml",
             char_dir / "character.yaml",
             {"  id: null": f"  id: {yaml_string(char_id)}", "  name: null": f"  name: {yaml_string(name)}"},
+            project_root=target,
             force=force,
             created=created,
             skipped=skipped,
@@ -341,8 +617,12 @@ def initialize(
             ("cognitive-resources.yaml", "cognitive-resources.yaml"),
             ("life-path-workbench.yaml", "life-path-workbench.yaml"),
             ("memories.yaml", "memories.yaml"),
+            ("speech-corpus.yaml", "speech-corpus.yaml"),
         ):
-            replacements = {"character_id: null": f"character_id: {yaml_string(char_id)}"}
+            if template_name == "life-path-workbench.yaml":
+                replacements = {"character_id: null": f"character_id: {yaml_string(char_id)}"}
+            else:
+                replacements = {"\ncharacter_id: null\n": f"\ncharacter_id: {yaml_string(char_id)}\n"}
             if template_name == "life-path-workbench.yaml":
                 replacements["package_context_id: null"] = (
                     f"package_context_id: {yaml_string(f'character-package-{char_id}')}"
@@ -351,19 +631,30 @@ def initialize(
                 template_name,
                 char_dir / filename,
                 replacements,
+                project_root=target,
                 force=force,
                 created=created,
                 skipped=skipped,
             )
-        speech_path = char_dir / "speech-samples.md"
-        if speech_path.is_symlink():
-            raise ValueError(f"Refusing to write through a symbolic link: {speech_path}")
+        materialize(
+            "life-path-reading.md",
+            char_dir / "life-path-reading.md",
+            {},
+            project_root=target,
+            force=force,
+            created=created,
+            skipped=skipped,
+        )
+        speech_path = _safe_destination(target, char_dir / "speech-samples.md")
         if speech_path.exists() and not speech_path.is_file():
             raise IsADirectoryError(f"Expected a file destination: {speech_path}")
         if speech_path.exists() and not force:
             skipped.append(speech_path)
         else:
+            _reject_force_through_hard_link(speech_path, force=force)
             speech_path.parent.mkdir(parents=True, exist_ok=True)
+            speech_path = _safe_destination(target, speech_path)
+            _reject_force_through_hard_link(speech_path, force=force)
             with speech_path.open("w", encoding="utf-8", newline="\n") as handle:
                 handle.write(
                     f"# {name}: approved speech evidence\n\n"
@@ -378,6 +669,7 @@ def initialize(
         "relationship-ledger.yaml",
         target / "02-characters" / "relationship-ledger.yaml",
         {RELATIONSHIP_PLACEHOLDER: _render_relationships(character_ids)},
+        project_root=target,
         force=force,
         created=created,
         skipped=skipped,
@@ -393,7 +685,9 @@ def initialize(
             CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids),
             "  id: null": f"  id: {yaml_string(scene_id)}",
             SCENE_CHARACTERS_PLACEHOLDER: _render_scene_characters(character_ids),
+            CHARACTER_RUNTIME_SCOPES_PLACEHOLDER: _render_character_runtime_scopes(character_ids),
         },
+        project_root=target,
         force=force,
         created=created,
         skipped=skipped,
@@ -405,7 +699,9 @@ def initialize(
             **scene_replacement,
             CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids),
             TURN_PLACEHOLDER: _render_turns(character_ids),
+            DECISION_TRACES_PLACEHOLDER: _render_decision_traces(character_ids),
         },
+        project_root=target,
         force=force,
         created=created,
         skipped=skipped,
@@ -413,18 +709,98 @@ def initialize(
     materialize(
         "beat-map.yaml",
         scene_dir / "beat-map.yaml",
-        {**scene_replacement, CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids)},
+        {
+            **scene_replacement,
+            "beat_map_id: null": f"beat_map_id: {yaml_string(f'{scene_id}-beats')}",
+            CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids),
+        },
+        project_root=target,
         force=force,
         created=created,
         skipped=skipped,
     )
-    materialize("main.fountain", target / "04-screenplay" / "main.fountain", {}, force=force, created=created, skipped=skipped)
-    materialize("storyboard.yaml", target / "05-storyboard" / "storyboard.yaml", scene_replacement, force=force, created=created, skipped=skipped)
-    materialize("storyboard.csv", target / "05-storyboard" / "storyboard.csv", {}, force=force, created=created, skipped=skipped)
-    materialize("continuity.yaml", target / "06-continuity" / "continuity.yaml", {}, force=force, created=created, skipped=skipped)
-    materialize("asset-contract.yaml", target / "07-adapter" / "asset-contract.yaml", {}, force=force, created=created, skipped=skipped)
-    materialize("video-prompt.md", target / "07-adapter" / "video-prompt.md", {}, force=force, created=created, skipped=skipped)
-    materialize("calibration-record.yaml", target / "08-calibration" / "calibration-record.yaml", {}, force=force, created=created, skipped=skipped)
+    materialize(
+        "main.fountain",
+        target / "04-screenplay" / "main.fountain",
+        {},
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    project_character_sources = {CHARACTER_SOURCES_PLACEHOLDER: _render_character_sources(character_ids)}
+    materialize(
+        "storyboard.yaml",
+        target / "05-storyboard" / "storyboard.yaml",
+        {**scene_replacement, **project_character_sources},
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    materialize(
+        "storyboard.csv",
+        target / "05-storyboard" / "storyboard.csv",
+        {},
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    materialize(
+        "continuity.yaml",
+        target / "06-continuity" / "continuity.yaml",
+        project_character_sources,
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    materialize(
+        "visual-bible.yaml",
+        target / "06-continuity" / "visual-bible.yaml",
+        project_character_sources,
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    materialize(
+        "asset-contract.yaml",
+        target / "07-adapter" / "asset-contract.yaml",
+        project_character_sources,
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    materialize(
+        "video-task.yaml",
+        target / "07-adapter" / "video-task.yaml",
+        project_character_sources,
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    materialize(
+        "video-prompt.md",
+        target / "07-adapter" / "video-prompt.md",
+        {},
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
+    materialize(
+        "calibration-record.yaml",
+        target / "08-calibration" / "calibration-record.yaml",
+        {},
+        project_root=target,
+        force=force,
+        created=created,
+        skipped=skipped,
+    )
     return created, skipped
 
 

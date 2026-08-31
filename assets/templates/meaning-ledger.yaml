@@ -1,0 +1,35 @@
+schema_version: 1
+ledger:
+  ledger_id: null
+  revision: ledger-001
+  source:
+    path: null
+    revision: null
+    sha256: null
+    supplied_by: null
+  transformation_mode: faithful_cleanup
+  requested_scope: null
+  permitted_transformations: []
+  prohibited_transformations: []
+  claims:
+    - claim_id: null
+      content: null
+      owner: null
+      basis: observation
+      certainty: unresolved
+      function: null
+      chronology_anchor: null
+      must_preserve: []
+      source_refs: []
+  contradictions: []
+  ambiguities: []
+  protected_wording_or_images: []
+  created_fiction_candidates: []
+approval:
+  status: draft
+  decision_source: null
+  approved_ledger_id: null
+  approved_ledger_revision: null
+  approved_source_revision: null
+  approved_source_sha256: null
+  decided_at: null

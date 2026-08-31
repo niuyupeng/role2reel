@@ -16,6 +16,8 @@ Before drafting, establish:
 - the intended or plausible ending state;
 - any lines, facts, tone, rating, duration, or continuity that must be preserved.
 
+When the supplied character path is explicitly a `light` behavior fixture, preserve that scope in the delivered artifact with a short non-dialogue label such as `评估范围：light 行为样例；不作为 deep 小传证据`. Do not make an actor say the label, and do not let a good short scene stand in for the unperformed deep-biography workflow.
+
 Do not force a predetermined ending when the user asks for exploratory simulation. Otherwise use the ending state to prevent drift.
 
 ## Build a beat map
@@ -78,6 +80,8 @@ A line may repeat words while changing pressure. A line may add no fact while ch
 
 Do not require a line for every beat. Prefer a nonverbal surface when speech would only repeat the image, narrate private analysis, or explain information already mutually known. Shared memory may compress an exchange only to the depth established in the relationship ledger; a glance cannot transmit a new proposition.
 
+Run a **mute pass** after the first draft. Remove each line and replay the beat with only the visible action and established context. Restore the line only when removing it changes what the listener can choose, know, refuse, or do next. A maximum of two lines means zero, one, or two—not an invitation to fill both slots. Delete a command when the partner is already doing the commanded action, and delete a statement of trust, solidarity, patience, or joint decision when distance, waiting, turn-taking, or division of the task already makes that relationship move legible. Do not replace a line with an invented prop ritual merely to keep the speaker active.
+
 Coordination proves that a character decoded a shared cue; it does not by itself express that character's distinct private residue. When the shared-context contract says informed participants remember the event differently, give that difference one playable modulation beyond generic compliance—such as delay, altered distance, avoidance of the cue object, incomplete eye contact, or a different way of taking up the agreed task—without explaining the old event aloud.
 
 Keep a shared-context test causally clean. Use the supplied dispute, object, and immediate task; do not invent an independent emergency, hazard, or command that would make an uninformed person perform the same state change. Otherwise the visible coordination no longer demonstrates that the established cue did any work.
@@ -97,6 +101,8 @@ Do not impose a universal short-line rule. A character may speak at length when 
 | People explain a shared event to equally informed friends | Use the established shared-memory key, look, code, joke, avoidance, or silence unless the explanation itself is a tactic |
 | Every beat contains dialogue | Remove lines that do no state work and allow gaze, expression, action, or silence to carry the beat |
 | Dialogue repeats what the audience can see | Keep only a line that changes interpretation, power, intimacy, risk, obligation, certainty, or the next tactic |
+| The line limit becomes a quota | Run the mute pass; zero lines is a complete result when action already changes the next choice |
+| A protective move becomes a verbal command | Preserve the other person's agency; open space, wait, or ask only for information/action that is still missing |
 | Every line advances plot facts | Allow exchanges that alter power, intimacy, obligation, or certainty |
 | Subtext means arbitrary vagueness | Make the hidden objective precise and the surface tactic playable |
 | Emotion appears before its cause | Restore cue, comprehension beat, first response, chosen mask, and residue |

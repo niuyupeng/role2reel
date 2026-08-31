@@ -1,0 +1,103 @@
+schema_version: 1
+compiled_provenance:
+  compiled_for_character_id: null
+  compiled_for_package_context_id: null
+  life_path_branch_id: null
+  compiled_from_lock_revision: null
+  compiled_from_fact_boundary_sha256: null
+  compiled_from_candidate_sha256: null
+  compiled_from_biography_revision: null
+  compiled_from_biography_sha256: null
+  source_refs: []
+character_id: null
+contract:
+  purpose: expression_retrieval_after_private_judgment
+  not_a_cognitive_resource: true
+  approved_entries_only_for_generation: true
+  never_overrides:
+    - knowledge_boundary
+    - current_judgment
+    - relationship_state
+    - scene_objective
+entries:
+  - id: speech-001
+    approval_state: pending
+    evidence_kind: null
+    text_or_pattern: null
+    language_or_variety: null
+    character_id: null
+    source_refs: []
+    compiled_from_lock_revision: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    biography_node_refs: []
+    relationship_scope:
+      counterpart_character_ids: []
+      relationship_types: []
+      intimacy_range: null
+      power_configuration: null
+      excluded_counterparts: []
+    register:
+      label: null
+      formality: null
+      directness: null
+      address_behavior: null
+      status_behavior: null
+    context:
+      situation_types: []
+      social_objectives: []
+      strategies: []
+      risk_conditions: []
+      body_or_emotion_conditions: []
+      excluded_contexts: []
+    syntax:
+      clause_shape: null
+      subject_omission: null
+      rhythm_or_breath: null
+      interruption_behavior: null
+      typical_length_conditions: null
+    repair:
+      self_correction_pattern: null
+      backtrack_pattern: null
+      qualification_pattern: null
+      when_used: []
+    uncertainty:
+      marking_pattern: null
+      tolerated_ambiguity: null
+      confidence_threshold_for_assertion: null
+      when_silence_replaces_claim: []
+    pragmatic_functions: []
+    paired_nonverbal_options: []
+    do_not_generalize_to: []
+retrieval_policy:
+  run_after:
+    - comprehension_retrieval
+    - private_interpretation
+    - pragmatic_attribution
+    - inference
+    - belief_delta
+    - stance
+    - social_objective
+  rank_by:
+    - relationship_match
+    - register_match
+    - context_match
+    - pragmatic_function_match
+    - provenance_strength
+  reject_character_id_mismatch: true
+  reject_biography_revision_mismatch: true
+  permit_no_match: true
+suppression_policy:
+  suppress_when:
+    - wording_exceeds_character_knowledge
+    - wording_exposes_private_analysis_without_tactical_reason
+    - wording_recaps_mutual_knowledge
+    - wording_conflicts_with_current_relationship_register
+    - action_or_silence_does_the_same_work_better
+forbidden_generic_phrasing:
+  - id: forbidden-001
+    pattern_or_family: null
+    reason: null
+    relationship_or_context_scope: []
+    permitted_exception: null
+    source_refs: []

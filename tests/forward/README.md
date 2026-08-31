@@ -7,6 +7,9 @@ The files in this directory specify behavioral evaluations. The repository unit 
 - Results recorded for the v0.1 cases are historical and are summarized in `EVALS.md`.
 - FT-01 through FT-13 have informal development cold runs and post-fix case-level regressions summarized in `EVALS.md`; they do not satisfy this formal protocol because exact model/run metadata and blinded human review were not recorded.
 - FT-14 has not received an actual-artifact staged deep run or blinded human review.
+- FT-15–FT-17 cover author-facing 命线反演, two-stage cognition/expression retrieval, and a light path-to-behavior scene. Any development cold runs remain informal until exact run metadata and blinded human review are recorded.
+- FT-18 specifies the complete fused pipeline and must remain pending without real source material, an actual author path decision, a separately approved deep biography, isolated compilation/generation tasks, and human review.
+- FT-19–FT-22 specify extension, protected edit, two-source transition, and multi-panel video tasks. Schema or linter success cannot establish provider support or rendered quality.
 - Adding a case, passing its JSON contract test, or passing a deterministic linter is not evidence that generation behavior improved.
 
 ## Cold-run protocol

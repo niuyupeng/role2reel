@@ -1,16 +1,47 @@
 schema_version: 1
+character_sources:
+  - character_id: null
+    package_context_id: null
+    life_path_branch_id: null
+    compiled_from_lock_revision: null
+    compiled_from_fact_boundary_sha256: null
+    compiled_from_candidate_sha256: null
+    compiled_from_biography_revision: null
+    compiled_from_biography_sha256: null
+    source_refs: []
+contract_version: 2
+contract_id: null
+revision: 1
+default_borrow_policy: deny
 provider: null
 model: null
-primary_mode: null
-verified_constraints:
+capability_verification:
+  status: unresolved
   checked_at: null
   source: null
-  items: []
-assets:
-  - source_id: null
+  model_version: null
+source_assets:
+  - asset_id: null
+    revision: null
     media_type: null
+    # Choose exactly one immutable binding. A mutable attachment slot by itself
+    # is deliberately not executable evidence.
+    local_file: null # relative to the asset-contract directory or --asset-media-root
+    sha256: null
+    provider_asset_id: null
+    provider_asset_version: null
+borrow_authorizations:
+  - authorization_id: null
+    source_ref:
+      asset_id: null
+      revision: null
     borrow: []
-    target: null
-    interval_s: null
+    targets: []
+    interval:
+      start_s: null
+      end_s: null
     preserve: []
     exclude: []
+
+# Legacy v1 readers may continue to accept `primary_mode`, `verified_constraints`,
+# and `assets[]`. New tasks keep task routing in video-task.yaml.

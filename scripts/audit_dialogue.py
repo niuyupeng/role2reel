@@ -13,10 +13,21 @@ from pathlib import Path
 EXPOSITION_PATTERNS = {
     "as-you-know": re.compile(r"众所周知|你(?:也)?知道的|你应该知道|as you (?:already )?know", re.I),
     "let-me-explain": re.compile(r"让我(?:来)?解释|简单来说|换句话说|let me explain", re.I),
+    "private-analysis-spill": re.compile(
+        r"我的(?:判断|推断|立场|第一反应|社交目标)是|这(?:就)?(?:说明|意味着).{0,16}(?:所以|因此)|"
+        r"my (?:judgment|inference|stance|first impulse|social objective) is",
+        re.I,
+    ),
+    "backstory-recital": re.compile(
+        r"我之所以.{1,30}是因为.{1,30}(?:所以|才)|自从.{1,30}以后[，,]?.{0,20}(?:我就|所以我)|"
+        r"the reason I .{1,40} is because",
+        re.I,
+    ),
 }
 GENERIC_PATTERNS = {
     "generic-summary": re.compile(r"总而言之|综上所述|in conclusion", re.I),
     "generic-emphasis": re.compile(r"值得注意的是|不可否认的是|在这个过程中", re.I),
+    "generic-empathy": re.compile(r"我(?:完全)?理解你的感受|我能理解你现在的心情|I (?:completely )?understand how you feel", re.I),
 }
 
 SCENE_HEADING_PATTERN = re.compile(

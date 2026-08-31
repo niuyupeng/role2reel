@@ -9,7 +9,7 @@
 
 ## Local behavior and data handling
 
-Role2Reel is an instruction and template package. Its bundled Python scripts make no network requests. Initialization, packaging, dialogue auditing, and CSV/JSON storyboard auditing use only the standard library; repository validation and YAML storyboard input use the declared PyYAML development dependency. The initializer writes a project tree at the target path and does not overwrite existing files unless `--force` is supplied. The packager writes or replaces `dist/role2reel.zip` by default, or the exact path supplied with `--output`. The audit and repository-validation scripts read local files and print findings.
+Role2Reel is an instruction and template package. Its bundled Python scripts make no network requests. YAML templates and YAML-capable production audits use the declared PyYAML dependency; initialization, packaging, dialogue auditing, and CSV/JSON storyboard timing checks otherwise use the standard library. The initializer writes a project tree at the target path and does not overwrite existing files unless `--force` is supplied. The packager writes or replaces `dist/role2reel.zip` by default, or the exact path supplied with `--output`. The audit and repository-validation scripts read local files and print findings.
 
 Using the skill through Codex or sending its output to a video, model, storage, or collaboration provider is separate from those local scripts. That processing is governed by the selected services and their data controls. Remove confidential scripts, personal data, faces, voices, credentials, local paths, and unreleased assets unless you are authorized to share them.
 
