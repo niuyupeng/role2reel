@@ -121,6 +121,8 @@ Do not make a character react before receiving the cue or an object move before 
 
 Estimate duration from dialogue breath, movement distance, comprehension, holds, and transitions. There is no universal maximum shot length and no requirement that adjacent shots use different movements. When a fixed total duration is required, reconcile every shot on one continuous timeline and flag compression that makes performance implausible.
 
+For the full timing contract, keep performance, editorial, and provider clocks separate and record the five hard floors (dialogue, action, visual, camera, performance hold) in [dynamic-shot-timing.md](dynamic-shot-timing.md). When the delivery must be pasted into a video model, render each shot through [copy-paste-prompt-contract.md](copy-paste-prompt-contract.md) and audit the text export, not only the workbook formula.
+
 ## Use sound narratively
 
 Specify sound when it establishes space, bridges a cut, precedes a reveal, masks information, carries off-screen action, or changes emotional interpretation. Do not add background music or effects merely to populate fields.

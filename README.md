@@ -176,9 +176,10 @@ If a workspace already has scene and relationship contracts, adding a new partic
 - scene contract, private goals, turn-state simulation, and beat mapping;
 - natural Chinese dialogue guidance based on judgment and interaction rather than filler words;
 - shot-duty storyboarding, motivated camera, causal performance, physics, sound, and continuity;
+- dynamic timing with separate performance/editorial/provider clocks, hard-floor diagnostics, optional complex-action previsualization, and a fixed paste-ready shot-block export;
 - provider-neutral single-mode video-task contracts, deny-by-default asset roles, exact causal timelines, and a Seedance downstream adapter that requires current-interface verification at execution time;
 - reusable YAML, CSV, Markdown, and Fountain templates;
-- deterministic project initialization, dialogue linting, storyboard timing checks, packaging, and repository validation;
+- deterministic project initialization, dialogue linting, storyboard and clipboard-prompt timing checks, packaging, and repository validation;
 - life-path and staged-evaluation auditors for exact fact/candidate/biography/artifact bindings, without claiming to score artistic quality;
 - forward-evaluation specifications for fidelity, subtext, shot duty, asset isolation, restraint, life-path counterfactuals, and staged deep compilation. FT-15–FT-17 now have retained informal failure→repair→rerun records; FT-19–FT-22 have partial video-mode behavior checks. FT-14, FT-18, executable provider runs, and blinded human evaluation remain pending.
 

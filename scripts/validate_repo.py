@@ -39,6 +39,9 @@ REQUIRED_TEMPLATES = {
     "meaning-ledger.yaml",
     "humanized-draft.md",
     "calibration-record.yaml",
+    "clipboard-prompt.yaml",
+    "timing-plan.yaml",
+    "copy-paste-shot-block.txt",
     "main.fountain",
 }
 IGNORED_DIRS = {".git", "dist", "test-results", "__pycache__", ".pytest_cache", ".venv"}

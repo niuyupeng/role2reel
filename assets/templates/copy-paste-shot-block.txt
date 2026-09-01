@@ -1,0 +1,5 @@
+shot<local_number>｜
+景别与运镜：<shot_scale_and_motivated_camera>
+拍摄方式：<capture_method_and_provider_trim_plan>
+画面与动线：<observable_blocking_state_change_and_handoff>
+【00:01-00:05】:（<camera_position>）（<atomic_visual_action>）

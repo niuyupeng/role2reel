@@ -1,0 +1,54 @@
+schema_version: 1
+project_id: null
+scene_id: null
+source_storyboard_revision: null
+timing_version:
+  id: null
+  status: draft
+  time_precision_seconds: 0.1
+  display_time_style: legacy-one-based
+  rounding_policy: round-display-only
+constraints:
+  target_total_seconds: null
+  editorial_timing_locked: false
+  provider_generation_min_seconds: null
+  provider_generation_max_seconds: null
+shots:
+  - shot_id: S001
+    source_shot_id: S001
+    beat_duty: null
+    original_duration_seconds: null
+    duration_locked: false
+    dialogue_action_relation: none
+    evidence:
+      measured_audio_duration: null
+      retrieved_analog_ids: []
+      evidence_level: rule-only
+    floors:
+      dialogue_floor: 0.0
+      action_floor: 0.0
+      visual_floor: 0.0
+      camera_floor: 0.0
+      performance_hold: 0.0
+      hard_floor: null
+    recommendation:
+      min_duration: null
+      recommended_duration: null
+      max_duration: null
+      editorial_duration: null
+      provider_generation_duration: null
+      confidence: low
+      timing_reason: null
+      flags: []
+    timing_beats: []
+    state_in: null
+    state_out: null
+    manual_confirmation: pending
+global_result:
+  hard_floor_total: null
+  recommended_total: null
+  editorial_total: null
+  provider_total: null
+  target_feasible: null
+  overflow_seconds: null
+  notes: []

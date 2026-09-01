@@ -1,0 +1,27 @@
+schema_version: 1
+project_id: null
+scene_id: null
+generation_unit_id: null
+source_timing_version: null
+numbering:
+  display_label: local-segment-shot
+  source_shot_id_field: source_shot_id
+time_style:
+  origin_seconds: 1.0
+  precision_seconds: 0.1
+  display_format: "【00:01-00:05】"
+shots:
+  - shot_label: shot1
+    source_shot_id: S001
+    editorial_duration_seconds: null
+    provider_generation_duration_seconds: null
+    framing: null
+    capture_method: null
+    visual_and_blocking: null
+    timed_segments:
+      - start_seconds: 1.0
+        end_seconds: 1.0
+        camera: null
+        action: null
+    rendered_block: null
+    status: draft

@@ -5,5 +5,6 @@ __pycache__/
 dist/
 *.zip
 test-results/
+outputs/
 .DS_Store
 Thumbs.db
