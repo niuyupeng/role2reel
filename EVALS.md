@@ -20,6 +20,7 @@ This document separates historical results, currently reproducible deterministic
 | FT-19–FT-22 video-mode development runs | v0.3.0-beta.1 candidate | Partial | Hard-case planning behavior was exercised; the post-fix FT-21/FT-22 prose runs were not complete executable `video-task.yaml` packages |
 | FT-18 full fused staged run and FT-14 production-deep run | v0.3.0-beta.1 candidate | Pending | Missing real author-approved deep artifacts, isolated full-chain execution, actor review, and adoption decisions |
 | Dynamic timing, paste-ready prompt contract, workbook profile, and clipboard auditor | v0.4.0-beta.2 candidate | Completed locally | Mechanical timing fields, fixed output syntax, source-segment offset handling, workbook formula reopening, segmented-label restart audit, and text-export audit; no provider or human-performance claim |
+| Source-truth, atomic-shot, physical/sound continuity, post-composite text, and readiness review gates | v0.5.0-beta.1 candidate | Completed locally | Mechanical release blockers and structured review fields; no claim that source comparison or simulated panel findings are human or semantic proof |
 
 ## Current v0.4.0-beta.2 candidate deterministic validation
 
@@ -37,6 +38,20 @@ The additive v0.4 candidate source tree was checked locally on 2026-09-01:
 New deterministic coverage checks the visible `explore` versus backstage `production-lock` 命线反演 surfaces; counter-reading and author-operation contracts; separate cognitive-resource and speech-corpus artifacts; two-stage turn references and approved expression evidence; proposition-level common ground and directional second-order belief provenance; exact raw-source/meaning-ledger/humanized-draft identity and approvals; source-bound concise/professional storyboards; visual-asset revisions; explicit continuity locks and state handoffs; deny-by-default reference borrowing; immutable local-media bytes or provider asset versions; exactly one provider-neutral video mode; exact timelines; extension seams; edit targets and protected regions; transition endpoints and bridges; multi-panel mappings; and current-capability evidence for provider-specific tasks. Modern production auditors fail closed without the real bound upstream files; explicit unbound-structure modes are draft lint only. Existing v0.1 and v0.2 compatibility tests remain in the same suite.
 
 These checks still cannot prove that candidate lives are semantically diverse, that a 30,000-character biography has causal or artistic density, that a model truly used a resource rather than copied an ID, that a provider will honor a task, that a dynamic estimate is physically or performatively right, or that actors and production teams prefer the result.
+
+## Current v0.5.0-beta.1 candidate deterministic validation
+
+The source-truth and atomic-shot gate update was checked locally on 2026-09-01:
+
+| Check | Current result |
+|---|---|
+| Skill Creator `quick_validate.py` under UTF-8 mode | Pass |
+| Role2Reel repository validator | Pass; 106 files checked |
+| Python unit tests | 194 discovered; 189 pass and 5 symlink-capability tests skipped on local Windows |
+| Release packaging | Pass; 102 allowlisted files packaged; ZIP integrity pass |
+| Readiness-gate audit tests | Pass; source-truth, atomicity, hard-floor, vacuum-carrier, and post-composite-text blockers covered |
+
+This update generalizes the latest storyboard review findings into reusable contracts: compare dialogue ownership and plot facts against the actual source before polish; classify atomic shots versus split-required or author-approved clusters before timing; name environment-aware sound carriers and force sources; track state handoffs; mark exact text for post-compositing; and preserve simulated multi-role review as simulated evidence. These checks still cannot prove that the source comparison is semantically correct, that the timing is playable, or that a model, actor, or production team will prefer the result.
 
 ## v0.3.0-beta.1 development cold-run status: partial evidence
 

@@ -1,0 +1,44 @@
+schema_version: 1
+project_id: null
+board_id: null
+board_revision: null
+source_truth_ledger_id: null
+review_mode: simulated-panel-or-human-panel
+production_lock: draft
+shots:
+  - shot_id: S001
+    source_shot_id: S001
+    source_truth:
+      status: MATCHED
+      speaker_match: true
+      plot_fact_match: true
+      author_addition_approved: false
+      finding_codes: []
+    atomicity:
+      status: ATOMIC_PASS
+      dominant_duty: null
+      beat_count: 1
+      action_path: []
+      camera_continuity: true
+      start_state: null
+      end_state: null
+      author_decision: pending
+      cluster_rationale: null
+    timing:
+      editorial_duration_s: null
+      provider_duration_s: null
+      hard_floor_s: null
+      flags: []
+    physical_sound:
+      environment: null
+      sound_carrier: null
+      force_source: null
+      continuity_state_in: null
+      continuity_state_out: null
+      issues: []
+    text:
+      status: none
+      overlay_plan: null
+      source_id: null
+    panel_findings: []
+    release_decision: pending

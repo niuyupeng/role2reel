@@ -42,6 +42,8 @@ REQUIRED_TEMPLATES = {
     "clipboard-prompt.yaml",
     "timing-plan.yaml",
     "copy-paste-shot-block.txt",
+    "source-truth-ledger.yaml",
+    "shot-readiness-review.yaml",
     "main.fountain",
 }
 IGNORED_DIRS = {".git", "dist", "test-results", "__pycache__", ".pytest_cache", ".venv"}

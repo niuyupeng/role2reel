@@ -177,6 +177,7 @@ If a workspace already has scene and relationship contracts, adding a new partic
 - natural Chinese dialogue guidance based on judgment and interaction rather than filler words;
 - shot-duty storyboarding, motivated camera, causal performance, physics, sound, and continuity;
 - dynamic timing with separate performance/editorial/provider clocks, hard-floor diagnostics, optional complex-action previsualization, and a fixed paste-ready shot-block export;
+- source-truth and atomic-shot gates, environment-aware sound/physics continuity, post-composite text planning, and optional multi-role readiness review before provider generation;
 - provider-neutral single-mode video-task contracts, deny-by-default asset roles, exact causal timelines, and a Seedance downstream adapter that requires current-interface verification at execution time;
 - reusable YAML, CSV, Markdown, and Fountain templates;
 - deterministic project initialization, dialogue linting, storyboard and clipboard-prompt timing checks, packaging, and repository validation;

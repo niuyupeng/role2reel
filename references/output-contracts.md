@@ -55,6 +55,8 @@ For a compact review, use Markdown with:
 
 For production or machine checking, use `assets/templates/storyboard.yaml` as the authoritative nested contract and `storyboard.csv` as a flat review/export view. Bind exact meaning, scene, beat, and visual-bible revisions before shots. Declare `delivery_depth: concise` for an author-review board or `professional` for blocking, camera, performance, continuity, and handoff detail. Keep start and end seconds numeric when automated timing checks are needed.
 
+For a production-bound repair, pair the board with `assets/templates/source-truth-ledger.yaml` and `assets/templates/shot-readiness-review.yaml`. Run the source-truth and atomic-shot gates before dynamic timing; unresolved `SOURCE_MISMATCH`, `SPLIT_REQUIRED`, unapproved clusters, infeasible hard floors, ungrounded sound carriers, or missing `POST_COMPOSITE_TEXT` overlay plans remain review blockers.
+
 Keep dialogue and sound separate. Every shot declares `dialogue.mode` as `spoken`, `nonverbal`, or `silent`, plus `state_in`, `state_out`, a handoff, and stable visual asset ID/revision references. Use `assets/templates/visual-bible.yaml` as the asset registry. For a modern board, run `scripts/audit_storyboard.py <board> --meaning <file> --scene <file> --beats <file> --visual-bible <file>` so the audit opens every bound document and compares its actual hash.
 
 ## Continuity package

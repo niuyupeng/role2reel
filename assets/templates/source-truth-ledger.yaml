@@ -1,0 +1,29 @@
+schema_version: 1
+project_id: null
+source:
+  source_id: null
+  revision: null
+  sha256: null
+  source_type: screenplay-or-approved-outline
+scenes:
+  - scene_id: scene-001
+    source_scene_ref: null
+    source_text_span: null
+    claims: []
+    shots:
+      - source_shot_id: S001
+        source_beat_ids: []
+        source_dialogue:
+          - speaker_id: null
+            text: null
+            order: 1
+        observable_action: null
+        characters_present: []
+        state_in: null
+        state_out: null
+        board_status: MATCHED
+        adapted_text: null
+        additions: []
+        omissions: []
+        finding_codes: []
+        author_decision: pending
