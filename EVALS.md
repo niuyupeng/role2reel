@@ -19,9 +19,9 @@ This document separates historical results, currently reproducible deterministic
 | FT-15–FT-17 independent development cold runs | v0.3.0-beta.1 candidate | Completed informally after recorded failures and repairs | Case-level model behavior under separate model review; not a human or production-deep study |
 | FT-19–FT-22 video-mode development runs | v0.3.0-beta.1 candidate | Partial | Hard-case planning behavior was exercised; the post-fix FT-21/FT-22 prose runs were not complete executable `video-task.yaml` packages |
 | FT-18 full fused staged run and FT-14 production-deep run | v0.3.0-beta.1 candidate | Pending | Missing real author-approved deep artifacts, isolated full-chain execution, actor review, and adoption decisions |
-| Dynamic timing, paste-ready prompt contract, workbook profile, and clipboard auditor | v0.4.0-beta.1 candidate | Completed locally | Mechanical timing fields, fixed output syntax, source-segment offset handling, workbook formula reopening, and text-export audit; no provider or human-performance claim |
+| Dynamic timing, paste-ready prompt contract, workbook profile, and clipboard auditor | v0.4.0-beta.2 candidate | Completed locally | Mechanical timing fields, fixed output syntax, source-segment offset handling, workbook formula reopening, segmented-label restart audit, and text-export audit; no provider or human-performance claim |
 
-## Current v0.4.0-beta.1 candidate deterministic validation
+## Current v0.4.0-beta.2 candidate deterministic validation
 
 The additive v0.4 candidate source tree was checked locally on 2026-09-01:
 
