@@ -43,6 +43,7 @@ def audit_text(
     expected_duration: float | None = None,
     one_based: bool = True,
     allow_offset: bool = False,
+    allow_restarts: bool = False,
     tolerance: float = 0.051,
 ) -> list[Finding]:
     """Return structural findings; semantic, artistic and provider checks remain manual."""
@@ -56,6 +57,9 @@ def audit_text(
     for header, block in blocks:
         number = int(re.search(r"\d+", header).group(0))
         shot = f"shot{number}"
+        if allow_restarts and previous_number is not None and number <= previous_number:
+            seen_numbers.clear()
+            previous_number = None
         if number in seen_numbers:
             findings.append(Finding("duplicate-shot-label", "error", shot, "The local shot label is repeated."))
         seen_numbers.add(number)
@@ -129,6 +133,7 @@ def main() -> int:
     parser.add_argument("--expected-duration", type=float)
     parser.add_argument("--zero-based", action="store_true", help="Expect the first display time to start at 00:00.")
     parser.add_argument("--allow-offset", action="store_true", help="Preserve source-segment timecodes whose first line is not the display origin.")
+    parser.add_argument("--allow-restarts", action="store_true", help="Allow local shot labels to restart at each concatenated generation segment.")
     parser.add_argument("--tolerance", type=float, default=0.051)
     parser.add_argument("--json", action="store_true", dest="as_json")
     args = parser.parse_args()
@@ -138,6 +143,7 @@ def main() -> int:
             expected_duration=args.expected_duration,
             one_based=not args.zero_based,
             allow_offset=args.allow_offset,
+            allow_restarts=args.allow_restarts,
             tolerance=args.tolerance,
         )
     except (OSError, UnicodeError) as exc:

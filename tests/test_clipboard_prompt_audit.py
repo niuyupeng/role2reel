@@ -43,3 +43,8 @@ class ClipboardPromptAuditTests(unittest.TestCase):
         self.assertIn("duplicate-shot-label", codes)
         self.assertIn("shot-order", codes)
         self.assertIn("duration-mismatch", {item.code for item in audit_text(VALID, expected_duration=4.5)})
+
+    def test_segment_export_can_restart_local_labels_when_declared(self) -> None:
+        restarted = VALID.replace("shot2｜", "shot1｜")
+        self.assertIn("duplicate-shot-label", {item.code for item in audit_text(restarted)})
+        self.assertEqual(audit_text(restarted, allow_restarts=True), [])
