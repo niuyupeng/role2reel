@@ -1,0 +1,448 @@
+name: Temporary Douyin recovery
+
+on:
+  push:
+    branches:
+      - tmp-douyin-recovery-20260903
+
+permissions:
+  contents: write
+
+jobs:
+  recover:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp-douyin-recovery-20260903
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install requests beautifulsoup4 lxml curl_cffi yt-dlp playwright playwright-stealth
+          python -m playwright install chromium
+          git clone --depth 1 https://github.com/Johnserf-Seed/f2.git /tmp/f2src || true
+          python -m pip install -e /tmp/f2src || true
+          rm -rf douyin_recovery
+          mkdir -p douyin_recovery
+      - name: Recover exact video
+        env:
+          SHARE_URL: https://v.douyin.com/KWJeNMifH8hq99/
+          SHARE_TEXT: '9:/5 U@l.pq :0pm 06/13 复制打开抖音，看看【原点构想（鹅鸭杀）的作品】第5集—被误导的方向 【本集呆呆鸟登场！】看上去是... ǚǚKWJeNMifH8hq99ǚǚ'
+        run: |
+          cat > /tmp/recover.py <<'PY'
+          import asyncio, contextlib, html, importlib, inspect, json, os, random, re, string, subprocess, sys, time, urllib.parse
+          from pathlib import Path
+
+          import requests
+          try:
+              from curl_cffi import requests as crequests
+          except Exception:
+              crequests = None
+
+          OUT = Path('douyin_recovery')
+          OUT.mkdir(exist_ok=True)
+          SHARE_URL = os.environ['SHARE_URL']
+          SHARE_TEXT = os.environ['SHARE_TEXT']
+          TOKEN = 'KWJeNMifH8hq99'
+          UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36'
+          MUA = 'Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Mobile Safari/537.36'
+          KEYWORDS = [
+              '原点构想（鹅鸭杀）', '原点构想 鹅鸭杀', '原点构想 被误导的方向',
+              '第5集 被误导的方向', '本集呆呆鸟登场', '被误导的方向 呆呆鸟 鹅鸭杀'
+          ]
+          exact_terms = ['被误导的方向', '本集呆呆鸟登场', '原点构想']
+          supporting_terms = ['呆呆鸟', '鹅鸭杀', '第5集', '第 5 集']
+
+          status = {'share_url': SHARE_URL, 'token': TOKEN, 'stages': [], 'verified': False, 'reason': '', 'candidate_count': 0}
+          texts = []
+          raw_urls = []
+          candidates = {}
+          cookies = []
+          sess = requests.Session()
+          sess.headers.update({'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8', 'Referer': 'https://www.douyin.com/'})
+
+          def safe_json_dump(path, obj):
+              Path(path).write_text(json.dumps(obj, ensure_ascii=False, indent=2, default=str), encoding='utf-8')
+
+          def norm_text(x):
+              if x is None: return ''
+              if isinstance(x, bytes): return x.decode('utf-8','ignore')
+              if isinstance(x, str): return html.unescape(x).replace('\\u002F','/').replace('\\/','/').replace('\\u0026','&')
+              try: return json.dumps(x, ensure_ascii=False, default=str)
+              except Exception: return str(x)
+
+          def add_text(source, x):
+              t = norm_text(x)
+              if not t: return
+              texts.append((source, t))
+              for u in re.findall(r'https?://[^\s\"\'<>]+', t):
+                  raw_urls.append((source, html.unescape(u).rstrip('),.;]}，。；')))
+
+          def score_text(t):
+              t = norm_text(t).lower()
+              score = 0
+              weights = [('被误导的方向',180),('本集呆呆鸟登场',140),('原点构想',100),('呆呆鸟',55),('鹅鸭杀',50),('第5集',35),('第 5 集',35)]
+              for term,w in weights:
+                  if term.lower() in t: score += w
+              return score
+
+          def add_candidate(aweme_id='', desc='', author='', play_urls=None, source='unknown', extra=None):
+              aweme_id = str(aweme_id or '')
+              if not re.fullmatch(r'\d{15,22}', aweme_id):
+                  aweme_id = ''
+              play_urls = [u for u in (play_urls or []) if isinstance(u,str) and u.startswith('http')]
+              key = aweme_id or ('url:' + play_urls[0] if play_urls else '')
+              if not key: return
+              row = candidates.setdefault(key, {'aweme_id':aweme_id,'desc':'','author':'','play_urls':[],'sources':[],'extra':[],'score':0})
+              if len(desc) > len(row['desc']): row['desc'] = desc[:4000]
+              if len(author) > len(row['author']): row['author'] = author[:1000]
+              for u in play_urls:
+                  u = html.unescape(u).replace('\\u002F','/').replace('\\/','/').replace('\\u0026','&')
+                  if u not in row['play_urls']: row['play_urls'].append(u)
+              if source not in row['sources']: row['sources'].append(source)
+              if extra is not None and len(row['extra']) < 20: row['extra'].append(extra)
+              row['score'] = score_text(row['desc'] + ' ' + row['author'] + ' ' + ' '.join(row['sources']))
+
+          def get_urls(obj):
+              urls=[]
+              if isinstance(obj,str):
+                  t=norm_text(obj)
+                  if t.startswith('http'): urls.append(t)
+                  else:
+                      for u in re.findall(r'https?://[^\s\"\'<>]+', t): urls.append(u)
+              elif isinstance(obj,list):
+                  for v in obj: urls += get_urls(v)
+              elif isinstance(obj,dict):
+                  for k,v in obj.items():
+                      if k in {'url_list','play_addr','download_addr','play_url','uri'} or 'play' in k.lower() or 'download' in k.lower():
+                          urls += get_urls(v)
+              return list(dict.fromkeys([html.unescape(u).replace('\\u002F','/').replace('\\/','/').replace('\\u0026','&') for u in urls if isinstance(u,str) and u.startswith('http')]))
+
+          def collect_candidate_objects(obj, source='json'):
+              if isinstance(obj, dict):
+                  aid = obj.get('aweme_id') or obj.get('group_id') or obj.get('item_id')
+                  desc = obj.get('desc') or obj.get('title') or obj.get('content') or ''
+                  author_obj = obj.get('author') or obj.get('user_info') or obj.get('author_info') or {}
+                  if isinstance(author_obj,dict):
+                      author=' '.join(str(author_obj.get(k,'')) for k in ['nickname','unique_id','short_id','sec_uid'] if author_obj.get(k))
+                  else: author=str(author_obj or '')
+                  play = get_urls(obj.get('video') or obj.get('video_info') or obj.get('play_addr') or obj.get('download_addr') or {})
+                  if aid or play:
+                      add_candidate(aid, norm_text(desc), norm_text(author), play, source)
+                  for k,v in obj.items():
+                      if isinstance(v,(dict,list)): collect_candidate_objects(v, source)
+                      elif isinstance(v,str): add_text(source + ':' + str(k), v)
+              elif isinstance(obj,list):
+                  for v in obj: collect_candidate_objects(v, source)
+
+          def req(url, source, headers=None, timeout=35, use_curl=False):
+              try:
+                  if use_curl and crequests:
+                      r = crequests.get(url, headers=headers or {'User-Agent':UA}, impersonate='chrome', timeout=timeout, allow_redirects=True)
+                  else:
+                      r = sess.get(url, headers=headers, timeout=timeout, allow_redirects=True)
+                  status['stages'].append({'source':source,'status':r.status_code,'final_url':r.url,'bytes':len(r.content),'ctype':r.headers.get('content-type','')})
+                  t=r.text
+                  add_text(source,t)
+                  try: collect_candidate_objects(r.json(),source)
+                  except Exception: pass
+                  return t,r
+              except Exception as e:
+                  status['stages'].append({'source':source,'error':repr(e),'url':url})
+                  return '',None
+
+          # A. Resolve the supplied command through multiple public surfaces.
+          for i,h in enumerate([
+              {'User-Agent':UA,'Referer':'https://www.douyin.com/'},
+              {'User-Agent':MUA,'Referer':'https://www.douyin.com/'},
+              {'User-Agent':'Aweme/320301 (iPhone; iOS 18.5; Scale/3.00)'},
+          ]):
+              req(SHARE_URL, f'share_{i}', h, use_curl=True)
+              req(SHARE_URL+'?previous_page=app_code_link', f'share_prev_{i}', h, use_curl=True)
+
+          parser_specs = [
+              ('ffapi','https://ffapi.cn/int/v1/douyin?url={q}'),
+              ('xinyew','https://api.xinyew.cn/api/douyinjx?url={q}'),
+              ('iosclub','https://api.ios-club.cn/api/douyin?url={q}'),
+              ('aa1','https://zj.v.api.aa1.cn/api/douyinjx/?text={q}'),
+              ('pearktrue','https://api.pearktrue.cn/api/video/douyin/?url={q}'),
+              ('vvhan','https://api.vvhan.com/api/douyin?url={q}'),
+              ('api52vmy','https://api.52vmy.cn/api/wl/douyin?url={q}'),
+              ('mmpapi','https://api.mmp.cc/api/douyin?url={q}'),
+          ]
+          for label,tpl in parser_specs:
+              for inpname,inp in [('url',SHARE_URL),('text',SHARE_TEXT)]:
+                  q=urllib.parse.quote(inp,safe='')
+                  req(tpl.format(q=q),f'parser_{label}_{inpname}',{'User-Agent':MUA},timeout=45,use_curl=True)
+
+          # B. Search engines, SEO mirrors and archives.
+          search_queries = [TOKEN, f'"{TOKEN}"', '"原点构想（鹅鸭杀）"', '"第5集—被误导的方向"',
+                            '"本集呆呆鸟登场"', '"被误导的方向" "呆呆鸟"', '"原点构想" "鹅鸭杀"']
+          engines=[
+              ('bing','https://www.bing.com/search?q='),('baidu','https://www.baidu.com/s?wd='),
+              ('sogou','https://www.sogou.com/web?query='),('brave','https://search.brave.com/search?q='),
+              ('ddg','https://html.duckduckgo.com/html/?q='),('toutiao','https://so.toutiao.com/search?keyword='),
+          ]
+          for qi,q in enumerate(search_queries):
+              for en,prefix in engines:
+                  req(prefix+urllib.parse.quote(q),f'search_{en}_{qi}',{'User-Agent':UA},timeout=30,use_curl=True)
+          req('https://web.archive.org/cdx/search/cdx?'+urllib.parse.urlencode({'url':f'v.douyin.com/{TOKEN}*','output':'json','fl':'timestamp,original,statuscode,mimetype,redirect,digest','collapse':'digest','limit':'200'}),'wayback',timeout=45)
+          req('https://urlscan.io/api/v1/search/?q='+urllib.parse.quote(TOKEN),'urlscan',timeout=45)
+          try:
+              coll=sess.get('https://index.commoncrawl.org/collinfo.json',timeout=30).json()
+              for row in coll[:20]:
+                  api=row.get('cdx-api')
+                  if api: req(api+'?'+urllib.parse.urlencode({'url':f'v.douyin.com/{TOKEN}*','output':'json'}),'cc_'+row.get('id','x'),timeout=45)
+          except Exception as e:
+              status['stages'].append({'source':'commoncrawl_catalog','error':repr(e)})
+
+          # C. Real browser: execute Douyin JS, capture search/profile/post/detail responses.
+          async def browser_pass():
+              nonlocal_dummy = None
+              global cookies
+              from playwright.async_api import async_playwright
+              async with async_playwright() as p:
+                  browser=await p.chromium.launch(headless=True,args=['--no-sandbox','--disable-dev-shm-usage','--disable-blink-features=AutomationControlled','--lang=zh-CN'])
+                  context=await browser.new_context(user_agent=UA,locale='zh-CN',timezone_id='Asia/Shanghai',viewport={'width':1440,'height':1000},extra_http_headers={'Accept-Language':'zh-CN,zh;q=0.9,en;q=0.8'})
+                  await context.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined}); Object.defineProperty(navigator,'languages',{get:()=>['zh-CN','zh','en']});")
+                  page=await context.new_page()
+                  captured=[]
+                  async def on_response(resp):
+                      try:
+                          u=resp.url
+                          if ('douyin.com' in u or 'iesdouyin.com' in u or 'byteimg.com' in u) and any(x in u for x in ['search','aweme','post','detail','user','video']):
+                              ctype=(resp.headers.get('content-type') or '').lower()
+                              body=''
+                              if any(x in ctype for x in ['json','text','javascript']):
+                                  with contextlib.suppress(Exception): body=await resp.text()
+                              if body:
+                                  add_text('browser_api:'+u,body)
+                                  with contextlib.suppress(Exception): collect_candidate_objects(json.loads(body),'browser_api')
+                              captured.append({'url':u,'status':resp.status,'ctype':ctype,'bytes':len(body)})
+                      except Exception: pass
+                  page.on('response',on_response)
+                  nav=[(SHARE_URL,'share')]
+                  for i,kw in enumerate(KEYWORDS):
+                      e=urllib.parse.quote(kw)
+                      nav += [(f'https://www.douyin.com/search/{e}?type=general',f'g{i}'),
+                              (f'https://www.douyin.com/search/{e}?type=video',f'v{i}'),
+                              (f'https://www.douyin.com/search/{e}?type=user',f'u{i}'),
+                              (f'https://www.douyin.com/shipin/{e}',f's{i}')]
+                  for url,name in nav:
+                      try:
+                          await page.goto(url,wait_until='domcontentloaded',timeout=55000)
+                          await page.wait_for_timeout(6500)
+                          for _ in range(4):
+                              await page.mouse.wheel(0,1800); await page.wait_for_timeout(1200)
+                          body=await page.content(); add_text('browser_page:'+name,body)
+                          for u in await page.eval_on_selector_all('a[href]','els=>els.map(e=>e.href)'): raw_urls.append(('browser_link:'+name,u))
+                          status['stages'].append({'source':'browser_'+name,'url':page.url,'title':await page.title(),'bytes':len(body)})
+                      except Exception as e:
+                          status['stages'].append({'source':'browser_'+name,'error':repr(e),'url':url})
+                  cookies=await context.cookies()
+                  status['browser_responses']=captured[-1000:]
+                  await browser.close()
+          try: asyncio.run(browser_pass())
+          except Exception as e: status['stages'].append({'source':'browser','error':repr(e)})
+          for c in cookies:
+              with contextlib.suppress(Exception): sess.cookies.set(c['name'],c['value'],domain=c.get('domain'),path=c.get('path','/'))
+
+          # D. Extract every concrete work/profile id already exposed.
+          all_text='\n'.join(t for _,t in texts)
+          id_patterns=[r'(?:douyin\.com/video/|iesdouyin\.com/share/video/)(\d{15,22})',r'[\"\']aweme_id[\"\']\s*[:=]\s*[\"\']?(\d{15,22})',r'[\"\']group_id[\"\']\s*[:=]\s*[\"\']?(\d{15,22})',r'[?&](?:aweme_id|item_ids)=([0-9]{15,22})']
+          ids=[]
+          for pat in id_patterns: ids += re.findall(pat,all_text)
+          for _,u in raw_urls:
+              for pat in id_patterns: ids += re.findall(pat,u)
+          ids=list(dict.fromkeys(ids))
+          sec_uids=list(dict.fromkeys(re.findall(r'(MS4wLjABAAAA[A-Za-z0-9_-]{20,})',all_text+'\n'+'\n'.join(u for _,u in raw_urls))))
+
+          # E. Discover and apply F2's current X-Bogus / A-Bogus signer.
+          signer_objs=[]
+          try:
+              sys.path.insert(0,'/tmp/f2src')
+              for py in Path('/tmp/f2src').rglob('*.py'):
+                  txt=py.read_text(encoding='utf-8',errors='ignore')
+                  if 'BogusManager' not in txt: continue
+                  rel=py.relative_to('/tmp/f2src').with_suffix('')
+                  modname='.'.join(rel.parts)
+                  try:
+                      mod=importlib.import_module(modname)
+                      for name,obj in vars(mod).items():
+                          if inspect.isclass(obj) and 'BogusManager' in name: signer_objs.append(obj)
+                  except Exception: pass
+          except Exception as e: status['stages'].append({'source':'f2_import','error':repr(e)})
+
+          def signed_variants(base,params):
+              q=urllib.parse.urlencode(params)
+              unsigned=base+'?'+q
+              out=[]
+              for cls in signer_objs:
+                  for obj in [cls]:
+                      with contextlib.suppress(Exception): obj=cls()
+                      for name in dir(obj):
+                          if not any(x in name.lower() for x in ['endpoint','bogus','sign']): continue
+                          fn=getattr(obj,name,None)
+                          if not callable(fn): continue
+                          attempts=[(q,UA),(unsigned,UA),(q,),(unsigned,),(params,UA),(params,)]
+                          for args in attempts:
+                              try:
+                                  val=fn(*args)
+                                  if inspect.isawaitable(val): continue
+                                  if isinstance(val,str):
+                                      if val.startswith('http'): out.append(val)
+                                      elif 'X-Bogus=' in val or 'a_bogus=' in val: out.append(base+'?'+val.lstrip('?'))
+                                      elif len(val)>10: out.append(unsigned+'&X-Bogus='+urllib.parse.quote(val))
+                              except Exception: pass
+              return list(dict.fromkeys(out+[unsigned]))[:12]
+
+          def rand_ms(n=107):
+              a=string.ascii_letters+string.digits+'-_'; return ''.join(random.choice(a) for _ in range(n))
+          webid=''
+          for c in cookies:
+              if c.get('name') in {'webid','s_v_web_id'}: webid=c.get('value','')
+          common={'device_platform':'webapp','aid':'6383','channel':'channel_pc_web','version_code':'170400','version_name':'17.4.0','cookie_enabled':'true','screen_width':'1440','screen_height':'1000','browser_language':'zh-CN','browser_platform':'Win32','browser_name':'Chrome','browser_version':'152.0.0.0','browser_online':'true','engine_name':'Blink','engine_version':'152.0.0.0','os_name':'Windows','os_version':'10','cpu_core_num':'8','device_memory':'8','platform':'PC','downlink':'10','effective_type':'4g','round_trip_time':'50'}
+          if webid: common['webid']=webid
+          for ki,kw in enumerate(KEYWORDS):
+              params=dict(common); params.update({'search_channel':'aweme_general','keyword':kw,'search_source':'normal_search','query_correct_type':'1','is_filter_search':'0','offset':'0','count':'40','msToken':rand_ms()})
+              for ei,base in enumerate(['https://www.douyin.com/aweme/v1/web/general/search/single/','https://www.douyin.com/aweme/v1/web/search/item/','https://www.douyin.com/aweme/v1/web/search/feed/']):
+                  for si,u in enumerate(signed_variants(base,params)):
+                      req(u,f'official_search_{ki}_{ei}_{si}',{'User-Agent':UA,'Referer':f'https://www.douyin.com/search/{urllib.parse.quote(kw)}'},timeout=35,use_curl=True)
+
+          # Search may reveal new ids/sec_uids.
+          all_text='\n'.join(t for _,t in texts)
+          for pat in id_patterns: ids += re.findall(pat,all_text)
+          ids=list(dict.fromkeys(ids))
+          sec_uids += re.findall(r'(MS4wLjABAAAA[A-Za-z0-9_-]{20,})',all_text)
+          sec_uids=list(dict.fromkeys(sec_uids))
+
+          # F. Enumerate posts for discovered accounts and fetch candidate details.
+          for ui,sec_uid in enumerate(sec_uids[:80]):
+              max_cursor='0'
+              for page_no in range(10):
+                  params=dict(common); params.update({'sec_user_id':sec_uid,'max_cursor':max_cursor,'count':'20','locate_query':'false','show_live_replay_strategy':'1','need_time_list':'1','time_list_query':'0','whale_cut_token':'','cut_version':'1','publish_video_strategy_type':'2','msToken':rand_ms()})
+                  got=False
+                  for si,u in enumerate(signed_variants('https://www.douyin.com/aweme/v1/web/aweme/post/',params)):
+                      t,r=req(u,f'userpost_{ui}_{page_no}_{si}',{'User-Agent':UA,'Referer':f'https://www.douyin.com/user/{sec_uid}'},timeout=35,use_curl=True)
+                      if r and r.status_code==200 and len(t)>50:
+                          try:
+                              o=json.loads(t); collect_candidate_objects(o,'user_posts'); got=True
+                              max_cursor=str(o.get('max_cursor') or o.get('cursor') or '0')
+                              if not o.get('has_more'): page_no=99
+                              break
+                          except Exception: pass
+                  if not got or page_no==99: break
+
+          all_text='\n'.join(t for _,t in texts)
+          for pat in id_patterns: ids += re.findall(pat,all_text)
+          ids=list(dict.fromkeys(ids))
+          for aid in ids[:500]: add_candidate(aid,source='id_extracted')
+
+          for idx,aid in enumerate(list(dict.fromkeys([r.get('aweme_id') for r in candidates.values() if r.get('aweme_id')]+ids))[:500]):
+              endpoints=[
+                  f'https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids={aid}',
+                  f'https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id={aid}&aid=6383&device_platform=webapp&channel=channel_pc_web',
+                  f'https://www.iesdouyin.com/share/video/{aid}/',
+                  f'https://www.douyin.com/video/{aid}',
+              ]
+              for j,u in enumerate(endpoints): req(u,f'detail_{idx}_{j}',{'User-Agent':MUA if j in [0,2] else UA,'Referer':'https://www.douyin.com/'},timeout=35,use_curl=True)
+
+          # Re-collect candidate objects from every JSON-like text after details.
+          for source,t in list(texts):
+              if len(t)>1 and t.lstrip()[:1] in '[{':
+                  with contextlib.suppress(Exception): collect_candidate_objects(json.loads(t),source)
+          status['candidate_count']=len(candidates)
+          ranked=sorted(candidates.values(),key=lambda r:r.get('score',0),reverse=True)
+          safe_json_dump(OUT/'candidates.json',[{k:v for k,v in r.items() if k!='extra'} for r in ranked[:500]])
+
+          def ffprobe_ok(path):
+              if not path.exists() or path.stat().st_size<100000: return False
+              try:
+                  p=subprocess.run(['ffprobe','-v','error','-show_entries','stream=codec_type','-of','json',str(path)],capture_output=True,text=True,timeout=30)
+                  return p.returncode==0 and 'video' in p.stdout
+              except Exception: return False
+
+          def download_url(url,dest):
+              headers={'User-Agent':MUA,'Referer':'https://www.douyin.com/','Range':'bytes=0-'}
+              variants=[url]
+              if 'playwm' in url: variants.insert(0,url.replace('playwm','play'))
+              for u in variants:
+                  try:
+                      with sess.get(u,headers=headers,stream=True,timeout=(20,180),allow_redirects=True) as r:
+                          if r.status_code>=400: continue
+                          with dest.open('wb') as f:
+                              for chunk in r.iter_content(1024*1024):
+                                  if chunk:f.write(chunk)
+                      if ffprobe_ok(dest): return True,u
+                  except Exception: pass
+                  dest.unlink(missing_ok=True)
+              return False,''
+
+          # G. Download only exact, auditable matches; never ship a merely similar result.
+          attempts=[]
+          final=OUT/'原点构想_鹅鸭杀_第5集_被误导的方向.mp4'
+          chosen=None
+          for row in ranked:
+              desc=(row.get('desc') or '')+' '+(row.get('author') or '')
+              exact_title='被误导的方向' in desc
+              exact_author='原点构想' in desc
+              supporting=any(x in desc for x in ['呆呆鸟','鹅鸭杀','第5集','第 5 集'])
+              verified=(exact_title and (exact_author or supporting)) or (exact_author and '本集呆呆鸟登场' in desc)
+              if not verified: continue
+              aid=row.get('aweme_id','')
+              direct=list(row.get('play_urls') or [])
+              for u in direct:
+                  ok,used=download_url(u,final)
+                  attempts.append({'type':'direct','aweme_id':aid,'url':u,'ok':ok})
+                  if ok:
+                      chosen=row; break
+              if chosen: break
+              if aid:
+                  tpl=str(OUT/'ytdlp.%(ext)s')
+                  cmd=['yt-dlp','--no-playlist','--impersonate','chrome','--merge-output-format','mp4','--remux-video','mp4','-o',tpl,f'https://www.douyin.com/video/{aid}']
+                  try:
+                      p=subprocess.run(cmd,capture_output=True,text=True,timeout=240)
+                      attempts.append({'type':'yt-dlp','aweme_id':aid,'code':p.returncode,'stderr':p.stderr[-3000:]})
+                      hits=[x for x in OUT.glob('ytdlp.*') if x.suffix.lower() in {'.mp4','.mov','.mkv','.webm'} and ffprobe_ok(x)]
+                      if hits:
+                          src=max(hits,key=lambda x:x.stat().st_size)
+                          if src.suffix.lower()=='.mp4': src.replace(final)
+                          else: subprocess.run(['ffmpeg','-y','-i',str(src),'-c','copy',str(final)],check=False)
+                          for x in OUT.glob('ytdlp.*'): x.unlink(missing_ok=True)
+                          if ffprobe_ok(final): chosen=row; break
+                  except Exception as e: attempts.append({'type':'yt-dlp','aweme_id':aid,'error':repr(e)})
+
+          safe_json_dump(OUT/'download_attempts.json',attempts)
+          if chosen and ffprobe_ok(final):
+              probe=subprocess.run(['ffprobe','-v','error','-show_entries','format=duration,size,format_name:stream=index,codec_name,codec_type,width,height,r_frame_rate','-of','json',str(final)],capture_output=True,text=True)
+              (OUT/'ffprobe.json').write_text(probe.stdout,encoding='utf-8')
+              subprocess.run(['ffmpeg','-y','-loglevel','error','-i',str(final),'-vf','fps=9/60,scale=360:-1,tile=3x3','-frames:v','1',str(OUT/'contact_sheet.jpg')],check=False)
+              status.update({'verified':True,'reason':'账号/标题元数据明确匹配，并通过 ffprobe 媒体校验','chosen':{k:v for k,v in chosen.items() if k!='extra'},'video_file':final.name,'bytes':final.stat().st_size})
+              # GitHub regular git limit: reduce only if unusually large.
+              if final.stat().st_size>92*1024*1024:
+                  small=OUT/'compressed.mp4'
+                  subprocess.run(['ffmpeg','-y','-i',str(final),'-vf','scale=-2:min(1080,ih)','-c:v','libx264','-crf','23','-preset','veryfast','-c:a','aac','-b:a','128k',str(small)],check=False)
+                  if ffprobe_ok(small): small.replace(final); status['bytes']=final.stat().st_size; status['compressed_for_transport']=True
+          else:
+              final.unlink(missing_ok=True)
+              status.update({'verified':False,'reason':'未找到同时匹配账号/标题的可验证作品；没有输出可能错误的视频','top_candidates':[{k:v for k,v in r.items() if k not in {'extra','play_urls'}} for r in ranked[:20]]})
+
+          safe_json_dump(OUT/'status.json',status)
+          print(json.dumps(status,ensure_ascii=False,indent=2))
+          PY
+          python /tmp/recover.py > douyin_recovery/run.log 2>&1 || true
+          cat douyin_recovery/status.json || true
+      - name: Commit sanitized result to temporary branch
+        if: always()
+        run: |
+          find douyin_recovery -type f -name '*.html' -delete || true
+          find douyin_recovery -type f -name 'cookies*' -delete || true
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add douyin_recovery
+          git commit -m 'chore: publish temporary Douyin recovery result [skip ci]' || true
+          git push origin HEAD:tmp-douyin-recovery-20260903
