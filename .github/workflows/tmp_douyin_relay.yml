@@ -1,0 +1,270 @@
+name: Temporary Douyin regional relay recovery
+
+on:
+  push:
+    branches:
+      - tmp-douyin-relay-20260903
+
+permissions:
+  contents: write
+
+jobs:
+  recover:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp-douyin-relay-20260903
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade requests curl_cffi yt-dlp pysocks
+          rm -rf douyin_relay && mkdir -p douyin_relay
+      - name: Resolve through relays and public proxies
+        env:
+          SHARE_URL: https://v.douyin.com/KWJeNMifH8hq99/
+          SHARE_TEXT: '9:/5 U@l.pq :0pm 06/13 复制打开抖音，看看【原点构想（鹅鸭杀）的作品】第5集—被误导的方向 【本集呆呆鸟登场！】看上去是... ǚǚKWJeNMifH8hq99ǚǚ'
+        run: |
+          cat > /tmp/relay.py <<'PY'
+          import concurrent.futures, contextlib, html, json, os, re, subprocess, urllib.parse
+          from pathlib import Path
+          import requests
+          try:
+              from curl_cffi import requests as crequests
+          except Exception:
+              crequests=None
+
+          OUT=Path('douyin_relay'); OUT.mkdir(exist_ok=True)
+          SHARE=os.environ['SHARE_URL']; TEXT=os.environ['SHARE_TEXT']
+          UA='Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Mobile Safari/537.36'
+          DUA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36'
+          ses=requests.Session(); ses.headers.update({'User-Agent':UA,'Referer':'https://www.douyin.com/','Accept-Language':'zh-CN,zh;q=0.9'})
+          records=[]; blobs=[]; ids=[]; direct_urls=[]
+
+          def norm(x):
+              return html.unescape(str(x or '')).replace('\\u002F','/').replace('\\/','/').replace('\\u0026','&')
+          def extract(text,source='unknown',trusted=False):
+              t=norm(text); blobs.append((source,t))
+              pats=[r'(?:douyin\.com/video/|iesdouyin\.com/share/video/)(\d{15,22})',r'[?&](?:aweme_id|item_ids|modal_id)=([0-9]{15,22})',r'[\"\'](?:aweme_id|group_id|item_id)[\"\']\s*[:=]\s*[\"\']?(\d{15,22})']
+              for p in pats:
+                  for aid in re.findall(p,t):
+                      ids.append((aid,source,trusted))
+              for u in re.findall(r'https?://[^\s\"\'<>]+',t):
+                  u=norm(u).rstrip('),.;]}，。；')
+                  low=u.lower()
+                  if any(x in low for x in ['douyinvod','bytecdn','video_id=','.mp4','/video/tos/']) and not any(x in low for x in ['cover','avatar','image','.jpg','.png']):
+                      direct_urls.append((u,source,trusted))
+
+          def get(url,source,headers=None,proxy=None,timeout=35,trust=False):
+              try:
+                  kw={'headers':headers or {'User-Agent':UA},'timeout':timeout,'allow_redirects':True}
+                  if proxy: kw['proxies']={'http':proxy,'https':proxy}
+                  r=ses.get(url,**kw)
+                  records.append({'source':source,'status':r.status_code,'url':url,'final':r.url,'history':[{'status':h.status_code,'url':h.url,'location':h.headers.get('location','')} for h in r.history],'bytes':len(r.content),'ctype':r.headers.get('content-type','')})
+                  extract(url,source,trust); extract(r.url,source,trust); extract(r.text,source,trust)
+                  for h in r.history: extract(h.url+' '+h.headers.get('location',''),source,trust)
+                  try: walk(r.json(),source,trust)
+                  except Exception: pass
+                  return r
+              except Exception as e:
+                  records.append({'source':source,'url':url,'proxy':proxy,'error':repr(e)})
+                  return None
+
+          def walk(o,source,trust=False,path=''):
+              if isinstance(o,dict):
+                  for k,v in o.items():
+                      p=f'{path}.{k}' if path else k
+                      if isinstance(v,str):
+                          extract(v,source+':'+p,trust)
+                      else: walk(v,source,trust,p)
+              elif isinstance(o,list):
+                  for i,v in enumerate(o): walk(v,source,trust,f'{path}[{i}]')
+
+          # Read-only relay/parser services. Every result is later title/author verified.
+          q=urllib.parse.quote(SHARE,safe=''); qt=urllib.parse.quote(TEXT,safe='')
+          relay_gets=[
+            ('jina_https','https://r.jina.ai/https://v.douyin.com/KWJeNMifH8hq99/'),
+            ('jina_http','https://r.jina.ai/http://v.douyin.com/KWJeNMifH8hq99/'),
+            ('google_translate','https://v-douyin-com.translate.goog/KWJeNMifH8hq99/?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en'),
+            ('douyinwtf_api','https://api.douyin.wtf/api/hybrid/video_data?url='+q),
+            ('douyinwtf','https://douyin.wtf/api/hybrid/video_data?url='+q),
+            ('tikwm_www','https://www.tikwm.com/api/?hd=1&url='+q),
+            ('tikwm','https://tikwm.com/api/?hd=1&url='+q),
+            ('tiklydown','https://api.tiklydown.eu.org/api/download/v3?url='+q),
+            ('pearktrue','https://api.pearktrue.cn/api/video/douyin/?url='+q),
+            ('ffapi','https://ffapi.cn/int/v1/douyin?url='+q),
+            ('xinyew','https://api.xinyew.cn/api/douyinjx?url='+q),
+            ('aa1','https://zj.v.api.aa1.cn/api/douyinjx/?text='+q),
+            ('mmp','https://api.mmp.cc/api/douyin?url='+q),
+            ('vvhan','https://api.vvhan.com/api/douyin?url='+q),
+            ('text_ffapi','https://ffapi.cn/int/v1/douyin?url='+qt),
+            ('text_pearktrue','https://api.pearktrue.cn/api/video/douyin/?url='+qt),
+          ]
+          for name,url in relay_gets: get(url,'relay_'+name,timeout=50)
+
+          # Cobalt-style POST instances.
+          for endpoint in ['https://api.cobalt.tools/','https://api.cobalt.best/','https://cobalt.tools/api/json']:
+              try:
+                  r=requests.post(endpoint,headers={'Accept':'application/json','Content-Type':'application/json','User-Agent':DUA},json={'url':SHARE,'downloadMode':'auto','videoQuality':'max','filenameStyle':'basic'},timeout=50,allow_redirects=True)
+                  records.append({'source':'cobalt','endpoint':endpoint,'status':r.status_code,'final':r.url,'bytes':len(r.content),'ctype':r.headers.get('content-type','')})
+                  extract(r.text,'cobalt:'+endpoint)
+                  with contextlib.suppress(Exception): walk(r.json(),'cobalt:'+endpoint)
+              except Exception as e: records.append({'source':'cobalt','endpoint':endpoint,'error':repr(e)})
+
+          # Regional public HTTP/SOCKS proxies; only public GETs, no account credentials.
+          proxy_sources=[
+            'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/all/data.txt',
+            'https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt',
+            'https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks5.txt',
+            'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt',
+            'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks5.txt',
+            'https://www.proxy-list.download/api/v1/get?type=http&country=CN',
+            'https://www.proxy-list.download/api/v1/get?type=http&country=HK',
+            'https://www.proxy-list.download/api/v1/get?type=http&country=SG',
+          ]
+          proxies=[]
+          for i,u in enumerate(proxy_sources):
+              try:
+                  t=requests.get(u,headers={'User-Agent':DUA},timeout=35).text
+                  for line in t.splitlines():
+                      line=line.strip()
+                      if not line or line.startswith('#'): continue
+                      if re.fullmatch(r'\d{1,3}(?:\.\d{1,3}){3}:\d{2,5}',line): line='http://'+line
+                      if re.match(r'^(?:https?|socks[45])://',line) and line not in proxies: proxies.append(line)
+              except Exception as e: records.append({'source':'proxy_list','url':u,'error':repr(e)})
+          proxies=proxies[:1400]
+
+          def trace_proxy(item):
+              idx,proxy=item
+              chain=[]; cur=SHARE
+              try:
+                  for hop in range(7):
+                      r=requests.get(cur,headers={'User-Agent':UA,'Referer':'https://www.douyin.com/'},proxies={'http':proxy,'https':proxy},timeout=(4,7),allow_redirects=False,verify=False)
+                      loc=r.headers.get('location',''); body=r.text[:300000]
+                      chain.append({'status':r.status_code,'url':cur,'location':loc,'bytes':len(r.content)})
+                      found=[]
+                      for piece in [cur,loc,body]:
+                          found += re.findall(r'(?:douyin\.com/video/|iesdouyin\.com/share/video/)(\d{15,22})',norm(piece))
+                          found += re.findall(r'[?&](?:aweme_id|modal_id|item_ids)=([0-9]{15,22})',norm(piece))
+                      if found:
+                          return {'proxy':proxy,'chain':chain,'ids':list(dict.fromkeys(found)),'body':body}
+                      if r.status_code in {301,302,303,307,308} and loc:
+                          cur=urllib.parse.urljoin(cur,loc)
+                      else: break
+              except Exception:
+                  return None
+              return None
+          hits=[]
+          requests.packages.urllib3.disable_warnings()
+          with concurrent.futures.ThreadPoolExecutor(max_workers=80) as ex:
+              for res in ex.map(trace_proxy,enumerate(proxies),chunksize=1):
+                  if res:
+                      hits.append(res)
+                      for aid in res['ids']: ids.append((aid,'regional_proxy',True))
+                      extract(res.get('body',''),'regional_proxy',True)
+                      if len(hits)>=8: break
+          records.append({'source':'proxy_summary','tested':len(proxies),'hits':[{k:v for k,v in h.items() if k!='body'} for h in hits]})
+
+          # Consolidate candidate IDs and probe metadata/play URLs.
+          id_rows={}
+          for aid,source,trust in ids:
+              row=id_rows.setdefault(aid,{'aweme_id':aid,'sources':[],'trusted_redirect':False,'desc':'','author':'','play_urls':[],'score':0,'verified':False})
+              if source not in row['sources']: row['sources'].append(source)
+              row['trusted_redirect'] |= bool(trust)
+          for aid,row in list(id_rows.items())[:200]:
+              eps=[f'https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids={aid}',f'https://www.iesdouyin.com/share/video/{aid}/',f'https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id={aid}&aid=6383&device_platform=webapp&channel=channel_pc_web',f'https://www.douyin.com/video/{aid}']
+              combined=''
+              for ep in eps:
+                  r=get(ep,'detail_'+aid,headers={'User-Agent':UA,'Referer':'https://www.douyin.com/'},timeout=40)
+                  if r: combined+='\n'+r.text
+                  try:
+                      o=r.json() if r else {}
+                      def vals(x,keys):
+                          z=[]
+                          if isinstance(x,dict):
+                              for k,v in x.items():
+                                  if k in keys and isinstance(v,(str,int,float)):z.append(str(v))
+                                  z+=vals(v,keys)
+                          elif isinstance(x,list):
+                              for v in x:z+=vals(v,keys)
+                          return z
+                      row['desc']=' | '.join(vals(o,{'desc','title','share_title'})[:40])
+                      row['author']=' | '.join(vals(o,{'nickname','unique_id','short_id'})[:30])
+                  except Exception: pass
+              try:
+                  p=subprocess.run(['yt-dlp','--impersonate','chrome','--dump-single-json','--skip-download',f'https://www.douyin.com/video/{aid}'],capture_output=True,text=True,timeout=150)
+                  if p.returncode==0 and p.stdout.strip():
+                      o=json.loads(p.stdout); row['desc']=(row['desc']+' | '+str(o.get('description') or o.get('title') or '')).strip(' |'); row['author']=(row['author']+' | '+str(o.get('uploader') or '')).strip(' |');
+                      for k in ['url','webpage_url']:
+                          if str(o.get(k) or '').startswith('http'):row['play_urls'].append(str(o[k]))
+              except Exception: pass
+              allblob=(row['desc']+' '+row['author']+' '+combined).lower()
+              row['score']=sum(w for term,w in [('被误导的方向',220),('本集呆呆鸟登场',170),('原点构想',120),('呆呆鸟',60),('鹅鸭杀',55),('第5集',40),('第 5 集',40)] if term.lower() in allblob)
+              row['verified']=(('被误导的方向' in allblob and any(x in allblob for x in ['原点构想','呆呆鸟','鹅鸭杀','第5集','第 5 集'])) or ('本集呆呆鸟登场' in allblob and '原点构想' in allblob))
+          # Attach direct URLs returned by trusted relays to the most plausible candidate if one ID only.
+          trusted_direct=list(dict.fromkeys([u for u,s,t in direct_urls if t or s.startswith(('relay_','cobalt'))]))
+          rows=sorted(id_rows.values(),key=lambda r:(r['verified'],r['trusted_redirect'],r['score']),reverse=True)
+          if len(rows)==1: rows[0]['play_urls']+=trusted_direct
+
+          def ffok(p):
+              if not p.exists() or p.stat().st_size<100000:return False
+              q=subprocess.run(['ffprobe','-v','error','-show_entries','stream=codec_type','-of','json',str(p)],capture_output=True,text=True)
+              return q.returncode==0 and 'video' in q.stdout
+          def fetch_media(url,dest,proxy=None):
+              for u in ([url.replace('playwm','play'),url] if 'playwm' in url else [url]):
+                  try:
+                      kw={'headers':{'User-Agent':UA,'Referer':'https://www.douyin.com/','Range':'bytes=0-'},'stream':True,'timeout':(20,220),'allow_redirects':True}
+                      if proxy:kw['proxies']={'http':proxy,'https':proxy};kw['verify']=False
+                      with ses.get(u,**kw) as r:
+                          if r.status_code>=400:continue
+                          with dest.open('wb') as f:
+                              for ch in r.iter_content(1024*1024):
+                                  if ch:f.write(ch)
+                      if ffok(dest):return True,u
+                  except Exception:pass
+                  dest.unlink(missing_ok=True)
+              return False,''
+
+          final=OUT/'原点构想_鹅鸭杀_第5集_被误导的方向.mp4'; chosen=None; attempts=[]
+          for row in rows:
+              allowed=row['verified'] or (row['trusted_redirect'] and row['score']>=120)
+              if not allowed:continue
+              for u in list(dict.fromkeys(row['play_urls']+trusted_direct)):
+                  ok,used=fetch_media(u,final);attempts.append({'type':'direct','aid':row['aweme_id'],'url':u,'ok':ok})
+                  if ok:chosen=row;break
+              if chosen:break
+              try:
+                  p=subprocess.run(['yt-dlp','--impersonate','chrome','--merge-output-format','mp4','--remux-video','mp4','-o',str(OUT/'tmp.%(ext)s'),f'https://www.douyin.com/video/{row["aweme_id"]}'],capture_output=True,text=True,timeout=300)
+                  attempts.append({'type':'ytdlp','aid':row['aweme_id'],'code':p.returncode,'stderr':p.stderr[-2000:]})
+                  hit=[x for x in OUT.glob('tmp.*') if ffok(x)]
+                  if hit:
+                      src=max(hit,key=lambda x:x.stat().st_size)
+                      if src.suffix.lower()=='.mp4':src.replace(final)
+                      else:subprocess.run(['ffmpeg','-y','-i',str(src),'-c','copy',str(final)],check=False)
+                      if ffok(final):chosen=row;break
+              except Exception as e:attempts.append({'type':'ytdlp','aid':row['aweme_id'],'error':repr(e)})
+
+          result={'verified':bool(chosen and ffok(final)),'found_ids':list(id_rows),'candidate_count':len(rows),'proxy_tested':len(proxies),'proxy_hits':len(hits),'top_candidates':[{k:v for k,v in r.items() if k!='play_urls'} for r in rows[:20]],'attempts':attempts,'relay_direct_count':len(trusted_direct)}
+          if result['verified']:
+              result['chosen']={k:v for k,v in chosen.items() if k!='play_urls'};result['bytes']=final.stat().st_size
+              q=subprocess.run(['ffprobe','-v','error','-show_entries','format=duration,size:stream=codec_name,codec_type,width,height,r_frame_rate','-of','json',str(final)],capture_output=True,text=True)
+              (OUT/'ffprobe.json').write_text(q.stdout,encoding='utf-8')
+              subprocess.run(['ffmpeg','-y','-loglevel','error','-i',str(final),'-vf','fps=9/60,scale=360:-1,tile=3x3','-frames:v','1',str(OUT/'contact_sheet.jpg')],check=False)
+          else:final.unlink(missing_ok=True)
+          (OUT/'status.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
+          (OUT/'records.json').write_text(json.dumps(records,ensure_ascii=False,indent=2),encoding='utf-8')
+          (OUT/'candidates.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps(result,ensure_ascii=False,indent=2))
+          PY
+          python /tmp/relay.py > douyin_relay/run.log 2>&1 || true
+          cat douyin_relay/status.json || true
+      - name: Publish sanitized result
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add douyin_relay
+          git commit -m 'chore: publish relay recovery result [skip ci]' || true
+          git push origin HEAD:tmp-douyin-relay-20260903
