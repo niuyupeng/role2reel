@@ -1,0 +1,172 @@
+[
+  {
+    "source": "relay_jina_https",
+    "status": 200,
+    "url": "https://r.jina.ai/https://v.douyin.com/KWJeNMifH8hq99/",
+    "final": "https://r.jina.ai/https://v.douyin.com/KWJeNMifH8hq99/",
+    "history": [],
+    "bytes": 3926,
+    "ctype": "text/plain; charset=utf-8"
+  },
+  {
+    "source": "relay_jina_http",
+    "status": 200,
+    "url": "https://r.jina.ai/http://v.douyin.com/KWJeNMifH8hq99/",
+    "final": "https://r.jina.ai/http://v.douyin.com/KWJeNMifH8hq99/",
+    "history": [],
+    "bytes": 5966,
+    "ctype": "text/plain; charset=utf-8"
+  },
+  {
+    "source": "relay_google_translate",
+    "status": 200,
+    "url": "https://v-douyin-com.translate.goog/KWJeNMifH8hq99/?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en",
+    "final": "https://www-douyin-com.translate.goog?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en",
+    "history": [
+      {
+        "status": 302,
+        "url": "https://v-douyin-com.translate.goog/KWJeNMifH8hq99/?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en",
+        "location": "https://www-douyin-com.translate.goog?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en"
+      }
+    ],
+    "bytes": 7283,
+    "ctype": "text/html"
+  },
+  {
+    "source": "relay_douyinwtf_api",
+    "status": 404,
+    "url": "https://api.douyin.wtf/api/hybrid/video_data?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://api.douyin.wtf/api/hybrid/video_data?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 0,
+    "ctype": ""
+  },
+  {
+    "source": "relay_douyinwtf",
+    "status": 400,
+    "url": "https://douyin.wtf/api/hybrid/video_data?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://douyin.wtf/api/hybrid/video_data?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 270,
+    "ctype": "application/json"
+  },
+  {
+    "source": "relay_tikwm_www",
+    "status": 200,
+    "url": "https://www.tikwm.com/api/?hd=1&url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://www.tikwm.com/api/?hd=1&url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 84,
+    "ctype": "application/json"
+  },
+  {
+    "source": "relay_tikwm",
+    "status": 200,
+    "url": "https://tikwm.com/api/?hd=1&url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://tikwm.com/api/?hd=1&url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 84,
+    "ctype": "application/json"
+  },
+  {
+    "source": "relay_tiklydown",
+    "url": "https://api.tiklydown.eu.org/api/download/v3?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "proxy": null,
+    "error": "SSLError(MaxRetryError('HTTPSConnectionPool(host=\\'api.tiklydown.eu.org\\', port=443): Max retries exceeded with url: /api/download/v3?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F (Caused by SSLError(SSLCertVerificationError(1, \"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for \\'api.tiklydown.eu.org\\'. (_ssl.c:1000)\")))'))"
+  },
+  {
+    "source": "relay_pearktrue",
+    "status": 512,
+    "url": "https://api.pearktrue.cn/api/video/douyin/?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://api.pearktrue.cn/api/video/douyin/?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 4142,
+    "ctype": "text/html;charset=utf-8"
+  },
+  {
+    "source": "relay_ffapi",
+    "status": 200,
+    "url": "https://ffapi.cn/int/v1/douyin?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://ffapi.cn/int/v1/douyin?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 143,
+    "ctype": "application/json;charset=utf-8"
+  },
+  {
+    "source": "relay_xinyew",
+    "status": 200,
+    "url": "https://api.xinyew.cn/api/douyinjx?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://api.xinyew.cn/api/douyinjx?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 56,
+    "ctype": "application/json; charset=utf-8"
+  },
+  {
+    "source": "relay_aa1",
+    "status": 504,
+    "url": "https://zj.v.api.aa1.cn/api/douyinjx/?text=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://zj.v.api.aa1.cn/api/douyinjx/?text=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 18742,
+    "ctype": "text/html;charset=utf-8"
+  },
+  {
+    "source": "relay_mmp",
+    "status": 200,
+    "url": "https://api.mmp.cc/api/douyin?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "final": "https://api.mmp.cc/api/douyin?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "history": [],
+    "bytes": 15,
+    "ctype": "text/html; charset=UTF-8"
+  },
+  {
+    "source": "relay_vvhan",
+    "url": "https://api.vvhan.com/api/douyin?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F",
+    "proxy": null,
+    "error": "ConnectionError(MaxRetryError('HTTPSConnectionPool(host=\\'api.vvhan.com\\', port=443): Max retries exceeded with url: /api/douyin?url=https%3A%2F%2Fv.douyin.com%2FKWJeNMifH8hq99%2F (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7f737367d4f0>: Failed to resolve \\'api.vvhan.com\\' ([Errno -2] Name or service not known)\"))'))"
+  },
+  {
+    "source": "relay_text_ffapi",
+    "status": 200,
+    "url": "https://ffapi.cn/int/v1/douyin?url=9%3A%2F5%20U%40l.pq%20%3A0pm%2006%2F13%20%E5%A4%8D%E5%88%B6%E6%89%93%E5%BC%80%E6%8A%96%E9%9F%B3%EF%BC%8C%E7%9C%8B%E7%9C%8B%E3%80%90%E5%8E%9F%E7%82%B9%E6%9E%84%E6%83%B3%EF%BC%88%E9%B9%85%E9%B8%AD%E6%9D%80%EF%BC%89%E7%9A%84%E4%BD%9C%E5%93%81%E3%80%91%E7%AC%AC5%E9%9B%86%E2%80%94%E8%A2%AB%E8%AF%AF%E5%AF%BC%E7%9A%84%E6%96%B9%E5%90%91%20%E3%80%90%E6%9C%AC%E9%9B%86%E5%91%86%E5%91%86%E9%B8%9F%E7%99%BB%E5%9C%BA%EF%BC%81%E3%80%91%E7%9C%8B%E4%B8%8A%E5%8E%BB%E6%98%AF...%20%C7%9A%C7%9AKWJeNMifH8hq99%C7%9A%C7%9A",
+    "final": "https://ffapi.cn/int/v1/douyin?url=9%3A%2F5%20U%40l.pq%20%3A0pm%2006%2F13%20%E5%A4%8D%E5%88%B6%E6%89%93%E5%BC%80%E6%8A%96%E9%9F%B3%EF%BC%8C%E7%9C%8B%E7%9C%8B%E3%80%90%E5%8E%9F%E7%82%B9%E6%9E%84%E6%83%B3%EF%BC%88%E9%B9%85%E9%B8%AD%E6%9D%80%EF%BC%89%E7%9A%84%E4%BD%9C%E5%93%81%E3%80%91%E7%AC%AC5%E9%9B%86%E2%80%94%E8%A2%AB%E8%AF%AF%E5%AF%BC%E7%9A%84%E6%96%B9%E5%90%91%20%E3%80%90%E6%9C%AC%E9%9B%86%E5%91%86%E5%91%86%E9%B8%9F%E7%99%BB%E5%9C%BA%EF%BC%81%E3%80%91%E7%9C%8B%E4%B8%8A%E5%8E%BB%E6%98%AF...%20%C7%9A%C7%9AKWJeNMifH8hq99%C7%9A%C7%9A",
+    "history": [],
+    "bytes": 143,
+    "ctype": "application/json;charset=utf-8"
+  },
+  {
+    "source": "relay_text_pearktrue",
+    "status": 512,
+    "url": "https://api.pearktrue.cn/api/video/douyin/?url=9%3A%2F5%20U%40l.pq%20%3A0pm%2006%2F13%20%E5%A4%8D%E5%88%B6%E6%89%93%E5%BC%80%E6%8A%96%E9%9F%B3%EF%BC%8C%E7%9C%8B%E7%9C%8B%E3%80%90%E5%8E%9F%E7%82%B9%E6%9E%84%E6%83%B3%EF%BC%88%E9%B9%85%E9%B8%AD%E6%9D%80%EF%BC%89%E7%9A%84%E4%BD%9C%E5%93%81%E3%80%91%E7%AC%AC5%E9%9B%86%E2%80%94%E8%A2%AB%E8%AF%AF%E5%AF%BC%E7%9A%84%E6%96%B9%E5%90%91%20%E3%80%90%E6%9C%AC%E9%9B%86%E5%91%86%E5%91%86%E9%B8%9F%E7%99%BB%E5%9C%BA%EF%BC%81%E3%80%91%E7%9C%8B%E4%B8%8A%E5%8E%BB%E6%98%AF...%20%C7%9A%C7%9AKWJeNMifH8hq99%C7%9A%C7%9A",
+    "final": "https://api.pearktrue.cn/api/video/douyin/?url=9%3A%2F5%20U%40l.pq%20%3A0pm%2006%2F13%20%E5%A4%8D%E5%88%B6%E6%89%93%E5%BC%80%E6%8A%96%E9%9F%B3%EF%BC%8C%E7%9C%8B%E7%9C%8B%E3%80%90%E5%8E%9F%E7%82%B9%E6%9E%84%E6%83%B3%EF%BC%88%E9%B9%85%E9%B8%AD%E6%9D%80%EF%BC%89%E7%9A%84%E4%BD%9C%E5%93%81%E3%80%91%E7%AC%AC5%E9%9B%86%E2%80%94%E8%A2%AB%E8%AF%AF%E5%AF%BC%E7%9A%84%E6%96%B9%E5%90%91%20%E3%80%90%E6%9C%AC%E9%9B%86%E5%91%86%E5%91%86%E9%B8%9F%E7%99%BB%E5%9C%BA%EF%BC%81%E3%80%91%E7%9C%8B%E4%B8%8A%E5%8E%BB%E6%98%AF...%20%C7%9A%C7%9AKWJeNMifH8hq99%C7%9A%C7%9A",
+    "history": [],
+    "bytes": 4142,
+    "ctype": "text/html;charset=utf-8"
+  },
+  {
+    "source": "cobalt",
+    "endpoint": "https://api.cobalt.tools/",
+    "status": 400,
+    "final": "https://api.cobalt.tools/",
+    "bytes": 64,
+    "ctype": "application/json; charset=utf-8"
+  },
+  {
+    "source": "cobalt",
+    "endpoint": "https://api.cobalt.best/",
+    "error": "SSLError(MaxRetryError(\"HTTPSConnectionPool(host='api.cobalt.best', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))\"))"
+  },
+  {
+    "source": "cobalt",
+    "endpoint": "https://cobalt.tools/api/json",
+    "status": 405,
+    "final": "https://cobalt.tools/api/json",
+    "bytes": 0,
+    "ctype": ""
+  },
+  {
+    "source": "proxy_summary",
+    "tested": 1400,
+    "hits": []
+  }
+]
