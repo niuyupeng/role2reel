@@ -1,0 +1,226 @@
+name: Temporary Douyin token trace
+
+on:
+  push:
+    branches:
+      - tmp-douyin-tokentrace-20260903
+
+permissions:
+  contents: write
+
+jobs:
+  trace:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp-douyin-tokentrace-20260903
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade requests curl_cffi yt-dlp
+          rm -rf douyin_trace && mkdir -p douyin_trace
+      - name: Trace token and recover
+        env:
+          TOKEN: KWJeNMifH8hq99
+        run: |
+          cat > /tmp/trace.py <<'PY'
+          import html, json, os, re, subprocess, time, urllib.parse
+          from pathlib import Path
+          import requests
+          try:
+              from curl_cffi import requests as crequests
+          except Exception:
+              crequests=None
+
+          OUT=Path('douyin_trace'); OUT.mkdir(exist_ok=True)
+          token=os.environ['TOKEN']
+          UA_LIST=[
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Mobile Safari/537.36',
+            'Aweme/320301 (iPhone; iOS 18.5; Scale/3.00)',
+            'com.ss.android.ugc.aweme/320301 (Linux; U; Android 14; zh_CN; Pixel 8 Pro; Build/AP2A) Cronet/TTNetVersion',
+          ]
+          exact_title_terms=['被误导的方向','本集呆呆鸟登场']
+          support_terms=['原点构想','呆呆鸟','鹅鸭杀','第5集','第 5 集']
+
+          variants=[]
+          for left in range(0,4):
+            for right in range(0,8):
+              s=token[left:len(token)-right if right else None]
+              if len(s)>=8 and s not in variants: variants.append(s)
+          # Likely suffix noise variants first after exact token.
+          variants=sorted(variants,key=lambda s:(s!=token, abs(len(s)-12), -len(s)))
+          bases=[]
+          for s in variants:
+            bases += [
+              f'https://v.douyin.com/{s}/',
+              f'https://v.douyin.com/{s}',
+              f'https://v.douyin.com/{s}/?previous_page=app_code_link',
+              f'https://v.douyin.com/{s}/?previous_page=web_code_link',
+              f'https://v.douyin.com/{s}/?from=web_code_link',
+            ]
+          bases=list(dict.fromkeys(bases))
+          traces=[]; ids=[]; bodies=[]
+
+          def extract_ids(text):
+            if not text: return []
+            text=html.unescape(str(text)).replace('\\u002F','/').replace('\\/','/').replace('\\u0026','&')
+            pats=[r'(?:douyin\.com/video/|iesdouyin\.com/share/video/)(\d{15,22})',r'[?&](?:aweme_id|item_ids|modal_id)=([0-9]{15,22})',r'[\"\'](?:aweme_id|group_id|item_id)[\"\']\s*[:=]\s*[\"\']?(\d{15,22})']
+            out=[]
+            for p in pats: out+=re.findall(p,text)
+            return list(dict.fromkeys(out))
+
+          def manual_trace(url,ua,use_curl=False):
+            chain=[]; current=url
+            ses=requests.Session()
+            for hop in range(12):
+              try:
+                headers={'User-Agent':ua,'Accept':'text/html,application/xhtml+xml,application/json,*/*','Accept-Language':'zh-CN,zh;q=0.9','Referer':'https://www.douyin.com/'}
+                if use_curl and crequests:
+                  r=crequests.get(current,headers=headers,impersonate='chrome',allow_redirects=False,timeout=25)
+                else:
+                  r=ses.get(current,headers=headers,allow_redirects=False,timeout=25)
+                loc=r.headers.get('location','')
+                body=r.text[:1000000]
+                chain.append({'hop':hop,'url':current,'status':r.status_code,'location':loc,'ctype':r.headers.get('content-type',''),'bytes':len(r.content),'body_head':body[:1000]})
+                ids.extend(extract_ids(current)); ids.extend(extract_ids(loc)); ids.extend(extract_ids(body))
+                if body: bodies.append((current,body))
+                if r.status_code in {301,302,303,307,308} and loc:
+                  current=urllib.parse.urljoin(current,loc)
+                  continue
+                break
+              except Exception as e:
+                chain.append({'hop':hop,'url':current,'error':repr(e)}); break
+            return chain
+
+          for idx,url in enumerate(bases):
+            for ui,ua in enumerate(UA_LIST):
+              chain=manual_trace(url,ua,use_curl=(ui<2))
+              traces.append({'variant':url,'ua_index':ui,'chain':chain})
+              if len(set(ids))>30: break
+            if len(set(ids))>30: break
+          ids=list(dict.fromkeys(ids))
+
+          # Probe IDs and collect metadata/play URLs from all known public detail surfaces.
+          candidates=[]
+          ses=requests.Session(); ses.headers.update({'User-Agent':UA_LIST[1],'Referer':'https://www.douyin.com/','Accept-Language':'zh-CN,zh;q=0.9'})
+          def urls_from_obj(o):
+            out=[]
+            if isinstance(o,str):
+              t=html.unescape(o).replace('\\u002F','/').replace('\\/','/').replace('\\u0026','&')
+              if t.startswith('http'): out.append(t)
+            elif isinstance(o,list):
+              for v in o: out+=urls_from_obj(v)
+            elif isinstance(o,dict):
+              for k,v in o.items():
+                if any(x in k.lower() for x in ['play','download','url_list']): out+=urls_from_obj(v)
+            return list(dict.fromkeys(out))
+          def values(o,keys):
+            out=[]
+            if isinstance(o,dict):
+              for k,v in o.items():
+                if k in keys and isinstance(v,(str,int,float)): out.append(str(v))
+                out+=values(v,keys)
+            elif isinstance(o,list):
+              for v in o: out+=values(v,keys)
+            return out
+          for aid in ids[:100]:
+            row={'aweme_id':aid,'desc':'','author':'','play_urls':[],'responses':[],'source_exact_token':False}
+            for tr in traces:
+              if token in tr['variant'] and any(aid in json.dumps(h,ensure_ascii=False) for h in tr['chain']): row['source_exact_token']=True
+            eps=[
+              f'https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids={aid}',
+              f'https://www.iesdouyin.com/share/video/{aid}/',
+              f'https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id={aid}&aid=6383&device_platform=webapp&channel=channel_pc_web',
+              f'https://www.douyin.com/video/{aid}',
+            ]
+            alltxt=''
+            for ep in eps:
+              try:
+                r=ses.get(ep,timeout=35,allow_redirects=True)
+                txt=r.text; alltxt+='\n'+txt
+                row['responses'].append({'url':ep,'status':r.status_code,'final':r.url,'bytes':len(r.content),'ctype':r.headers.get('content-type','')})
+                try:
+                  obj=r.json()
+                  row['desc']=' | '.join(values(obj,{'desc','title','share_title'})[:30])
+                  row['author']=' | '.join(values(obj,{'nickname','unique_id','short_id'})[:30])
+                  row['play_urls']+=urls_from_obj(obj)
+                except Exception: pass
+              except Exception as e: row['responses'].append({'url':ep,'error':repr(e)})
+            # yt-dlp metadata can confirm title even when web detail JSON is blocked.
+            try:
+              p=subprocess.run(['yt-dlp','--impersonate','chrome','--dump-single-json','--skip-download',f'https://www.douyin.com/video/{aid}'],capture_output=True,text=True,timeout=120)
+              row['ytdlp_code']=p.returncode; row['ytdlp_error']=p.stderr[-2000:]
+              if p.returncode==0 and p.stdout.strip():
+                obj=json.loads(p.stdout); row['desc']=(row['desc']+' | '+str(obj.get('description') or obj.get('title') or '')).strip(' |'); row['author']=(row['author']+' | '+str(obj.get('uploader') or obj.get('channel') or '')).strip(' |'); row['play_urls'] += [str(obj.get('url') or '')]
+            except Exception as e: row['ytdlp_exception']=repr(e)
+            row['play_urls']=list(dict.fromkeys([u for u in row['play_urls'] if u.startswith('http')]))
+            combined=(row['desc']+' '+row['author']+' '+alltxt[:2000000]).lower()
+            row['score']=sum(w for term,w in [('被误导的方向',200),('本集呆呆鸟登场',150),('原点构想',100),('呆呆鸟',55),('鹅鸭杀',50),('第5集',35),('第 5 集',35)] if term.lower() in combined)
+            row['metadata_verified']=(('被误导的方向' in combined and any(x in combined for x in support_terms)) or ('本集呆呆鸟登场' in combined and '原点构想' in combined))
+            candidates.append(row)
+          candidates.sort(key=lambda r:(r['metadata_verified'],r['source_exact_token'],r['score']),reverse=True)
+
+          def ffok(p):
+            if not p.exists() or p.stat().st_size<100000:return False
+            q=subprocess.run(['ffprobe','-v','error','-show_entries','stream=codec_type','-of','json',str(p)],capture_output=True,text=True)
+            return q.returncode==0 and 'video' in q.stdout
+          def direct(url,dest):
+            for u in ([url.replace('playwm','play'),url] if 'playwm' in url else [url]):
+              try:
+                with ses.get(u,headers={'User-Agent':UA_LIST[1],'Referer':'https://www.douyin.com/','Range':'bytes=0-'},stream=True,timeout=(20,180),allow_redirects=True) as r:
+                  if r.status_code>=400: continue
+                  with dest.open('wb') as f:
+                    for ch in r.iter_content(1024*1024):
+                      if ch:f.write(ch)
+                if ffok(dest): return True,u
+              except Exception: pass
+              dest.unlink(missing_ok=True)
+            return False,''
+
+          final=OUT/'原点构想_鹅鸭杀_第5集_被误导的方向.mp4'; chosen=None; attempts=[]
+          for row in candidates:
+            # Exact full-token redirect is strong provenance; trimmed-token IDs still require metadata match.
+            allowed=row['metadata_verified'] or (row['source_exact_token'] and row['score']>=100)
+            if not allowed: continue
+            for u in row['play_urls']:
+              ok,used=direct(u,final); attempts.append({'type':'direct','aid':row['aweme_id'],'ok':ok,'url':u})
+              if ok: chosen=row; break
+            if chosen: break
+            try:
+              p=subprocess.run(['yt-dlp','--impersonate','chrome','--merge-output-format','mp4','--remux-video','mp4','-o',str(OUT/'tmp.%(ext)s'),f'https://www.douyin.com/video/{row["aweme_id"]}'],capture_output=True,text=True,timeout=240)
+              attempts.append({'type':'ytdlp','aid':row['aweme_id'],'code':p.returncode,'stderr':p.stderr[-3000:]})
+              hits=[x for x in OUT.glob('tmp.*') if ffok(x)]
+              if hits:
+                src=max(hits,key=lambda x:x.stat().st_size)
+                if src.suffix.lower()=='.mp4':src.replace(final)
+                else:subprocess.run(['ffmpeg','-y','-i',str(src),'-c','copy',str(final)],check=False)
+                if ffok(final): chosen=row; break
+            except Exception as e: attempts.append({'type':'ytdlp','aid':row['aweme_id'],'error':repr(e)})
+
+          result={'verified':bool(chosen and ffok(final)),'token':token,'tested_variant_count':len(bases),'found_ids':ids,'candidate_count':len(candidates),'top_candidates':[{k:v for k,v in r.items() if k not in {'play_urls','responses','ytdlp_error'}} for r in candidates[:20]],'attempts':attempts}
+          if result['verified']:
+            result['chosen']={k:v for k,v in chosen.items() if k not in {'play_urls','responses','ytdlp_error'}};result['bytes']=final.stat().st_size
+            q=subprocess.run(['ffprobe','-v','error','-show_entries','format=duration,size:stream=codec_name,codec_type,width,height,r_frame_rate','-of','json',str(final)],capture_output=True,text=True)
+            (OUT/'ffprobe.json').write_text(q.stdout,encoding='utf-8')
+            subprocess.run(['ffmpeg','-y','-loglevel','error','-i',str(final),'-vf','fps=9/60,scale=360:-1,tile=3x3','-frames:v','1',str(OUT/'contact_sheet.jpg')],check=False)
+          else:
+            final.unlink(missing_ok=True)
+          (OUT/'status.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
+          (OUT/'redirect_traces.json').write_text(json.dumps(traces,ensure_ascii=False,indent=2),encoding='utf-8')
+          (OUT/'candidates.json').write_text(json.dumps(candidates,ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps(result,ensure_ascii=False,indent=2))
+          PY
+          python /tmp/trace.py > douyin_trace/run.log 2>&1 || true
+          cat douyin_trace/status.json || true
+      - name: Publish temporary result
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add douyin_trace
+          git commit -m 'chore: publish token trace result [skip ci]' || true
+          git push origin HEAD:tmp-douyin-tokentrace-20260903
