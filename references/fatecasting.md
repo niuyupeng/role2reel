@@ -174,7 +174,7 @@ For the chosen or composed reading:
 6. Record the actual author's decision and bind it to the exact character, package, fact snapshot, candidate content, branch, and revision.
 7. Keep the workbench `open` or `selected` until explicit lock approval. Never manufacture approval.
 
-Only a valid production lock authorizes deep-biography expansion. The expanded biography introduces details beyond the outline and therefore still needs its own exact revision and body-hash approval before runtime compilation.
+Only a valid production lock authorizes canon-bound deep-biography expansion. An explicit author request to expand an already selected route may instead use the author-review draft contract in [life-paths.md](life-paths.md), without inventing lock approval. The expanded biography introduces details beyond the outline and therefore still needs its own exact revision and body-hash approval before runtime compilation.
 
 ## Quick quality test
 

@@ -450,6 +450,21 @@
         "Record the two explicit selections while leaving the fourth open; do not fabricate formal canon lock, approved biography or a selected route for the corrected character."
       ],
       "human_rubric": ["layered characterization", "reference borrowing precision", "author selection fidelity", "restraint without dismissing possibility"]
+    },
+    {
+      "id": "FT-32",
+      "title": "Selected lives advance to rich review drafts without invented canon approval",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "甲选乙路线、乙选丙路线，现在按这两条写丰富的小传，丙还没选。不是四十页硬指标，但要真正展开人生，不是履历。",
+      "input": "合成材料：甲的乙路线是多年照料渡船后难以放弃任何尚可修复的东西，常让等船者付时间代价；乙的丙路线是反复接受转达任务而习惯不问目的，后来发现照办也有自己责任。原稿明确两人开场初识，不知对方前史；只有成年状态，未定出生年。没有正式锁定包，也没有扩写后的小传批准记录。",
+      "hard_invariants": [
+        "Proceed with explicitly requested author-review drafts for the two selected routes, without repeating selection questions or inventing formal lock or biography approval.",
+        "Do not choose the third role, merge rejected routes, invent childhood friendship between the leads, or claim the entire cast is complete.",
+        "Expand continuous pre-opening lived history and relationship changes, not a plot recap or renamed resume; preserve unknown dates and distinguish invented draft details from original facts.",
+        "Keep drafts out of canon-bound runtime and screenplay compilation, and report scope and gaps without an arbitrary length quota."
+      ],
+      "human_rubric": ["lived temporal depth", "mixed-readiness handling", "causal continuity without universal foreshadowing", "honest approval boundaries"]
     }
   ]
 }
