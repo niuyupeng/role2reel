@@ -11,6 +11,8 @@ Build the person before the line, the scene before the shot, and the shot before
 
 Do only the stages needed for the requested deliverable. Do not force a full production pipeline onto a narrow rewrite.
 
+- First distinguish the content deliverable from its file format: a screenplay is not a storyboard, and Word/Excel does not choose the content mode. For screenplay, storyboard, or format-only delivery requests, read the deliverable boundary and screenplay contract in [references/output-contracts.md](references/output-contracts.md). A screenplay retains scene headings, playable action, character cues, and dialogue, without per-second labels by default. Apply shot timing and paste-ready shot syntax only to an explicitly requested storyboard/video-prompt layer.
+
 - For transcripts, notes, treatments, narration, or AI drafts that must retain the speaker's meaning, read [references/humanization.md](references/humanization.md).
 - For drafting or revising story prose, narrative biographies, or screenplay scenes, read [references/story-prose-craft.md](references/story-prose-craft.md) and [references/natural-dialogue-repair.md](references/natural-dialogue-repair.md) before drafting and apply their final prose review. This is not conditional on the author saying “去AI味”; keep analysis and provenance outside the creative body, and preserve the requested genre and author voice.
 - For story, biography, or chapter titles, use the title-to-body check in [references/story-prose-craft.md](references/story-prose-craft.md). Compare the expectation each candidate creates with what the actual text delivers; preserve author-established names and do not import marketing headlines into narrative prose by default.
@@ -109,5 +111,7 @@ Make reversible assumptions when they do not alter authorship, plot truth, or pr
 - Use files under `assets/templates/` as starting contracts. Adapt them to the user's material; do not fill unknowns with fabricated facts.
 
 ## Deliver cleanly
+
+For this author's Chinese screenplay delivery, apply the all-left-aligned, zero-indent profile in [references/output-contracts.md](references/output-contracts.md), including titles and action paragraphs. Do not import centered character cues, indented dialogue columns, or per-second storyboard labels into a requested screenplay.
 
 Return the artifact the user requested, followed by only the assumptions, warnings, or audit notes needed to use it. Do not dump every intermediate ledger by default. For an end-to-end package, use the layered formats in [references/output-contracts.md](references/output-contracts.md).

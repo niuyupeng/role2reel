@@ -2,6 +2,30 @@
 
 Return the narrowest artifact that satisfies the request. Add intermediate ledgers only when they help collaboration, audit, or reuse.
 
+## Deliverable boundary: screenplay versus storyboard
+
+Choose content mode from the user's requested artifact, not from its file extension or the amount of detail requested:
+
+- **剧本 / 完整剧本**: deliver a readable, playable screenplay. Do not substitute a shot table, second-by-second schedule, or generation prompts.
+- **分镜 / 镜头表**: translate the screenplay into motivated shots, with framing, camera, action, dialogue/sound, and timing at the requested production depth. Do not turn every second or every line into a separate shot.
+- **Word / Excel**: these choose the container only. A request for an Excel screenplay is still a screenplay; changing the container must not silently change the story or turn it into a storyboard.
+- A total duration such as “两分钟以内” or “七分钟” is a pacing constraint, not permission to put timestamps throughout a screenplay. “详细” means sufficient dramatic and playable detail, not automatic per-second annotation.
+- If both artifacts are requested, separate them into clearly identified documents or sheets. If the user explicitly asks for timed screenplay annotations, keep the timing in a separate companion layer where practical. Do not ask again when the latest request already clearly selects the mode.
+
+## Reader-facing screenplay
+
+Use a title followed by complete scenes. Each scene has a heading identifying interior/exterior, location, and dramatic time (such as 日、夜、连续), then observable action and necessary sound. Follow the author's supplied format for dialogue attribution; do not impose a separate character-cue line. Use short parentheticals only when needed to resolve delivery or action ambiguity. Preserve speaker ownership and narrative order.
+
+For this author's Chinese screenplay deliveries, use the supplied left-aligned reference profile: title, scene headings, action, dialogue, and transition paragraphs share the same left text edge. Set paragraph alignment explicitly to LEFT, and left, right, first-line, and hanging indents to zero; remove inherited indentation, leading tabs, and padding spaces. Left-aligned text inside an indented block does not pass this requirement. Do not center the title or character names. Keep headings with following content and avoid stranded dialogue labels. This is the author's delivery convention, not a claim that every Chinese screenplay follows one national layout standard.
+
+Use `【地点｜日或夜等剧情时间｜内或外】` scene labels when following this reference, preserving known time information rather than inventing day/night. If only alignment is being corrected, retain existing scene labels and dialogue wording. Dialogue may use `人物名：台词` on one line, or the reference's attributed prose with quoted speech when that style is explicitly requested or already present; do not mix in Hollywood-style centered cues and narrow dialogue columns. A screenshot demonstrating alignment does not authorize borrowing its story, adding its characters, or changing dialogue attribution style without need.
+
+For Word delivery, check both rendered pages and effective paragraph/style properties: every screenplay paragraph must have the same left edge and no first-line indent under this profile. If a later author-supplied template explicitly requests another layout, follow that template instead. Keep this screenplay profile separate from storyboard tables and provider prompt contracts.
+
+Without an explicit timed-script request, omit start/end seconds, per-second labels, shot numbers, lens/camera columns, and model-prompt syntax from the screenplay body. This does **not** mean removing action, environment, relevant props, silence, or sound: these are part of the screenplay, not inherently storyboard material. Ordinary punctuation, scene numbering, story-world clock readings, and plot-relevant countdowns are not production timestamps and should not be stripped indiscriminately.
+
+For a format-only correction, preserve the established story and dialogue; do not silently rewrite them. Before delivery, check that the requested content mode and file type are both correct, the full text is present, speakers are preserved, and unwanted timing/shot metadata has not leaked into the body. Verify document pagination separately. Page count or a timing estimate does not prove the finished film's runtime.
+
 ## Humanized text
 
 Recommended order:
