@@ -60,6 +60,8 @@ author approval before formal canon compilation.
 
 ## Local dialogue adapter
 
+For discoveries during drafting that require earlier setup or a changed relationship history, use [recursive-story-revision.md](recursive-story-revision.md). The dependency order above is not a ban on returning to an earlier stage. Repair the smallest affected span within authorized scope, reread forward from that point, and invalidate downstream versions where necessary; do not silently rewrite protected canon to make a new scene convenient.
+
 For the executable local extraction/reintegration helper, read [dialogue-local-workbench.md](dialogue-local-workbench.md). Use it to reduce repeated copying and stale-source merges; still perform the semantic and whole-scene reviews below.
 
 Use [dialogue-handoff.yaml](../assets/templates/dialogue-handoff.yaml) when a

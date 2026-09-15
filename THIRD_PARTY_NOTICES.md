@@ -90,8 +90,12 @@ This pass extends the earlier story-writing review rather than claiming to have 
 
 The new title and cross-character review sections in `references/story-prose-craft.md` are independently worded. Behavioral observations came from actual draft review, not upstream popularity or automated text-pattern scores. No broader empirical writing-quality improvement has been established.
 
+## Recursive revision design review (2026-09-15)
+
+[justinwetch/Skill-RSI](https://github.com/justinwetch/Skill-RSI), repository main observed at `6baf57e9e37d80431ec7132fca71bad251cdcc30`: reviewed README sections describing a baseline, localized challenger, comparison evidence and retained history. This is conceptual design comparison, not installation, execution, a source-code audit, or measured validation of Role2Reel. GitHub's license endpoint returned 404; redistribution permission was not established. No upstream text, examples, templates or code are included. `references/recursive-story-revision.md` is independently authored. Do not assume the author's unresolved acronym “RIS” names this project. Do not import unattended runs, numerical source quotas, model judges as human acceptance, or automatic publication of private manuscripts.
+
 ## Trademarks and product facts
 
-Role2Reel is not affiliated with, endorsed by, or sponsored by ByteDance, Dreamina, Jimeng, Seedance, OpenAI, or either community project above. Names and trademarks belong to their respective owners.
+Role2Reel is not affiliated with, endorsed by, or sponsored by ByteDance, Dreamina, Jimeng, Seedance, OpenAI, or the community projects above. Names and trademarks belong to their respective owners.
 
 Video-model modes, limits, and interfaces change. Any provider-specific fact should be checked against the provider's current authoritative documentation or interface at the time of use.
