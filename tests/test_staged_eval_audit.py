@@ -9,7 +9,7 @@ from pathlib import Path
 
 from scripts.audit_staged_eval import audit_file, audit_record, file_sha256, load_record
 from tests.test_life_paths_audit import (
-    DEFAULT_MINIMUM_CHINESE_CHARACTERS,
+    FIXTURE_BIOGRAPHY_HAN_COUNT,
     candidate_sha256,
     causal_node,
     enable_compilation,
@@ -97,7 +97,7 @@ def write_variant_package(
     digest = write_and_approve(
         root,
         payload,
-        varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS),
+        varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT),
         filename=biography_name,
     )
     refs_text = ", ".join(source_refs)
@@ -118,7 +118,7 @@ def complete_record(root: Path) -> tuple[dict, Path]:
     approved_body_sha256 = write_and_approve(
         root,
         workbench_payload,
-        varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS),
+        varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT),
     )
     baseline_refs = ["life-path:path-a/node-1", "life-path:path-a/node-2"]
     enable_compilation(
@@ -319,7 +319,7 @@ def rewrite_ablation_variant(root: Path, record: dict, mutation) -> None:
     biography_digest = write_and_approve(
         root,
         workbench,
-        varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS),
+        varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT),
         filename="ablation-biography.md",
     )
     enable_compilation(

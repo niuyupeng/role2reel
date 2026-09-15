@@ -1,5 +1,9 @@
 # Role2Reel evaluation status
 
+## Current interpretation — 2026-09-15
+
+Historical entries below describe earlier evaluations, including a former 30,000-Han-character default. That default is superseded: deep biography now requires substantive coverage and author review, with no implicit word/page quota. Only an explicitly requested positive minimum is enforced. Historical passes are not evidence of current artistic quality; FT-26 and real author/actor validation remain pending. Current meeting implementation evidence is recorded separately in the local meeting audit.
+
 Last deterministic check: 2026-08-31
 
 This document separates historical results, currently reproducible deterministic checks, and evaluations that are still pending. It is not evidence of production adoption-rate improvement.

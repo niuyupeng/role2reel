@@ -23,7 +23,7 @@ Use persistent files only for recurring characters:
 
 - `life-path-reading.md`: author-facing 命线反演 alternatives in `explore` mode; readable lives and the decision menu come before any production appendix, and the file is not canon by itself;
 - `life-path-workbench.yaml`: stable character/package identity, versioned fact boundary, candidate branches, identity- and content-bound author selection/lock state, separate biography approval, exact compiled-file records, and conditional outline review;
-- `life-paths/<branch-id>.md`: materialized biography of the locked causal path, with character/package identity, fact-boundary hash, branch, candidate hash, path-lock revision, biography revision, and status in frontmatter; a `deep` path defaults to at least 30,000 countable Han characters in Chinese prose;
+- `life-paths/<branch-id>.md`: materialized biography of the locked causal path, with character/package identity, fact-boundary hash, branch, candidate hash, path-lock revision, biography revision, and status in frontmatter; a `deep` path is judged by causal and scene-useful coverage, with no default length minimum;
 - `character.yaml`: drives, contradictions, interpretation and decision rules;
 - `cognitive-resources.yaml`: the comprehension library—knowledge status, beliefs, expertise, values, analogies, attention and attribution rules, and misconceptions;
 - `speech-corpus.yaml`: the expression library—approved, provenance-bearing relationship/register/context/syntax/repair evidence retrieved only after private judgment and social objective exist;

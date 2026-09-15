@@ -22,7 +22,7 @@ except ImportError:  # pragma: no cover - exercised by the CLI dependency check
     yaml = None
 
 
-DEFAULT_MINIMUM_CHINESE_CHARACTERS = 30_000
+DEFAULT_MINIMUM_CHINESE_CHARACTERS = None  # Depth is content-based; length is opt-in.
 INTERNAL_REPEAT_CHUNK_HAN = 40
 MAX_REPEATED_HAN_RATIO = 0.05
 
@@ -1537,23 +1537,13 @@ def audit_manifest(
             )
         )
     minimum_characters = biography.get("minimum_chinese_characters", DEFAULT_MINIMUM_CHINESE_CHARACTERS)
-    if not _positive_int(minimum_characters):
+    if minimum_characters is not None and not _positive_int(minimum_characters):
         findings.append(
             Finding(
                 "invalid-biography-threshold",
                 "error",
                 "deep_biography.minimum_chinese_characters",
-                "minimum_chinese_characters must be a positive integer.",
-            )
-        )
-        minimum_characters = DEFAULT_MINIMUM_CHINESE_CHARACTERS
-    elif mode == "deep" and minimum_characters < DEFAULT_MINIMUM_CHINESE_CHARACTERS:
-        findings.append(
-            Finding(
-                "deep-biography-threshold-below-default",
-                "error",
-                "deep_biography.minimum_chinese_characters",
-                f"Deep mode cannot lower the minimum below {DEFAULT_MINIMUM_CHINESE_CHARACTERS} countable Han characters.",
+                "minimum_chinese_characters must be null (no length gate) or an explicitly requested positive integer.",
             )
         )
         minimum_characters = DEFAULT_MINIMUM_CHINESE_CHARACTERS
@@ -1834,7 +1824,9 @@ def audit_manifest(
                             f"Repeated normalized paragraphs or fixed-size chunks contribute {stats.repeated_ratio:.1%} of body Han characters; maximum is {MAX_REPEATED_HAN_RATIO:.0%}.",
                         )
                     )
-                if stats.effective_han < minimum_characters:
+                if not text.split("---", 2)[-1].strip():
+                    findings.append(Finding("empty-biography-body", "error", "deep_biography", "A biography needs an actual narrative body, not metadata alone."))
+                if minimum_characters is not None and stats.effective_han < minimum_characters:
                     findings.append(
                         Finding(
                             "biography-too-short",

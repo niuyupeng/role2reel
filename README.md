@@ -68,7 +68,7 @@ Only after that creative decision does Role2Reel materialize the audit record an
 
 Role2Reel treats a current identity, relationship, achievement, or other summary label as a constraint—not a personality. The same visible present can be reached through materially different lives. It separates facts, traces, testimony, rumors, unknowns, and conflicts; presents at least three causally different readings; and gives the writer full authority to select, edit, combine, reject, regenerate, lock, or later unlock them. The eventual production lock is bound to one stable character package and exact source snapshot. A locked causal branch may be expanded, but it enters screenplay runtime only after the writer separately approves that exact biography revision.
 
-For a consequential character marked `deep`, the locked-path Chinese biography defaults to at least 30,000 countable Han characters. It must contain ordinary life as well as turning points: relationships forming and fraying, failed attempts, avoidance, work, habits, changing values, debts, misremembering, and present residue. Candidate readings stay compact until selection, so length is spent on the chosen life rather than padded alternatives. Mechanical checks can verify provenance, revision, length, and obvious repetition; causal density, individuality, relationship truth, and actor usefulness still need people. 命线反演 is a fiction-development instrument—not factual divination, profiling, diagnosis, or a way to recover a real person's private history.
+For a consequential character marked `deep`, the locked-path biography requires rich, causally useful life material, not a default page or character quota. A numeric minimum applies only when the author explicitly sets one. Include ordinary life as well as turning points: relationships forming and fraying, failed attempts, avoidance, work, habits, changing values, debts, misremembering, and present residue. Candidate readings stay compact until selection. Mechanical checks verify provenance, revision, any explicit length constraint, and obvious repetition; causal density, individuality, relationship truth, and actor usefulness still need people. 命线反演 is a fiction-development instrument—not factual divination, profiling, diagnosis, or a way to recover a real person's private history.
 
 The result should remain mostly invisible on screen:
 
@@ -170,7 +170,7 @@ If a workspace already has scene and relationship contracts, adding a new partic
 ## Included production system
 
 - persistent meaning-ledger humanization that preserves uncertainty and authorship;
-- author-facing 命线反演 readings plus backstage multi-candidate locks, separate exact-biography approval, 30,000-Han-character deep-biography gates, downstream provenance, and counterfactual tests;
+- author-facing 命线反演 readings plus backstage multi-candidate locks, separate exact-biography approval, author-defined optional length constraints, downstream provenance, and counterfactual tests;
 - CharacterOS with separate cognitive-resource and speech-corpus libraries, two-stage retrieval, episodic memory, relationship ledger, knowledge boundary, common ground, and second-order belief;
 - shared-memory contracts for mutual knowledge, private meanings, looks, codes, jokes, taboos, and compressed nonverbal exchange;
 - scene contract, private goals, turn-state simulation, and beat mapping;

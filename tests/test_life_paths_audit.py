@@ -10,7 +10,6 @@ from pathlib import Path
 import yaml
 
 from scripts.audit_life_paths import (
-    DEFAULT_MINIMUM_CHINESE_CHARACTERS,
     HAN_PATTERN,
     audit_file,
     audit_shared_event_registry,
@@ -22,6 +21,9 @@ from scripts.audit_life_paths import (
     shared_event_sha256,
 )
 
+
+# Synthetic fixture size, not a production depth requirement.
+FIXTURE_BIOGRAPHY_HAN_COUNT = 30_000
 
 VARIANTS = {
     "a": (
@@ -524,7 +526,7 @@ def codes(findings) -> set[str]:
 
 
 class LifePathAuditTests(unittest.TestCase):
-    def ready_fixture(self, root: Path, payload: dict | None = None, count: int = DEFAULT_MINIMUM_CHINESE_CHARACTERS) -> tuple[dict, Path, str]:
+    def ready_fixture(self, root: Path, payload: dict | None = None, count: int = FIXTURE_BIOGRAPHY_HAN_COUNT) -> tuple[dict, Path, str]:
         payload = payload or locked_manifest()
         digest = write_and_approve(root, payload, varied_body(count))
         return payload, write_manifest(root, payload), digest
@@ -535,30 +537,55 @@ class LifePathAuditTests(unittest.TestCase):
             self.assertEqual(audit_file(manifest, require_locked=True), [])
             self.assertEqual(len(payload["candidates"]), 3)
 
-    def test_default_thirty_thousand_han_threshold(self) -> None:
+    def test_no_default_length_gate(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            payload, manifest, _ = self.ready_fixture(root, count=DEFAULT_MINIMUM_CHINESE_CHARACTERS - 1)
-            self.assertIn("biography-too-short", codes(audit_file(manifest, require_locked=True)))
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
-            write_manifest(root, payload)
-            self.assertNotIn("biography-too-short", codes(audit_file(manifest, require_locked=True)))
+            payload, manifest, _ = self.ready_fixture(root, count=2_000)
+            self.assertEqual(codes(audit_file(manifest, require_locked=True)), set())
+            payload["deep_biography"]["minimum_chinese_characters"] = None
+            self.assertEqual(codes(audit_file(write_manifest(root, payload), require_locked=True)), set())
 
-    def test_deep_threshold_cannot_be_lowered(self) -> None:
+    def test_explicit_length_gate_is_honored_without_universal_floor(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
             payload["deep_biography"]["minimum_chinese_characters"] = 2_000
-            write_and_approve(root, payload, varied_body(2_000))
+            write_and_approve(root, payload, varied_body(1_999))
             found = codes(audit_file(write_manifest(root, payload), require_locked=True))
-            self.assertIn("deep-biography-threshold-below-default", found)
             self.assertIn("biography-too-short", found)
+            write_and_approve(root, payload, varied_body(2_000))
+            self.assertEqual(codes(audit_file(write_manifest(root, payload), require_locked=True)), set())
+
+    def test_invalid_explicit_length_gate(self) -> None:
+        for value in (0, -1, True, "2000", 2.5):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                payload, _, _ = self.ready_fixture(root, count=2_000)
+                payload["deep_biography"]["minimum_chinese_characters"] = value
+                self.assertIn("invalid-biography-threshold", codes(audit_file(write_manifest(root, payload), require_locked=True)))
+
+    def test_no_length_gate_does_not_waive_coverage_or_approval(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload, _, _ = self.ready_fixture(root, count=2_000)
+            payload["deep_biography"]["coverage_stages"] = []
+            payload["deep_biography"]["author_approval"]["state"] = "pending"
+            found = codes(audit_file(write_manifest(root, payload), require_locked=True))
+            self.assertIn("missing-biography-coverage", found)
+            self.assertIn("biography-author-approval-required", found)
+
+    def test_empty_body_is_not_a_completed_biography(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = locked_manifest()
+            write_and_approve(root, payload, "")
+            self.assertIn("empty-biography-body", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_obvious_single_character_padding_fails(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            write_and_approve(root, payload, "文" * DEFAULT_MINIMUM_CHINESE_CHARACTERS)
+            write_and_approve(root, payload, "文" * FIXTURE_BIOGRAPHY_HAN_COUNT)
             self.assertIn("repeated-biography-padding", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_repeated_short_paragraph_padding_fails(self) -> None:
@@ -579,7 +606,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             del payload["fact_boundary"]["observable_traces"]
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("missing-fact-boundary-category", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_candidate_feasibility_must_reference_claim_ids(self) -> None:
@@ -587,7 +614,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             payload["candidates"][0]["feasibility"]["supports"] = ["not-a-claim"]
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("unknown-fact-boundary-reference", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_empty_conflicts_and_unknowns_are_explicitly_allowed(self) -> None:
@@ -597,7 +624,7 @@ class LifePathAuditTests(unittest.TestCase):
             for item in payload["candidates"]:
                 item["feasibility"]["conflicts"] = []
                 item["feasibility"]["unknowns"] = []
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             found = codes(audit_file(write_manifest(root, payload), require_locked=True))
             self.assertNotIn("missing-field", found)
 
@@ -606,7 +633,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             payload["selection"]["author_decision"] = True
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("missing-author-decision", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_author_path_decision_cannot_be_replayed_for_another_branch(self) -> None:
@@ -614,7 +641,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             payload["selection"]["author_decision"]["approved_branch_id"] = "path-b"
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("author-decision-binding-mismatch", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_author_path_decision_cannot_be_replayed_for_another_character_package(self) -> None:
@@ -623,7 +650,7 @@ class LifePathAuditTests(unittest.TestCase):
             source = locked_manifest("character-a")
             payload = locked_manifest("character-b")
             payload["selection"] = copy.deepcopy(source["selection"])
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("author-decision-binding-mismatch", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_author_path_decision_binds_exact_package_context(self) -> None:
@@ -631,7 +658,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             payload["selection"]["author_decision"]["approved_package_context_id"] = "another-package-context"
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("author-decision-binding-mismatch", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_fact_boundary_change_invalidates_path_lock(self) -> None:
@@ -639,7 +666,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             payload["fact_boundary"]["author_locked_facts"][0]["content"] = "锁后被替换的另一项当前事实"
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("locked-fact-boundary-hash-mismatch", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_editing_locked_candidate_without_relock_fails(self) -> None:
@@ -647,7 +674,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             payload["candidates"][0]["causal_spine"][0]["choice"] = "锁后被静默改写的选择"
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("locked-candidate-hash-mismatch", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_exact_duplicate_spines_fail(self) -> None:
@@ -657,7 +684,7 @@ class LifePathAuditTests(unittest.TestCase):
             duplicate = copy.deepcopy(payload["candidates"][1])
             duplicate["id"] = "path-c"
             payload["candidates"][2] = duplicate
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("duplicate-causal-spine", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_composite_does_not_replace_three_root_candidates(self) -> None:
@@ -665,7 +692,7 @@ class LifePathAuditTests(unittest.TestCase):
             root = Path(directory)
             payload = locked_manifest()
             payload["candidates"][2]["derived_from"] = ["path-a", "path-b"]
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("too-few-root-candidates", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_selection_requires_at_least_three_candidates(self) -> None:
@@ -674,14 +701,14 @@ class LifePathAuditTests(unittest.TestCase):
             payload = locked_manifest()
             payload["candidates"] = payload["candidates"][:2]
             payload["selection"]["rejected_branch_ids"] = ["path-b"]
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("too-few-candidates", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_biography_requires_separate_author_approval(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            write_biography(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_biography(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             self.assertIn("biography-author-approval-required", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_biography_approval_cannot_be_replayed_across_path_contexts(self) -> None:
@@ -701,8 +728,8 @@ class LifePathAuditTests(unittest.TestCase):
             target_root.mkdir()
             source = locked_manifest("character-a")
             target = locked_manifest("character-b")
-            write_and_approve(source_root, source, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
-            write_biography(target_root, target, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            write_and_approve(source_root, source, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
+            write_biography(target_root, target, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             target["deep_biography"]["author_approval"] = copy.deepcopy(source["deep_biography"]["author_approval"])
             self.assertIn(
                 "biography-approval-binding-mismatch",
@@ -721,14 +748,14 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload, manifest, _ = self.ready_fixture(root)
-            write_biography(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS + 1))
+            write_biography(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT + 1))
             self.assertIn("biography-approval-hash-mismatch", codes(audit_file(manifest, require_locked=True)))
 
     def test_biography_frontmatter_binds_locked_branch(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS), life_path_branch_id="path-b")
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT), life_path_branch_id="path-b")
             self.assertIn("biography-branch-mismatch", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
     def test_biography_frontmatter_binds_exact_package_context(self) -> None:
@@ -738,7 +765,7 @@ class LifePathAuditTests(unittest.TestCase):
             write_and_approve(
                 root,
                 payload,
-                varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS),
+                varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT),
                 package_context_id="another-package-context",
             )
             self.assertIn(
@@ -750,7 +777,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            body = "来源life-path:path-b/node-1。" + varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS)
+            body = "来源life-path:path-b/node-1。" + varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT)
             write_and_approve(root, payload, body)
             self.assertIn("rejected-branch-reference", codes(audit_file(write_manifest(root, payload), require_locked=True)))
 
@@ -760,7 +787,7 @@ class LifePathAuditTests(unittest.TestCase):
             workbench = root / "workbench"
             workbench.mkdir()
             payload = locked_manifest()
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS), filename="outside.md")
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT), filename="outside.md")
             payload["deep_biography"]["biography_file"] = "../outside.md"
             self.assertIn("biography-path-escape", codes(audit_file(write_manifest(workbench, payload), require_locked=True)))
 
@@ -768,7 +795,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS), filename="target.md")
+            write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT), filename="target.md")
             try:
                 (root / "biography.md").symlink_to(root / "target.md")
             except OSError as exc:
@@ -790,7 +817,7 @@ class LifePathAuditTests(unittest.TestCase):
             workbench = root / "workbench"
             workbench.mkdir()
             payload = locked_manifest()
-            digest = write_and_approve(workbench, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(workbench, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             (root / "outside.yaml").write_text("source_refs: [life-path:path-a/node-1]\n", encoding="utf-8")
             enable_compilation(workbench, payload, digest)
             payload["compiled_runtime"]["artifact_files"][0]["path"] = "../outside.yaml"
@@ -817,7 +844,7 @@ class LifePathAuditTests(unittest.TestCase):
             for filename in ("character.yaml", "cognitive-resources.yaml", "memories.yaml", "relationship-ledger.yaml"):
                 with self.subTest(filename=filename):
                     payload = locked_manifest()
-                    digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+                    digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
                     enable_compilation(root, payload, digest, {filename: "source_refs: [life-path:path-b/node-1]\n"})
                     found = codes(audit_file(write_manifest(root, payload), require_locked=True))
                     self.assertIn("rejected-branch-reference", found)
@@ -826,7 +853,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
             ledger = {
                 "schema_version": 1,
@@ -848,7 +875,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             payload["deep_biography"]["relationship_ledger_file"] = "declared-ledger.yaml"
             empty_ledger = json.dumps(
                 {"schema_version": 1, "relationships": [], "shared_event_registry": [], "shared_memory_contracts": []},
@@ -873,7 +900,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
             ledger = json.dumps(
                 {
@@ -894,7 +921,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
             ledger = {
                 "schema_version": 1,
@@ -975,8 +1002,8 @@ class LifePathAuditTests(unittest.TestCase):
             target_root.mkdir()
             source = locked_manifest("character-a")
             target = locked_manifest("character-b")
-            source_digest = write_and_approve(source_root, source, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
-            target_digest = write_and_approve(target_root, target, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            source_digest = write_and_approve(source_root, source, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
+            target_digest = write_and_approve(target_root, target, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             enable_compilation(source_root, source, source_digest)
             (target_root / "runtime-artifact.yaml").write_text(
                 (source_root / "runtime-artifact.yaml").read_text(encoding="utf-8"),
@@ -1016,7 +1043,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest("character-b")
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             copied_content = character_artifact_document(
                 payload,
                 digest,
@@ -1033,7 +1060,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             enable_compilation(root, payload, digest, {"character.yaml": character_artifact_document(payload, digest)})
             self.assertEqual(audit_file(write_manifest(root, payload), require_locked=True), [])
 
@@ -1041,7 +1068,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             enable_compilation(root, payload, digest, {"scene-contract.yaml": scene_artifact_document(payload, digest)})
             record = payload["compiled_runtime"]["artifact_files"][0]
             record["source_refs"] = ["life-path:path-a/node-1"]
@@ -1065,7 +1092,7 @@ class LifePathAuditTests(unittest.TestCase):
                     case_root = root / filename.replace(".", "-")
                     case_root.mkdir()
                     payload = locked_manifest("character-a")
-                    digest = write_and_approve(case_root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+                    digest = write_and_approve(case_root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
                     current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
                     document = {
                         "schema_version": 1,
@@ -1090,7 +1117,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest("character-a")
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
             document = {
                 "schema_version": 1,
@@ -1133,7 +1160,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest("character-a")
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
             current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
             ledger = {
@@ -1169,7 +1196,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest("character-a")
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             payload["deep_biography"]["relationship_ledger_file"] = "relationship-ledger.yaml"
             ledger = {
                 "schema_version": 1,
@@ -1201,7 +1228,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest("character-a")
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             current_source = json.loads(scene_artifact_document(payload, digest))["character_sources"][0]
             document = {
                 "schema_version": 1,
@@ -1224,7 +1251,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             content = json.loads(scene_artifact_document(payload, digest))
             content["character_sources"][0]["package_context_id"] = "copied-from-another-package"
             enable_compilation(root, payload, digest, {"scene-contract.yaml": json.dumps(content, ensure_ascii=False)})
@@ -1235,7 +1262,7 @@ class LifePathAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = locked_manifest()
-            digest = write_and_approve(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+            digest = write_and_approve(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
             content = "memories:\n  - source_branch_id: path-b\n    source_node_ids: [node-1]\n"
             enable_compilation(root, payload, digest, {"memories.yaml": content})
             self.assertIn("rejected-branch-reference", codes(audit_file(write_manifest(root, payload), require_locked=True)))
@@ -1246,7 +1273,7 @@ class LifePathAuditTests(unittest.TestCase):
             payload, manifest, digest = self.ready_fixture(root)
             enable_compilation(root, payload, digest)
             write_manifest(root, payload)
-            write_biography(root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS + 1))
+            write_biography(root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT + 1))
             self.assertIn("compiled-biography-hash-mismatch", codes(audit_file(manifest, require_locked=True)))
 
     def test_unresolved_outline_blocks_formal_scene_compilation(self) -> None:
@@ -1358,7 +1385,7 @@ class SharedEventAuditTests(unittest.TestCase):
         payload["deep_biography"]["shared_history_refs"] = ["life-path:path-a/node-1"]
         payload["deep_biography"]["shared_event_ids"] = ["shared-event-1"]
         payload["deep_biography"]["relationship_ledger_file"] = "02-characters/relationship-ledger.yaml"
-        write_and_approve(char_root, payload, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS))
+        write_and_approve(char_root, payload, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT))
         return payload, write_manifest(char_root, payload)
 
     def ledger(self, project: Path, a: dict, b: dict) -> Path:
@@ -1561,7 +1588,7 @@ class SharedEventAuditTests(unittest.TestCase):
             b, b_manifest = self.create_character(project, "character-b")
             ledger_path = self.ledger(project, a, b)
             b_root = b_manifest.parent
-            write_and_approve(b_root, b, varied_body(DEFAULT_MINIMUM_CHINESE_CHARACTERS + 1))
+            write_and_approve(b_root, b, varied_body(FIXTURE_BIOGRAPHY_HAN_COUNT + 1))
             write_manifest(b_root, b)
             self.assertIn("shared-biography-hash-mismatch", codes(audit_shared_event_registry(ledger_path)))
 

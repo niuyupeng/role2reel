@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "case_id": "",
+  "task_type": "next_episode",
+  "split": "development",
+  "target_episode": 2,
+  "skill_revision": "",
+  "inputs": [],
+  "reference": {"path": "", "revision": ""},
+  "diagnostic_focus": "",
+  "max_revision_rounds": 2
+}

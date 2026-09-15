@@ -1,0 +1,45 @@
+schema_version: 1
+handoff_id: null
+status: draft
+source:
+  path: null
+  revision: null
+  sha256: null
+  scene_id: null
+adapter:
+  mode: unselected
+  backend_and_version: null
+  settings: null
+  execution_status: not_run
+  authorized_transmission_scope: null
+read_only_context:
+  previous_turns: []
+  next_turns: []
+  entry_state: null
+  required_exit_state: null
+  character_resource_bindings: []
+editable_turns: []
+# Each turn: turn_id, beat_id, fixed_speaker, fixed_recipient, original_text,
+# propositions_with_ownership_and_certainty, objective_and_tactic,
+# knowledge_limits, required_response, timing_constraints, candidate_text.
+protected_content: []
+forbidden_additions: []
+unresolved_questions: []
+candidate_changes: []
+reintegration:
+  source_rechecked: false
+  source_sha256_at_merge: null
+  accepted_turn_ids: []
+  collateral_changes: []
+  resulting_scene_revision: null
+  resulting_scene_sha256: null
+  downstream_invalidations: []
+review:
+  fidelity: pending
+  speaker_and_knowledge: pending
+  chronology_and_location: pending
+  whole_scene_read_aloud: pending
+  human_decision: pending
+  decision_source: null
+  accepted_candidate_revision: null
+claim_boundary: "A filled packet is not proof of external execution, semantic fidelity, or human acceptance."

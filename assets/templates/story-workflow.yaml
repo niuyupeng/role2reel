@@ -1,0 +1,41 @@
+schema_version: 1
+workflow_id: null
+status: draft
+brief:
+  project_id: null
+  source_revision: null
+  premise: null
+  audience_experience: null
+  duration_seconds: null
+  ending: null
+  principal_characters: []
+  production_constraints: []
+  requested_deliverables: []
+  excluded_deliverables: []
+author_protected_beats: []
+permitted_changes: []
+capacity_review:
+  characters_and_functions: []
+  locations_and_transition_costs: []
+  conflicts_setups_and_payoffs: []
+  timing_basis: null
+  overloads_and_tradeoffs: []
+stage_handoffs: []
+character_source_bindings: []
+character_depth_review:
+  basis: causal_and_scene_usefulness_not_length
+  explicit_length_request_source: null
+  characters: [] # Per character: outline needs, evidence refs, gaps, repairs, review status.
+  human_review: pending
+outline_character_conflicts: []
+revision_budget:
+  max_rounds: null
+  stop_condition: null
+change_map: []
+invalidated_downstream_artifacts: []
+pending_author_choices: []
+review:
+  mechanical_checks: not_run
+  human_review: pending
+  decision_source: null
+  approved_revision: null

@@ -10,6 +10,7 @@ The files in this directory specify behavioral evaluations. The repository unit 
 - FT-15–FT-17 cover author-facing 命线反演, two-stage cognition/expression retrieval, and a light path-to-behavior scene. Any development cold runs remain informal until exact run metadata and blinded human review are recorded.
 - FT-18 specifies the complete fused pipeline and must remain pending without real source material, an actual author path decision, a separately approved deep biography, isolated compilation/generation tasks, and human review.
 - FT-19–FT-22 specify extension, protected edit, two-source transition, and multi-panel video tasks. Schema or linter success cannot establish provider support or rendered quality.
+- FT-23–FT-25 specify bounded dialogue reintegration, story-capacity tradeoffs, and stale handoff rejection. They remain pending behavioral execution and human review; repository tests check their specifications only.
 - Adding a case, passing its JSON contract test, or passing a deterministic linter is not evidence that generation behavior improved.
 
 ## Cold-run protocol

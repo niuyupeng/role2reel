@@ -1,6 +1,6 @@
 # Staged life-path example
 
-This abbreviated fictional example shows the contract between stages. It is not a substitute for the deep biography: a real `deep` run must keep an actual author-approved biography file with at least 30,000 countable Han characters and pass the audit.
+This abbreviated fictional example shows the contract between stages. It is not a substitute for the deep biography: a real `deep` run must keep an actual author-approved biography file with sufficient causal and scene-useful coverage and pass applicable audits.
 
 ## 1. Sparse material becomes an evidence boundary
 
@@ -62,7 +62,7 @@ biography_status: ready
 ---
 ```
 
-The omitted body covers the actual life stages, ordinary routines, constraints, relationships, choices, costs, feedback, revisions, contradictions, mistaken memories, and opening residues. It must contain at least 30,000 countable Han characters without padding. After review, the author separately approves the exact biography revision and body hash. Changing the prose invalidates that approval.
+The omitted body covers the actual life stages, ordinary routines, constraints, relationships, choices, costs, feedback, revisions, contradictions, mistaken memories, and opening residues. Its depth is judged by usable causal coverage rather than a character quota. After review, the author separately approves the exact biography revision and body hash. Changing the prose invalidates that approval.
 
 ## 5. Compilation retains causes without carrying the whole book
 

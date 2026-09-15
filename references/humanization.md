@@ -64,6 +64,8 @@ Keep three layers separate:
 
 ## Make language human at the reasoning level
 
+For defensive, over-explained or generic drafts, use [natural-dialogue-repair.md](natural-dialogue-repair.md) alongside this fidelity contract. Do not substitute a generic humanizer's defaults for the source voice or this task's permitted transformation.
+
 Prefer:
 
 - concrete evidence a speaker would notice;

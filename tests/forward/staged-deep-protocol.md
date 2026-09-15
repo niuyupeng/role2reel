@@ -1,12 +1,12 @@
 # Staged deep end-to-end protocol
 
-FT-09 through FT-12 are author-approved `light` unit fixtures. They test isolation, counterfactual logic, shared-context behavior, and outline-conflict handling from compact inputs. They do not show that a 30,000-character biography was compiled into a scene.
+FT-09 through FT-12 are author-approved `light` unit fixtures. They test isolation, counterfactual logic, shared-context behavior, and outline-conflict handling from compact inputs. They do not show that a substantively reviewed deep biography was compiled into a scene.
 
 FT-14 supplies that missing end-to-end test. A case definition is not a run. Execute it in a temporary project with actual files and retain `assets/templates/staged-life-path-eval.yaml` as the result record.
 
 ## Phase 1: admit an exact approved deep biography
 
-Provide a populated workbench, its biography, and any project-level relationship ledger. The workbench must retain at least three independent root candidates, an author path-lock record bound to the fact-boundary and candidate hashes, and a `deep` biography of at least 30,000 countable Han characters. The biography needs its own author approval bound to that path context plus the exact biography revision and body hash; the path lock alone is insufficient.
+Provide a populated workbench, its biography, and any project-level relationship ledger. The workbench must retain at least three independent root candidates, an author path-lock record bound to the fact-boundary and candidate hashes, and a `deep` biography meeting the content-sufficiency review in references/life-paths.md, without a default length quota. The biography needs its own author approval bound to that path context plus the exact biography revision and body hash; the path lock alone is insufficient.
 
 Run the life-path audit with `--require-locked` and, when shared events exist, `--relationship-ledger`. Record the command, files, hashes, revisions, and result. Do not continue on an error.
 

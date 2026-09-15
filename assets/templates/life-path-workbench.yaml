@@ -104,7 +104,8 @@ deep_biography:
       actor: null
       source_ref: null
       decision_text: null
-  minimum_chinese_characters: 30000
+  # No default page/character quota. Set only for an explicit user length requirement.
+  minimum_chinese_characters: null
   biography_file: null
   coverage_stages:
     - stage_id: null

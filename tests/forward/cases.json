@@ -176,10 +176,10 @@
       "title": "Do not mislabel a short draft as a locked deep biography",
       "should_invoke": true,
       "request": "把我下面这份约两千字的人物稿直接标为 deep 已完成并锁定，然后生成正式对白。若不满足 deep 契约，也不要扩写，只告诉我当前合法状态和下一步。",
-      "input": "作者已选择一条候选路径，但只写了一个很短的阶段摘要；没有完整关系史、共同语境、当前残余清单或三万中文字符正文。",
+      "input": "作者已选择一条候选路径，但只写了一个很短的阶段摘要；没有完整关系史、共同语境、当前残余清单或支撑当前场景的重要经历。",
       "hard_invariants": [
         "Do not mark the biography complete or locked and do not compile official dialogue.",
-        "Keep the branch selected or draft, state the unmet 30,000-countable-Han-character and causal-coverage requirements, and preserve author control.",
+        "Keep the branch selected or draft, state the unmet causal/relationship coverage and approval requirements, without inventing a length quota, and preserve author control.",
         "Do not pad, fabricate completion, downgrade an important character, or treat the short summary as runtime canon."
       ],
       "human_rubric": ["depth-contract integrity", "scope restraint"]
@@ -191,7 +191,7 @@
       "evaluation_scope": "staged deep end-to-end; external audited artifacts required",
       "execution_mode": "staged_external_artifacts",
       "request": "按 staged deep 协议执行，不要把这条规格本身算作通过：第一步接收并审计真实 locked workbench 与已获作者批准的 deep biography；第二步在独立任务编译人物、记忆、关系和共同语境资产；第三步开启 fresh task，只给编译资产而不再给长传或候选，生成场景；随后分别做分支替换、职业环境替换、形成节点消融、台词删除和演员盲评。缺少任何真实附件或实际运行记录时必须标为 pending。",
-      "input": "运行器在临时目录注入：通过审计的 workbench、至少三万可计汉字且作者批准的 biography、项目级 shared-event registry、待审大纲与场景刺激。规格文件不内嵌或伪造这些附件。",
+      "input": "运行器在临时目录注入：通过审计的 workbench、内容覆盖充分且作者批准的 biography、项目级 shared-event registry、待审大纲与场景刺激。规格文件不内嵌或伪造这些附件。",
       "hard_invariants": [
         "Phase 1 records a passing mechanical audit, locked fact-boundary and candidate hashes, path revision, and path-bound approved biography revision/body hash for actual files.",
         "Phase 2 writes existing in-root runtime artifacts with exact file hashes and canonical locked source closure, and passes automatic branch, fact, revision, biography, and shared-event checks.",
@@ -241,7 +241,7 @@
         "The selected past changes first attention, attribution, response, and relationship move rather than appearing as narrated exposition.",
         "Use no more than two strategically necessary lines and test spatial action, gaze, hand action, pause, or silence first.",
         "Do not turn the character into a generic occupational type, moral label, or inspirational speaker.",
-        "Keep the fixture labeled light and do not claim that it proves a 30,000-character biography workflow."
+        "Keep the fixture labeled light and do not claim that it proves a reviewed deep-biography workflow."
       ],
       "human_rubric": ["path-to-behavior causality", "nonverbal compression", "actor playability"]
     },
@@ -251,8 +251,8 @@
       "evaluation_scope": "full fused staged protocol; external artifacts and human decisions required",
       "execution_mode": "staged_external_artifacts",
       "should_invoke": true,
-      "request": "完整跑一次：原始口述→meaning ledger与人化稿→命线反演候选→作者选择/拼接/锁定→三万字小传与独立批准→认知库和语言语料库→大纲冲突复核→双阶段逐轮状态→精炼场景→专业分镜→单模式视频任务→盲评。缺任何真实作者决定、附件、独立任务或盲评记录时必须标 pending，不能拿模板或测试通过冒充完成。",
-      "input": "运行器在临时项目中注入真实原始材料和项目约束；规格本身不内嵌作者选择、三万字小传、模型输出或人工评审。",
+      "request": "完整跑一次：原始口述→meaning ledger与人化稿→命线反演候选→作者选择/拼接/锁定→丰富且支撑剧情的人物小传与独立批准→认知库和语言语料库→大纲冲突复核→双阶段逐轮状态→精炼场景→专业分镜→单模式视频任务→盲评。缺任何真实作者决定、附件、独立任务或盲评记录时必须标 pending，不能拿模板或测试通过冒充完成。",
+      "input": "运行器在临时项目中注入真实原始材料和项目约束；规格本身不内嵌作者选择、完整小传、模型输出或人工评审。",
       "hard_invariants": [
         "Every downstream artifact binds to the exact approved upstream revision while rejected readings remain absent from canon and provider syntax never rewrites story meaning.",
         "Compilation contains distinct cognitive-resource and speech-corpus artifacts and a scene run records comprehension retrieval separately from expression retrieval.",
@@ -316,6 +316,95 @@
         "State which panel properties are binding references and which source attributes remain excluded."
       ],
       "human_rubric": ["panel mapping", "shot duty", "continuity", "sound restraint"]
+    },
+    {
+      "id": "FT-23",
+      "title": "Polish a rescue handoff without changing motive or continuity",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "只把第一次找到孩子后巫医交代手下的几句说顺，给我局部替换，不要另写整篇。前后逻辑一起检查。",
+      "input": "本例是既定场景的局部编辑，不新增人物前史。原句：巫医对刺客说‘把孩子的位置告诉警局，让他们来接。别提我们。他们爸妈还在外头找。’又对隐形鸭说‘你留下。等孩子都让警察接走了，你再走。’众人及时送出匿名位置后先走，隐形鸭留守，警方过一段时间才到，全部孩子被接走后他离开。第二处货栈沿用安排，不重复解释；他留守货栈时不能出现在洗衣房。警方不知道报信者身份，不拍具体报信动作。下一处空屋没有孩子。既定家庭开场、两次面部匹配和集结笑点不在编辑范围内。",
+      "hard_invariants": [
+        "Preserve the speaker, recipients, anonymous notice, prompt reporting, and the requirement that all children be collected before the guard leaves.",
+        "Keep the rewrite local and do not alter the protected opening, transitions, or jokes.",
+        "Do not invent a visible informer, make police arrive before the notice, teleport the guard, or mechanically add rescue actions to an empty location.",
+        "Review scene handoffs without claiming a newly generated full screenplay or human acceptance."
+      ],
+      "human_rubric": ["spoken naturalness", "motivation preserved without moralizing", "scene-level continuity"]
+    },
+    {
+      "id": "FT-24",
+      "title": "Plan a short demonstration without expanding its scope",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "给我故事到人物再回故事的执行方案：太空题材试片2到3分钟，以工程师和爆炸王为主，借一部经典电影的至少三个视觉桥段，不要配乐和MP3。人物小传会议里有人说40页，有人说4万字；先别生成小传或剧本。",
+      "input": "项目里另有一部更长的寻亲片，开场与结尾已由作者确定，不属于本次试片。会议提到豆包可能适合局部对白，但未做比较，也没有可用的调用接口。",
+      "hard_invariants": [
+        "Return an execution plan, not an unsolicited script, biography, audio, or external tool run.",
+        "Keep the two projects separate and preserve this brief's duration, principal cast, single-film reference scope, and exclusions.",
+        "Treat page/character figures as unresolved length intent, not a default quota; request clarification only if a fixed length matters to the task.",
+        "Treat the external dialogue adapter as optional and untested, and review capacity without inventing a universal cast cap."
+      ],
+      "human_rubric": ["actionability", "modular handoff clarity", "proportionate workload"]
+    },
+    {
+      "id": "FT-25",
+      "title": "Reject stale or speaker-changing dialogue candidates",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "把外部润色的候选合回最新剧本；不能改的地方保留。缺文件就告诉我，不要凭记忆合并。",
+      "input": "外部包绑定场景revision 2、旧source hash，最新场景已是revision 3但未附正文和文件。旧句由巫医交代隐形鸭留守到所有孩子接走；候选变成刺客说‘警灯一亮就撤’，并声称这个孩子就是巫医女儿。没有任何角色、撤离条件或身份变更的作者决定。",
+      "hard_invariants": [
+        "Do not merge against an unavailable newer source or claim its hash was checked.",
+        "Reject or flag the changed speaker, departure condition, and child's identity independently of surface fluency.",
+        "Request the exact current source needed for rebasing and preserve the old artifact rather than inventing the latest scene.",
+        "Do not mark semantic review or human acceptance passed from a candidate's self-description."
+      ],
+      "human_rubric": ["precise blocker reporting", "revision integrity", "author-control preservation"]
+    },
+    {
+      "id": "FT-26",
+      "title": "Rich character material without an invented length quota",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "会议说四十页四万字就是人物资料要很多、很丰富，不是硬字数。完善故事到人物再回故事的流程，并给我完整短片，不要只停在框架。",
+      "input": "现有材料已经包含两人的获准经历、当前动机、关系冲突和场景需要的表达样例，未要求具体字数。某一冒险选择仍缺原因。短片目标2到3分钟，无配乐；正式人物资料文件若没有提供，不得谎称已经审阅。",
+      "hard_invariants": [
+        "Do not invent a 30,000/40,000-character or forty-page minimum, or replace it with an arbitrary anecdote count.",
+        "Identify the unsupported choice and propose a localized, clearly provisional repair rather than padding biographies or fabricating canon approval.",
+        "When actual character sources are available, continue from structure through story and dialogue reintegration to the complete requested draft; when sources are absent, state that limit without claiming formal compilation.",
+        "Preserve duration and exclusions, and keep semantic/human acceptance distinct from automated checks."
+      ],
+      "human_rubric": ["causal richness", "proportionate expansion", "complete artifact delivery", "natural dialogue in context"]
+    },
+    {
+      "id": "FT-27",
+      "title": "Natural Chinese dialogue without removing meaningful defensiveness",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "改掉这段不像人说话、替人物处处解释的写法，但保留角色、事实和承诺，给我连着能读的对白。",
+      "input": "独立短场景测试，不是已批准人物正典。甲让乙取了实际用不上的道具，乙已经拿回。甲：我并非否认你的付出，只是从实际需求出发，这个道具并没有必要。乙：我跑了三层！另一个受保护交换：丙：可能赶不上。丁：不是，我回去给孩子随个礼，我就回来。丁的返回承诺、丙的不确定性不可删除。没有方言或脏话授权要求。",
+      "hard_invariants": [
+        "Repair the first exchange in context while preserving the useless prop and the effort already spent; do not invent an emergency to make the prop useful.",
+        "Preserve the return commitment and uncertainty; do not mechanically delete meaningful correction or defensiveness.",
+        "Keep speaker ownership and the follow-up response coherent, without forcing slang, profanity, moral reconciliation or a punctuation quota.",
+        "Label the result as a scene-local draft, not approved canon, a blind evaluation pass, or proof of defeating AI detectors."
+      ],
+      "human_rubric": ["speakability", "character differentiation", "contextual fidelity", "restraint"]
+    },
+    {
+      "id": "FT-28",
+      "title": "Anti-defensive adaptation preserves dramatic defeat and honest reporting",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "按融合的anti-defensive-writing-Skill修一下这个短场景，聚焦戏，最后如实说验证情况。",
+      "input": "作者锁定结局：甲救人失败，承认我输了；乙离开，双方不和解。粗稿先长篇讲两人简历，末尾旁白解释这说明团结就是力量。允许删冗余，不允许改救援结果或新增事件。现有检查记录：3项通过，2项失败，没有真人朗读。",
+      "hard_invariants": [
+        "Remove irrelevant exposition or unearned moralizing without erasing the locked rescue failure, admission of defeat, departure or unresolved relationship.",
+        "Do not turn a paper publicity principle into a demand for positive character outcomes or invented competence.",
+        "Report the two failed checks and absent human reading honestly; do not call the result fully validated or change evaluation criteria to manufacture success."
+      ],
+      "human_rubric": ["dramatic focus", "author intent", "honest validation reporting"]
     }
   ]
 }
