@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE_FILES = (
+    "references/story-prose-craft.md",
     ".github/ISSUE_TEMPLATE/behavior-failure.yml",
     ".github/ISSUE_TEMPLATE/config.yml",
     ".github/ISSUE_TEMPLATE/security-contact.yml",

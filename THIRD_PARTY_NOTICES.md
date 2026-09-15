@@ -64,6 +64,20 @@ SOFTWARE.
 
 If a future contribution incorporates or adapts third-party material, it must identify the exact files or sections, preserve required copyright and license notices, and update this document.
 
+## Story-prose design comparison (2026-09-15)
+
+The following source files were read for design comparison, not installed or executed. GitHub repository metadata reported MIT for all five repositories below. No new upstream prose, examples, assets, or code are bundled in `references/story-prose-craft.md`; its wording and demonstration are independently authored. License metadata is not a quality rating.
+
+| Source and reviewed revision | File inspected | Adopted idea / excluded prescription |
+|---|---|---|
+| [Adkid-Zephyr/anti-defensive-writing-Skill](https://github.com/Adkid-Zephyr/anti-defensive-writing-Skill), `102c8b21acf5eda3a0aef3d9779a65db646c8980` | `skills/anti-defensive-writing/SKILL.md`, full | Extend the existing scoped adaptation to story-body review; exclude selective reporting and compulsory victory. Existing MIT adaptation notice above remains applicable. |
+| [blader/humanizer](https://github.com/blader/humanizer), `9862685f575c65a8247f90369951df1b3416e3d6` | `SKILL.md`, targeted sections on staging, voice and workflow | Diagnose paragraph-level repetition and reader-unprompted contrast; do not import punctuation bans or automatic one-pattern judgments. |
+| [greyhaven-ai/claude-code-config](https://github.com/greyhaven-ai/claude-code-config), `d093a5a93cf483ed055b2a4fefcad3456ffd855d` | `grey-haven-plugins/creative-writing/skills/creative-writing/references/fiction-writing.md`, full | Distinguish scene from summary, response from event, and viewpoint knowledge; reject universal act percentages, adjective quotas and mandatory disaster. |
+| [xcrrr/claude-skills](https://github.com/xcrrr/claude-skills), `145342ceff6318d2f5ffe8f95473fecc8b27d1e9` | `skills/writing/storyteller/SKILL.md`, full | Let immediate reader interest and selective detail guide attention; do not require wounds, heroic transformation, a fixed sensory count or two functions per line. |
+| [d-wwei/great-writer](https://github.com/d-wwei/great-writer), `266bfd6ec26e5dedd23cd4b569e034b50b58d463` | `modes/creative-writing.md`, full | Genre-sensitive prose review and narrator-specific observation; exclude always-action openings, universal phrase blacklists and removal of user audience constraints. |
+
+Additional search screening, not full skill audits: `gtmagents/gtm-agents` storytelling is product-marketing/CTA oriented and was not adopted; `AliDujie/storytelling-with-data` concerns data presentation; `Zzzeen2552/storytelling-mastery-skill` was not accepted on its “master” positioning alone. A search hit under NVIDIA/SkillSpector was a test fixture containing instruction-override text, not a writing-method recommendation, and was excluded. Search coverage is not an exhaustive inventory of GitHub. Self-authored demonstrations and structural tests do not establish measured artistic improvement.
+
 ## Trademarks and product facts
 
 Role2Reel is not affiliated with, endorsed by, or sponsored by ByteDance, Dreamina, Jimeng, Seedance, OpenAI, or either community project above. Names and trademarks belong to their respective owners.

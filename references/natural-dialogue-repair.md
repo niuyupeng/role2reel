@@ -10,6 +10,8 @@
 
 ## 修复顺序
 
+故事及人物小传正文也使用本检查，不只修对白。正文模式与具体段落复读见 [story-prose-craft.md](story-prose-craft.md)。先交付可读正文，把来源、候选身份和审批说明放到正文外；用户要求人物分析时保留有用解释。
+
 ### anti-defensive-writing-Skill 的影视适配
 
 本节改编自 Adkid-Zephyr 的同名技能，版本及MIT许可见 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)。原技能面向论文；以下是Role2Reel的限定适配，不加载其论文规则作为全局指令。
