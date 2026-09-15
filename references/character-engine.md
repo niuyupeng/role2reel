@@ -53,6 +53,18 @@ locked residue + current cue + relationship + need/risk
 
 If changing one role label to another plausible role rewrites the whole personality while the lived history remains fixed, the runtime is category-driven and must be rebuilt.
 
+## Appearance, capability, and performed persona
+
+When analyzing a character or borrowing from another fictional character, distinguish observable presentation, other people's interpretation, demonstrated capabilities and limits, private goals, and deliberate concealment. These layers may align or conflict. Awkward movement, slow delivery, an innocent face, or comic mistakes do not establish low intelligence; a calculating interior does not establish technical expertise, omniscience, evil intent, or a perfect plan.
+
+Treat competence as domain- and situation-specific. A person can read motives well while mishandling a machine, hesitate socially while judging danger accurately, or think extensively without reaching the right conclusion. Ask what they noticed, what evidence was available, what they sought, and what action actually supports the proposed competence. Do not replace one stereotype with its inversion: apparent simplicity is neither proof of stupidity nor proof of secret genius.
+
+If the author proposes hidden cleverness as a possibility, retain it as a live interpretation rather than dismissing it because the source contains a genuine mistake. Conversely, do not relabel an established accident as a planned rescue merely to make the person clever. Mixed cases are valid: natural awkwardness, selective concealment, and real blind spots can coexist. A possible mask is not yet confirmed deception or a complete life history.
+
+For a requested character reference, name the transferable mechanism and its scope: for example, an underestimated public presence that gives someone room to observe. Separately exclude unrequested allegiance, cruelty, family history, signature plot, and abilities. Studying a villain's presentation does not make the target a villain. If citing a specific work or scene, inspect and identify the source; do not invent reference evidence. A broad archetypal suggestion may remain an explicitly conceptual comparison without claiming a studied example.
+
+To make a hidden layer playable, propose a small, author-reviewable discrepancy between what others see and what the person chooses: a question that appears naive but tests a fact, a withheld correction, or a selectively accepted misunderstanding. Such a proposal must preserve actual knowledge and established outcomes, and need not include a reveal. Do not explain the whole interior aloud or add a stock sinister smile to every harmless-looking character. Update earlier analysis when an author clarification changes these boundaries without silently changing unrelated selected paths.
+
 ## Keep three realities separate
 
 ```text

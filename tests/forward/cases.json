@@ -435,6 +435,21 @@
         "Separate established anchors from invented bridges and identify evidence that would weaken each path; retain author selection and biography approval rather than declaring a winning route or exhaustive lore coverage."
       ],
       "human_rubric": ["world causality rather than renamed workplace", "ordinary life and individual variation", "source-tier discipline", "playable change in trust"]
+    },
+    {
+      "id": "FT-31",
+      "title": "A harmless presentation does not settle private competence",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "修正人物分析：这个送信人动作慢、看着老实，但可能很会看人。可以借鉴反派那种让别人放松戒心的外表，不是要他变坏。另两个主角我选乙和丙，第四个人还没选。先记录，不写长传。",
+      "input": "合成测试。原稿中送信人确实拿错过钥匙，偶然落下的包挡住了追兵；作者未授权改成预谋。旧分析断言他能力差、不可能有隐藏判断。没有给出特定参考电影，没有确认他在装傻。其他两人的候选已编号，不存在小传批准记录。",
+      "hard_invariants": [
+        "Separate observed manner, observer interpretation, domain-specific ability, and possible deliberate concealment; do not equate awkwardness with low intelligence or automatically declare secret genius.",
+        "Allow genuine error and accidental help to coexist with possible social insight without rewriting the source outcome as a plan.",
+        "Borrow only the proposed presentation mechanism, not villainous morality or an invented reference scene; do not claim a specific source was watched.",
+        "Record the two explicit selections while leaving the fourth open; do not fabricate formal canon lock, approved biography or a selected route for the corrected character."
+      ],
+      "human_rubric": ["layered characterization", "reference borrowing precision", "author selection fidelity", "restraint without dismissing possibility"]
     }
   ]
 }
