@@ -49,6 +49,8 @@ If the source concerns a living or identifiable real person, do not infer a priv
 
 ## Generate real divergence
 
+This stage selects an unresolved direction. An author-requested repair of a selected direction or single-path experiment instead follows [biography-growth-review.md](biography-growth-review.md); it does not require repeating selection or authorize changing canon.
+
 Produce at least three readings before long-form expansion. They must reach the same fixed opening condition through materially different causal routes and lead to distinguishable present attention, interpretation, first impulse, relationship strategy, or restraint. Cosmetic changes in setting, labels, dates, or trait words do not count.
 
 Audit the set before drafting prose. Give each reading a different primary causal

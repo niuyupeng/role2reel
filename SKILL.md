@@ -22,6 +22,7 @@ Do only the stages needed for the requested deliverable. Do not force a full pro
 - For an existing fictional universe, franchise adaptation, or researched world history that will shape characters, read [references/world-grounding.md](references/world-grounding.md) before life-path invention. Establish the author's continuity, source versions, contested claims, and the world's actual pressures; role mechanics and fan compilations are not ready-made biographies.
 - For sparse present clues, a sketch biography, “像推命一样给我几种过去,” a substantial pre-story life trajectory, or category-stereotype repair, first read [references/fatecasting.md](references/fatecasting.md), then [references/life-paths.md](references/life-paths.md) and [references/character-engine.md](references/character-engine.md). 命线反演 is fictional reverse inference for authors, not a claim about a real person's hidden past.
 - For character-only construction from already established canon, read [references/character-engine.md](references/character-engine.md).
+- For biography repair, growth-path review before prose, or a character whose whole past merely explains one episode, also read [references/biography-growth-review.md](references/biography-growth-review.md). Rebuild evidence from the original work, show how capabilities and relationships develop, and stop at the author's requested review boundary.
 - For character-reference analysis, misleading appearances, masks, or hidden competence, also use the appearance-and-capability distinction in [references/character-engine.md](references/character-engine.md). Borrow a reference's specified dramatic mechanism, not its entire personality, biography, or moral alignment.
 - For scene or dialogue writing, read [references/scene-dialogue.md](references/scene-dialogue.md). Also read [references/character-engine.md](references/character-engine.md) when the request requires building, repairing, or checking character state, knowledge, memory, relationships, or decision rules.
 - For shot lists or storyboards, read [references/storyboard.md](references/storyboard.md).
@@ -36,6 +37,8 @@ Do only the stages needed for the requested deliverable. Do not force a full pro
 ## Preserve the dependency order
 
 For end-to-end work, use this dependency order and skip irrelevant stages:
+
+For an already selected direction being repaired, or an explicit single-character growth-path experiment, follow [the growth-review boundary](references/biography-growth-review.md) instead of restarting stage 3's unresolved-choice exploration. A request to review a path stops before stage 4 until the author asks for expansion.
 
 1. Establish the deliverable, audience, language, duration, and supplied facts. Ask only when a missing choice would materially change the result.
 2. Build a meaning ledger before rewriting substantial rough material. Preserve claim ownership, uncertainty, chronology, and emotional function; keep created fiction separate from faithful transformation.

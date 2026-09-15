@@ -40,6 +40,8 @@ For a living or identifiable real person, do not infer private or sensitive hist
 
 ## Generate comparable candidates before long-form expansion
 
+When revising an already selected direction or fulfilling an explicit single-character growth-path experiment, use [biography-growth-review.md](biography-growth-review.md). Preserve the actual selection and show the revised path as pending review; do not restart a three-way selection unless the author requests alternatives or the revision contradicts that selection. The plurality requirement below applies when choosing an unresolved causal direction, not to every revision of an existing choice.
+
 Produce at least three causally distinct, fact-compatible outlines before writing a deep biography. The author may ask for more, but no scorer or model may automatically choose a single winner.
 
 In `explore` mode, present those outlines first as readable life readings rather than schema dumps. Each reading should let the author feel the route from present traces through ordinary years, choices, pressures, costs, self-story, and unresolved residue to the character's opening impulse. Include a counter-reading that explains the same fixed traces through a materially different causal route. Use the divergence method in [fatecasting.md](fatecasting.md); do not derive a path from a demographic, educational, occupational, or status stereotype.
@@ -120,6 +122,8 @@ Write a long biography stage by stage in a file instead of truncating it into on
 Run `scripts/audit_life_paths.py` before downstream compilation. The script checks structure, exact duplicate candidate spines, decision bindings, fact/candidate/biography hashes, optional explicitly requested length, obvious repetition, exact runtime files, and explicit provenance closure. It refuses a formal structured artifact that omits canonical path references, but it cannot judge whether every claim is semantically warranted, whether the life feels artistically true, or whether a human actually made either recorded approval.
 
 ### Content sufficiency, not bulk
+
+For developmental gaps, apply the evidence, capability-acquisition, independent-life, and forward re-entry checks in [biography-growth-review.md](biography-growth-review.md). More anecdotes do not repair a missing transition from amateur practice to professional responsibility.
 
 For each important character, review the material against the actual outline. Record concrete source sections and scene consequences, not a self-awarded score:
 

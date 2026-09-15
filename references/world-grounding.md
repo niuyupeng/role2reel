@@ -39,6 +39,8 @@ Missing primary material is a named gap, not permission to invent lost lore. Con
 
 ## Make the world causally necessary to a life
 
+If the author explicitly requests a human-social-growth analogy with game mechanics temporarily suspended, declare a separate experiment and follow [biography-growth-review.md](biography-growth-review.md). Apply the world-removal test below when reintegrating that experiment, not as a reason to refuse the authorized analogy. Preserve original species, relationships, events, and continuity outside the experiment; fictional schooling or institutions proposed for the analogy are not official lore.
+
 Before presenting life-path candidates, connect source-grounded conditions to lived choices:
 
 **world pressure or affordance → recurring daily/relationship experience → a choice and its price → learned expectation → present action or hesitation.**
