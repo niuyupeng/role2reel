@@ -96,6 +96,10 @@ The new title and cross-character review sections in `references/story-prose-cra
 
 Follow-up after the author confirmed RSI (2026-09-15): read the complete [HOW_IT_WORKS.md](https://github.com/justinwetch/Skill-RSI/blob/6baf57e9e37d80431ec7132fca71bad251cdcc30/docs/HOW_IT_WORKS.md) at the same pinned revision. The independently written writing adaptation adds stable-task regression protection, inconclusive outcomes, and scoped failure memory. This supersedes the unresolved-acronym status above, not its historical review record. No upstream code or wording is bundled, and no Skill RSI software run or independent quality comparison is claimed. License permission remains unverified.
 
+## Character profile delivery review (2026-09-15)
+
+Reviewed [Reedsy character profile guidance](https://reedsy.com/blog/character-profile/), especially its definition, appearance/backstory/psychology organization and editorial discussion of revisable profiles. Independently adapted the general idea of a concise orientation alongside a fuller life, without copying questionnaires, examples or template text. The new section in `references/biography-growth-review.md` follows the author's requested biography format; it does not prescribe dossier exposition at the opening of every novel. This is a method update and single-draft application, not an independently measured quality gain.
+
 ## Trademarks and product facts
 
 Role2Reel is not affiliated with, endorsed by, or sponsored by ByteDance, Dreamina, Jimeng, Seedance, OpenAI, or the community projects above. Names and trademarks belong to their respective owners.
