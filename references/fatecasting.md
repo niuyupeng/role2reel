@@ -20,6 +20,16 @@ The formal record lives behind the reading. Do not open with hashes or make the 
 
 ## Read the present without collapsing it
 
+### Existing-universe source checkpoint
+
+When the author refers to an existing screenplay, episode, or fictional universe, locate and read that source before generating lives. Search the named workspace and supplied attachment locations, including ignored output folders when relevant. Record the exact source and version; do not silently select by newest timestamp or substitute your own recent draft. If the source is unavailable, report the specific gap before proposing an explicitly optional alternative.
+
+Extract a compact world-and-character basis: species/factions, institutions and technology limits, established relationships, events, consequential actions and speech, and unresolved identities. Separate narrator-established facts, a character's self-description, playful fourth-wall speech, author corrections, and unapproved assistant inventions. A character claiming a rank or relative is not automatically corroborated biography. Project canon governs the adaptation; game mechanics are supplemental, version-specific material, not a personality or mandatory story-world power.
+
+Tie each candidate's causal life to concrete source scenes, including awkward or contrary evidence. Do not paste ordinary occupational biographies into a universe by renaming places. Check that its history can lead into the actual source actions without inventing prior meetings between apparent strangers, secret competence behind accidental success, or a cameo's allegiance from its role name. Sparse cameos may have provisional arrival histories with identity and purpose left open; do not compensate for scarce evidence by asserting elaborate canon.
+
+When a previous output failed this checkpoint, mark it withdrawn from development and rebuild from the source rather than adding cosmetic world vocabulary. Keep manuscript content private unless publishing it is specifically authorized; reusable regression tests should use synthetic fixtures, not the user's unpublished plot.
+
 Start with a small, honest present-sign sheet:
 
 - what is author-locked;

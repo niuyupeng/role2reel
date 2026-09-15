@@ -83,6 +83,8 @@ Apply each invariant only to the stage named. A narrow fidelity task such as typ
 
 ## Work with incomplete material
 
+For life-path work in an existing story universe, first apply the source checkpoint in [references/fatecasting.md](references/fatecasting.md): read the author's actual screenplay/world material before inventing history. Never replace it with game-role stereotypes or unapproved assistant drafts.
+
 Make reversible assumptions when they do not alter authorship, plot truth, or production constraints, and label them briefly. When a sparse endpoint admits several plausible histories, provide clearly separated candidates rather than silently choosing the stereotype. If missing information would change character knowledge, branch selection, scene outcome, duration, or provider mode, ask one focused question or preserve the alternatives.
 
 ## Use the included resources
