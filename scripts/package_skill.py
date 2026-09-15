@@ -85,6 +85,7 @@ RELEASE_FILES = (
     "references/story-character-roundtrip.md",
     "references/video-adapters.md",
     "references/workbook-delivery-profile.md",
+    "references/world-grounding.md",
     "requirements-dev.txt",
     "scripts/__init__.py",
     "scripts/audit_character_runtime.py",

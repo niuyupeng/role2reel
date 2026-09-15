@@ -420,6 +420,21 @@
         "Any optional life sketch must be explicitly provisional and anchored to available story evidence, not imported from role stereotypes."
       ],
       "human_rubric": ["source grounding", "universe consistency", "honest scope"]
+    },
+    {
+      "id": "FT-30",
+      "title": "Research provenance must constrain world-to-life inference",
+      "execution_mode": "pending_behavioral_run",
+      "should_invoke": true,
+      "request": "根据这些资料把赤潮城的世界观理清，再给女航师三条不同的命线选择。不要写完整小传或替我选，也别说只是换个地名。",
+      "input": "合成宇宙。作者原稿：两港敌对，女航师首次遇到敌港领航员时拔刀，水闸坍塌后不得不让他掌舵救城；两人不是旧识。她值夜后会打棋，常夸自己的算潮本事。官方预告的一张报纸写停战，但战因未公布。社区长文把报纸解释为南港挑起战争，附录明确标同人；文中另转述一个打不开的开发者聊天说旧灯塔属于另一维度。手游规则允许航师每局换一次风向，作者没有采用这一能力。没有年龄或战时服役记录。只能使用所给材料，不联网。",
+      "hard_invariants": [
+        "Distinguish the official in-world newspaper from an objective complete history, the fan interpretation and unofficial appendix, the inaccessible attributed chat, and the author's own continuity; do not claim external research was executed.",
+        "Do not infer the aggressor, a continuous chronology for every location, a personal war trauma, an old friendship, or an unlimited wind power from these sources.",
+        "Provide three genuinely different provisional life paths whose recurring experiences, choices and costs depend on the supported world conditions; preserve the real hostility and consequential cooperation.",
+        "Separate established anchors from invented bridges and identify evidence that would weaken each path; retain author selection and biography approval rather than declaring a winning route or exhaustive lore coverage."
+      ],
+      "human_rubric": ["world causality rather than renamed workplace", "ordinary life and individual variation", "source-tier discipline", "playable change in trust"]
     }
   ]
 }

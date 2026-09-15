@@ -17,6 +17,7 @@ Do only the stages needed for the requested deliverable. Do not force a full pro
 - For actual local dialogue extraction and safe reintegration, read [references/dialogue-local-workbench.md](references/dialogue-local-workbench.md). The helper does not invoke another model or certify semantic quality.
 - For classic-film borrowing or an absurd/comedic adaptation, read [references/reference-comedy.md](references/reference-comedy.md); scope genre, cast, source count, and protected jokes to this project rather than making them universal defaults.
 - For requested whitebox previsualization or depth-reference experiments, read [references/previs-experiments.md](references/previs-experiments.md). Experiments are not finished production or proven capabilities.
+- For an existing fictional universe, franchise adaptation, or researched world history that will shape characters, read [references/world-grounding.md](references/world-grounding.md) before life-path invention. Establish the author's continuity, source versions, contested claims, and the world's actual pressures; role mechanics and fan compilations are not ready-made biographies.
 - For sparse present clues, a sketch biography, “像推命一样给我几种过去,” a substantial pre-story life trajectory, or category-stereotype repair, first read [references/fatecasting.md](references/fatecasting.md), then [references/life-paths.md](references/life-paths.md) and [references/character-engine.md](references/character-engine.md). 命线反演 is fictional reverse inference for authors, not a claim about a real person's hidden past.
 - For character-only construction from already established canon, read [references/character-engine.md](references/character-engine.md).
 - For scene or dialogue writing, read [references/scene-dialogue.md](references/scene-dialogue.md). Also read [references/character-engine.md](references/character-engine.md) when the request requires building, repairing, or checking character state, knowledge, memory, relationships, or decision rules.
@@ -83,7 +84,7 @@ Apply each invariant only to the stage named. A narrow fidelity task such as typ
 
 ## Work with incomplete material
 
-For life-path work in an existing story universe, first apply the source checkpoint in [references/fatecasting.md](references/fatecasting.md): read the author's actual screenplay/world material before inventing history. Never replace it with game-role stereotypes or unapproved assistant drafts.
+For life-path work in an existing story universe, first apply [world grounding](references/world-grounding.md) and the source checkpoint in [references/fatecasting.md](references/fatecasting.md): read the author's actual screenplay/world material before inventing history. Never replace it with game-role stereotypes or unapproved assistant drafts. World research must change feasible choices, ordinary life, and relationship costs, not merely the place names.
 
 Make reversible assumptions when they do not alter authorship, plot truth, or production constraints, and label them briefly. When a sparse endpoint admits several plausible histories, provide clearly separated candidates rather than silently choosing the stereotype. If missing information would change character knowledge, branch selection, scene outcome, duration, or provider mode, ask one focused question or preserve the alternatives.
 

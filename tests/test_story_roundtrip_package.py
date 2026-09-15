@@ -23,6 +23,7 @@ class RoundtripPackageTests(unittest.TestCase):
             "references/reference-comedy.md",
             "references/previs-experiments.md",
             "references/story-character-roundtrip.md",
+            "references/world-grounding.md",
             "assets/templates/story-workflow.yaml",
             "assets/templates/dialogue-handoff.yaml",
         }
