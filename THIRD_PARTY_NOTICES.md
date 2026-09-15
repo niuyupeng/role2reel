@@ -94,6 +94,8 @@ The new title and cross-character review sections in `references/story-prose-cra
 
 [justinwetch/Skill-RSI](https://github.com/justinwetch/Skill-RSI), repository main observed at `6baf57e9e37d80431ec7132fca71bad251cdcc30`: reviewed README sections describing a baseline, localized challenger, comparison evidence and retained history. This is conceptual design comparison, not installation, execution, a source-code audit, or measured validation of Role2Reel. GitHub's license endpoint returned 404; redistribution permission was not established. No upstream text, examples, templates or code are included. `references/recursive-story-revision.md` is independently authored. Do not assume the author's unresolved acronym “RIS” names this project. Do not import unattended runs, numerical source quotas, model judges as human acceptance, or automatic publication of private manuscripts.
 
+Follow-up after the author confirmed RSI (2026-09-15): read the complete [HOW_IT_WORKS.md](https://github.com/justinwetch/Skill-RSI/blob/6baf57e9e37d80431ec7132fca71bad251cdcc30/docs/HOW_IT_WORKS.md) at the same pinned revision. The independently written writing adaptation adds stable-task regression protection, inconclusive outcomes, and scoped failure memory. This supersedes the unresolved-acronym status above, not its historical review record. No upstream code or wording is bundled, and no Skill RSI software run or independent quality comparison is claimed. License permission remains unverified.
+
 ## Trademarks and product facts
 
 Role2Reel is not affiliated with, endorsed by, or sponsored by ByteDance, Dreamina, Jimeng, Seedance, OpenAI, or the community projects above. Names and trademarks belong to their respective owners.
